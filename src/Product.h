@@ -18,6 +18,7 @@ public:
 
     // Setters
     void setPrice(double newPrice);
+    void setName(const std::string& newName);
 
     // logic
     bool isValid() const;
