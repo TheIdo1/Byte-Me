@@ -4,6 +4,7 @@ project(JiraProjectTests)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Fetch Google Test
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -13,24 +14,36 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-#1. add source files for the main project.
+# 1. Core Library
+# Collect all source files
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
+
+# Exclude main.cpp to prevent multiple main() definitions
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+
+# Create the core library
 add_library(ProjectCore ${SOURCES})
 
-# 2. create an executable for the tests.
-file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
-add_executable(
-  RunTests
-  ${TEST_SOURCES}
-)
 
-3. link the test executable with the main project and gtest.
+# 2. Main Application Target
+add_executable(RunApp src/main.cpp)
+target_link_libraries(RunApp ProjectCore)
+
+
+# 3. Tests Target
+# Collect all test files
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
+
+# Create the test executable
+add_executable(RunTests ${TEST_SOURCES})
+
+# Link core library and Google Test
 target_link_libraries(
   RunTests
   ProjectCore
   gtest_main
 )
 
-#let gtest discover the tests in the executable.
+# Enable CTest discovery
 include(GoogleTest)
 gtest_discover_tests(RunTests)
