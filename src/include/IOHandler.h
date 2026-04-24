@@ -13,7 +13,7 @@ public:
     // get user input fro input source
     virtual void readInput() = 0;
     // extract commandType and args from input
-    virtual void parser(const std::string& input) = 0;  
+    virtual void parser() = 0;  
 };
 
 #endif
