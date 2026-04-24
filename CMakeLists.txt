@@ -16,8 +16,11 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(src/include)
 
-add_executable(run_tests tests/test_icommand.cpp)
+add_executable(run_tests
+    tests/test_console.cpp
+    src/Console.cpp
+)
 target_link_libraries(run_tests gtest_main) # gtest_main provides the main() function automatically
 
 enable_testing()
-add_test(NAME ICommandTest COMMAND run_tests)
+add_test(NAME ConsoleTests COMMAND run_tests)
