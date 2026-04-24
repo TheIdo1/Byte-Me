@@ -35,6 +35,15 @@ TEST_F(AppValidationTest, RecommendCommandValidation) {
     EXPECT_FALSE(app.isValidCommand("recommend\t1 101"));  
 }
 
+// tests for checking non-numeric userId and product Id
+TEST_F(AppValidationTest, NonNumericValidation) {
+    // invalid userId abc
+    EXPECT_FALSE(app.isValidCommand("add abc 101"));
+    
+    // invalid productId xyz
+    EXPECT_FALSE(app.isValidCommand("recommend 1 xyz"));
+}
+
 // general tests
 TEST_F(AppValidationTest, UnknownCommandValidation) {
     EXPECT_FALSE(app.isValidCommand("delete 1 101"));      // invalid - command type unrecognizable

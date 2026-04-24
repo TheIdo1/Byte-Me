@@ -12,6 +12,7 @@ class App {
         }
         // helper: validate input as command
         bool isValidCommand(const std::string& input);
+        bool isNumeric(const std::string& s);
 };
 
 #endif

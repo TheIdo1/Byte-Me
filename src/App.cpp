@@ -1,7 +1,13 @@
 #include "../src/include/App.h"
 #include <sstream>
 #include <vector>
+#include <algorithm> // for std::all_of
+#include <cctype>    // for std::isdigit
 
+bool App::isNumeric(const std::string& s) {
+    // checks that s isnot empty or contains non numeric characters
+    return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
+}
 
 bool App::isValidCommand(const std::string& input) {
     // check if input contains tabs
@@ -36,12 +42,20 @@ bool App::isValidCommand(const std::string& input) {
     
     else if (cmdType == "add") {
         // add command should contain at least 3 entries "add [userid] [productid1]..."
-        return tokens.size() >= 3;
+        if (tokens.size() < 3) return false;
+        // check that the rest of tokens are numeric
+        for (int i = 1; i < tokens.size(); ++i) {
+            if (!isNumeric(tokens[i])) return false;
+        }
+        return true;
     } 
     
     else if (cmdType == "recommend") {
         // recommend command should contain exactly 3 entries "recommend [userid] [productid]"
-        return tokens.size() == 3;
+        if (tokens.size() != 3) return false;
+        // check that the rest of tokens are numeric
+        return isNumeric(tokens[1]) && isNumeric(tokens[2]);
+
     }
 
     return false; // unfamilier command type
