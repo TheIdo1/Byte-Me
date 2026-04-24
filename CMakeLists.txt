@@ -19,8 +19,9 @@ include_directories(src/include)
 add_executable(run_tests
     tests/test_console.cpp
     src/Console.cpp
+    test_icommand.cpp
 )
 target_link_libraries(run_tests gtest_main) # gtest_main provides the main() function automatically
 
 enable_testing()
-add_test(NAME ConsoleTests COMMAND run_tests)
+add_test(NAME AllTests COMMAND run_tests)
