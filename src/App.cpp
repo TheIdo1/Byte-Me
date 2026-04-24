@@ -4,28 +4,43 @@
 #include <algorithm> // for std::all_of
 #include <cctype>    // for std::isdigit
 
+void App::inputParseIntoTokens(const std::string& input, std::vector<std::string>& tokens) {
+    tokens.clear(); //ensures the vector is empty before getting started
+    std::stringstream ss(input);
+    std::string word;
+    while (ss >> word) {
+        tokens.push_back(word);
+    }
+}
+
 bool App::isNumeric(const std::string& s) {
     // checks that s isnot empty or contains non numeric characters
     return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
+//
 bool App::isValidCommand(const std::string& input) {
+    std::vector<std::string> tokens;
+    inputParseIntoTokens(input, tokens); // parsing the input into tokens
+    return isValidCommand(input, tokens); // invoke the full version
+}
+bool App::isValidCommand(const std::string& input, const std::vector<std::string>& tokens) {
     // check if input contains tabs
     // std::string::npos meaning thers is no index matching to the find query
     if (input.find('\t') != std::string::npos) return false;
 
-    // std::stringstream is a stream object (behaves like std::cin)
-    // injects the user-input into ss the std::stringstream
-    std::stringstream ss(input);
-    std::string word;
-    //vector to contain commands entries
-    std::vector<std::string> tokens;
+    // // std::stringstream is a stream object (behaves like std::cin)
+    // // injects the user-input into ss the std::stringstream
+    // std::stringstream ss(input);
+    // std::string word;
+    // //vector to contain commands entries
+    // std::vector<std::string> tokens;
 
-    // each iteration, ss reads chars until hits white character (space,enter,tab)
-    while (ss >> word) {
-        //the push_back method adding new element to the end of the vector
-        tokens.push_back(word);
-    }
+    // // each iteration, ss reads chars until hits white character (space,enter,tab)
+    // while (ss >> word) {
+    //     //the push_back method adding new element to the end of the vector
+    //     tokens.push_back(word);
+    // }
 
     // empty input case
     if (tokens.empty()) return false;
