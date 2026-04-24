@@ -12,7 +12,8 @@
 
 class Console : public IOHandler {
 private:
-    std::map<std::string, std::unique_ptr<ICommand>> commands;
+    //commands attribute in second thought does not belong to Console logic and should by higher in hierarchy
+    //std::map<std::string, std::unique_ptr<ICommand>> commands;
     std::string input;              // the input - read from cin
     std::string cmdType;            // the command type :add, recomend, help etc. 
     std::vector<std::string> args;  // the rest of entries extracted from input [userId, prodId1, prodId2, ...]
