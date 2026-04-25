@@ -1,20 +1,22 @@
 #include "HelpCommand.h"
 
-// initializes HelpCommand with the list of all registered commands
-HelpCommand::HelpCommand(const std::vector<ICommand*>& commands)
-    : commands(commands), description("") {}
+// initializes commands list, io reference, and hardcodes the description since it never changes
+HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
+    : commands(commands), description("help"), io(io) {}
 
-// prints description of all commands via IOHandler
+// iterates over all registered commands and prints each one's description via io
 void HelpCommand::execute() {
-    // TODO
+    for (ICommand* cmd : commands) {
+        io.print(cmd->getDescription());
+    }
 }
 
 // validates that no args were passed to help command
 bool HelpCommand::validate(const std::vector<std::string>& args) const {
-    // TODO
+    return args.empty();
 }
 
 // returns description of HelpCommand itself
 const std::string& HelpCommand::getDescription() const {
-    // TODO
+    return description;
 }

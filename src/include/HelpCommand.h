@@ -2,6 +2,7 @@
 #define HELPCOMMAND_H
 
 #include "ICommand.h"
+#include "IOHandler.h"
 #include <string>
 #include <vector>
 
@@ -9,10 +10,11 @@ class HelpCommand : public ICommand {
 private:
     std::string description;            // help
     std::vector<ICommand*> commands;    // [AppCommand, RecommendCommand, HelpCommand, ...]
+    IOHandler& io;                      // reference to the io handler used for printing command descriptions
 
 public:
-    // constructor - receives list of all commands to print their descriptions
-    HelpCommand(const std::vector<ICommand*>& commands);
+    // constructor - receives all commands and io for printing
+    HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io);
 
     // prints description of all commands via IOHandler implementer
     void execute() override;
