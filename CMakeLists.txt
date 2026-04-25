@@ -18,8 +18,9 @@ include_directories(src/include)
 
 add_executable(run_tests
     tests/test_console.cpp
+    tests/test_helpcommand.cpp
     src/Console.cpp
-    test_icommand.cpp
+    src/HelpCommand.cpp
 )
 target_link_libraries(run_tests gtest_main) # gtest_main provides the main() function automatically
 
