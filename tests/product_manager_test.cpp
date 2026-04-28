@@ -9,6 +9,8 @@ public:
     std::vector<User> loadUsers() override { return {}; }
     void saveProduct(const Product& product) override {}
     std::vector<Product> loadProducts() override { return {}; }
+    void deleteUser(int userId) override {}
+    void deleteProduct(int productId) override {}
 };
 
 // Global instance so the Singleton doesn't hold a dangling pointer
@@ -89,13 +91,13 @@ TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
     EXPECT_DOUBLE_EQ(products[1].getPrice(), 19.99);
 }
 
-// Test that removing a non-existent product does not throw an error
-TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
+// Test that removing a non-existent product throws an error
+TEST(ProductManagerTests, RemoveNonExistentProductThrows) {
     resetProductManager();
     ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     // Attempt to remove a product that doesn't exist
-    EXPECT_NO_THROW(manager.removeProduct(999)); // ID that doesn't exist
+    EXPECT_THROW(manager.removeProduct(999), std::invalid_argument); // ID that doesn't exist
 }
 
 // Test that adding a product with invalid data throws an error
