@@ -6,10 +6,13 @@ private:
     int id;
     std::string name;
     double price;
-
-public:
-    //Constructor
+    
+    //private Constructor
     Product(int id, const std::string& name, double price);
+    //friend class ProductManager to allow it to create products
+    friend class ProductManager;
+    
+public:
 
     // Getters
     int getId() const;

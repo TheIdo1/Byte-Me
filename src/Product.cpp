@@ -1,4 +1,4 @@
-#include <Product.h>
+#include "include/Product.h"
 #include <stdexcept>
 
 Product::Product(int id, const std::string& name, double price) : id(id), name(name), price(price) {
