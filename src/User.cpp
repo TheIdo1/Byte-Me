@@ -1,12 +1,16 @@
 #include <User.h>
 #include <stdexcept>    
 
-User::User(string id, string name) : id(id), name(name), productsWatched() {
+User::User(string id, string name, vector<Product>& productsWatched)
+    : id(id), name(name), productsWatched(productsWatched) {
     if (id.empty()) {
         throw std::invalid_argument("ID cannot be empty.");
     }
     if (name.empty()) {
         throw std::invalid_argument("Name cannot be empty.");
+    }
+    if (productsWatched.empty()) {
+        throw std::invalid_argument("Products watched cannot be empty.");
     }
 }
 
@@ -44,5 +48,5 @@ void User::addProductWatched(Product product) {
 
 //isValid method
 bool User::isValid() const {
-    return !id.empty() && !name.empty();
+    return !id.empty() && !name.empty() && !productsWatched.empty();
 }

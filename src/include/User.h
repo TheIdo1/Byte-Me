@@ -11,7 +11,7 @@ class User {
         vector<Product> productsWatched;
     public:
         //constructor
-        User(string id, string name);
+        User(string id, string name, vector<Product>& productsWatched);
         
         //getters
         string getId() const;
