@@ -11,10 +11,22 @@ public:
     std::vector<Product> loadProducts() override { return {}; }
 };
 
+// Global instance so the Singleton doesn't hold a dangling pointer
+MockDataHandler globalMockHandler;
+
+// Helper to clear the Singleton state between tests
+void resetProductManager() {
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
+    std::vector<Product> products = manager.getAllProducts();
+    for (const auto& p : products) {
+        manager.removeProduct(p.getId());
+    }
+}
+
 // Test valid initialization and data retention
 TEST(ProductManagerTests, ValidInitialization) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
 
@@ -28,8 +40,8 @@ TEST(ProductManagerTests, ValidInitialization) {
 
 // Test that adding a product with an existing ID throws an error
 TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -39,8 +51,8 @@ TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
 
 // Test that removing a product works correctly
 TEST(ProductManagerTests, RemoveProductWorks) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     manager.removeProduct(1);
@@ -52,8 +64,8 @@ TEST(ProductManagerTests, RemoveProductWorks) {
 
 // Test that retrieving a non-existent product returns nullptr
 TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     Product* retrievedProduct = manager.getProduct(999); // ID that doesn't exist
     EXPECT_EQ(retrievedProduct, nullptr);
@@ -61,8 +73,8 @@ TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
 
 // Test that getAllProducts returns the correct list of products
 TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Product 1", 9.99);
     manager.addProduct(2, "Product 2", 19.99);
@@ -79,8 +91,8 @@ TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
 
 // Test that removing a non-existent product does not throw an error
 TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     // Attempt to remove a product that doesn't exist
     EXPECT_NO_THROW(manager.removeProduct(999)); // ID that doesn't exist
@@ -88,8 +100,8 @@ TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
 
 // Test that adding a product with invalid data throws an error
 TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     // Attempt to add a product with a negative price
     EXPECT_THROW(manager.addProduct(1, "Invalid Product", -10.0), std::invalid_argument);
@@ -101,11 +113,10 @@ TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
     EXPECT_THROW(manager.addProduct(0, "Invalid Product", 9.99), std::invalid_argument);
 }
 
-
 // TEST UPDATE: Test that updating a product's price works correctly
 TEST(ProductManagerTests, UpdateProductPriceWorks) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -120,8 +131,8 @@ TEST(ProductManagerTests, UpdateProductPriceWorks) {
 
 // TEST UPDATE: Test that updating a product's name works correctly
 TEST(ProductManagerTests, UpdateProductNameWorks) {
-    MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    resetProductManager();
+    ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
