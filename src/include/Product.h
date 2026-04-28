@@ -12,7 +12,7 @@ private:
     Product(int id, const std::string& name, double price);
     //friend class ProductManager to allow it to create products
     friend class ProductManager;
-    
+
 public:
 
     // Getters
@@ -26,5 +26,7 @@ public:
 
     // logic
     bool isValid() const;
+
+    bool operator==(const Product& other) const;
 };
 #endif
