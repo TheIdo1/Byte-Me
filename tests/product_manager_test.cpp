@@ -60,18 +60,15 @@ TEST(ProductManagerTests, RemoveProductWorks) {
     manager.removeProduct(1);
 
     // Attempt to retrieve the removed product
-    Product* retrievedProduct = manager.getProduct(1);
-    EXPECT_EQ(retrievedProduct, nullptr); // The product should no longer exist
+    EXPECT_THROW(manager.getProduct(1), std::invalid_argument); // The product should no longer exist
 }
 
-// Test that retrieving a non-existent product returns nullptr and throws an error
-TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
+// Test that retrieving a non-existent product throws an error
+TEST(ProductManagerTests, GetNonExistentProductThrowsError) {
     resetProductManager();
     ProductManager& manager = ProductManager::getInstance(&globalMockHandler);
 
-    Product* retrievedProduct = manager.getProduct(999); // ID that doesn't exist
-    EXPECT_EQ(retrievedProduct, nullptr);
-
+    // Attempt to retrieve a product that doesn't exist
     EXPECT_THROW(manager.getProduct(999), std::invalid_argument);
 }
 
