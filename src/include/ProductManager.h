@@ -7,18 +7,12 @@
 class ProductManager {
 private:
     std::vector<Product> products; // list of products
-    IDataHandler* dataHandler; // data handler for input/output operations
-
-    //private Const to make it Singleton
-    ProductManager(IDataHandler* dataHandler = nullptr);
+    const IDataHandler* dataHandler; // data handler for input/output operations
 public:
-    //ensure that the class cannot be copied or assigned
-    ProductManager(const ProductManager&) = delete;
-    ProductManager& operator=(const ProductManager&) = delete;
-
+    // constructor
+    ProductManager(const IDataHandler* handler) : dataHandler(handler) {}
+    // destructor
     ~ProductManager() = default;
-
-    static ProductManager& getInstance(IDataHandler* handler = nullptr);
 
     // add a product to the product list
     void addProduct(int id, const std::string& name, double price);
