@@ -16,6 +16,7 @@ public:
     virtual bool validate(const std::vector<std::string>& args) const = 0;
 
     // returns description of the command - will be used by some IOHandler
+    // exemple: for the recommend command the description is 'recommend [userId] [prodId]'
     virtual const std::string& getDescription() const = 0;
 };
 

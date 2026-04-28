@@ -8,7 +8,7 @@
 
 class HelpCommand : public ICommand {
 private:
-    std::string description;            // help
+    std::string description;            // the command description that is printed when invoking help command. here the description is 'help'
     std::vector<ICommand*> commands;    // [AppCommand, RecommendCommand, HelpCommand, ...]
     IOHandler& io;                      // reference to the io handler used for printing command descriptions
 

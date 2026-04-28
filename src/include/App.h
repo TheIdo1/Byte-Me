@@ -6,9 +6,9 @@
 class App {
     public:
         //constructor
-        App () {}
+        App ();
         
-        void run(){}
+        void run();
 
 
 };

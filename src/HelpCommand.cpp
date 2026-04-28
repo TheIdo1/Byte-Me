@@ -1,6 +1,6 @@
-#include "HelpCommand.h"
+#include "include/HelpCommand.h"
 
-// initializes commands list, io reference, and hardcodes the description since it never changes
+// initializes commands list, io reference, and the description attributes
 HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
     : commands(commands), description("help"), io(io) {}
 
