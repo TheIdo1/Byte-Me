@@ -8,20 +8,20 @@ using namespace std;
 
 class User {
     private:
-        string id;
+        int id;
         string name;
         vector<Product> productsWatched;
     public:
         //constructor
-        User(string id, string name);
+        User(int id, string name);
         
         //getters
-        string getId() const;
+        int getId() const;
         string getName() const; 
         vector<Product> getProductsWatched() const;
 
         //setters
-        void setId(string id);
+        void setId(int id);
         void setName(string name);
         void addProductWatched(Product product);
 

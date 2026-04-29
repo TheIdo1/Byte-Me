@@ -1,9 +1,10 @@
 #include "include/User.h"
 #include <stdexcept>    
 
-User::User(string id, string name) : id(id), name(name), productsWatched() {
-    if (id.empty()) {
-        throw std::invalid_argument("ID cannot be empty.");
+User::User(int id, string name) : id(id), name(name), productsWatched() {
+    //TODO: make validation in UserManager
+    if (id < 0) {
+        throw std::invalid_argument("ID cannot be negetive.");
     }
     if (name.empty()) {
         throw std::invalid_argument("Name cannot be empty.");
@@ -11,7 +12,7 @@ User::User(string id, string name) : id(id), name(name), productsWatched() {
 }
 
 //Getters
-string User::getId() const {
+int User::getId() const {
     return id;
 }
 
@@ -24,9 +25,9 @@ vector<Product> User::getProductsWatched() const {
 }
 
 //Setters
-void User::setId(string id) {
-    if (id.empty()) {
-        throw std::invalid_argument("ID cannot be empty.");
+void User::setId(int id) {
+    if (id < 0) {
+        throw std::invalid_argument("ID cannot be negetive.");
     }
     this->id = id;
 }
@@ -44,7 +45,7 @@ void User::addProductWatched(Product product) {
 
 //isValid method
 bool User::isValid() const {
-    return !id.empty() && !name.empty();
+    return !(id < 0) && !name.empty();
 }
 
 
