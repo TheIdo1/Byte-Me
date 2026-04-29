@@ -1,4 +1,4 @@
-#include <User.h>
+#include "include/User.h"
 #include <stdexcept>    
 
 User::User(string id, string name) : id(id), name(name), productsWatched() {
@@ -45,4 +45,9 @@ void User::addProductWatched(Product product) {
 //isValid method
 bool User::isValid() const {
     return !id.empty() && !name.empty();
+}
+
+
+bool User::operator==(const User& other) const {
+        return (this->id == other.id) && (this->name == other.name);
 }

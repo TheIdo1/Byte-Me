@@ -27,5 +27,7 @@ class User {
 
         //checks if valid user
         bool isValid() const;
+
+        bool operator==(const User& other) const;
 };
 #endif
