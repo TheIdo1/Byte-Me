@@ -1,3 +1,5 @@
+#ifndef USER_H
+#define USER_H
 #include <string>
 #include <vector>
 #include "Product.h"
@@ -26,3 +28,4 @@ class User {
         //checks if valid user
         bool isValid() const;
 };
+#endif

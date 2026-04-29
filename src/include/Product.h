@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PRODUCT_H
+#define PRODUCT_H
 #include <string>
 
 class Product {
@@ -23,3 +24,4 @@ public:
     // logic
     bool isValid() const;
 };
+#endif
