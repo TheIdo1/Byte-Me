@@ -1,4 +1,4 @@
-#include "../src/include/App.h"
+#include "include/App.h"
 
 
 void App::run(){

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
-#include "../src/Product.h"
+#include "../src/include/Product.h"
 
 // Test valid initialization and data retention
 TEST(ProductTests, InitializationWorks) {
