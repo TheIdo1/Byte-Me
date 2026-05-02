@@ -10,7 +10,7 @@ public:
     virtual ~ICommand() = default;
 
     // executes specific logic of command
-    virtual void execute() = 0; 
+    virtual void execute(const std::vector<std::string>& args) = 0; 
 
     // validates args passed to the command
     virtual bool validate(const std::vector<std::string>& args) const = 0;
