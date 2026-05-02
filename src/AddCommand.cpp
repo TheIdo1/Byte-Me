@@ -5,9 +5,14 @@ userManager(userManager),
 productManager(productManager),
 description("add [userId] [productId1] [productId2] ...") {}
 
-AddCommand::execute() {
-    for (Product& product : productsToAdd) {
-        user->getProductsWatched().push_back(product);
+AddCommand::execute(const std::vector<std::string>& args) {
+    //reset everyting in any execution
+    user = nullptr;
+    productsToAdd.clear();
+    if (validate(args)) {
+        for (Product& product : productsToAdd) {
+            user->getProductsWatched().push_back(product);
+        }
     }
 }
 
@@ -20,7 +25,7 @@ AddCommand::validate(const std::vector<std::string>& args) const {
         int id = std::stoi(args[0]);
         user = userManager->getUser(id);
         if (user == nullptr || !user->isValid()) {
-            return false; // userId does not exist or is invalid
+            throw std::invalid_argument("User with ID " + args[0] + " does not exist."); 
         }
     } catch (const std::exception&) {
         return false; // userId is not a valid integer
@@ -31,7 +36,7 @@ AddCommand::validate(const std::vector<std::string>& args) const {
             int id =std::stoi(args[i]);
             Product* product = productManager->getProduct(id);
             if (product == nullptr || !product->isValid()) {
-                return false; // productId does not exist or is invalid
+                throw std::invalid_argument("Product with ID " + args[i] + " does not exist."); 
             }
             productsToAdd.push_back(*product);
         } catch (const std::exception&) {

@@ -16,7 +16,7 @@ class AddCommand : public ICommand {
         std::vector<Product> productsToAdd;
     public:
         AddCommand(UserManager* userManager, ProductManager* productManager);
-        void execute() override;
+        void execute(const std::vector<std::string>& args) override;
         bool validate(const std::vector<std::string>& args) const override;
         const std::string& getDescription() const override;    
 };
