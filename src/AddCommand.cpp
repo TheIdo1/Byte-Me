@@ -5,7 +5,7 @@ userManager(userManager),
 productManager(productManager),
 description("add [userId] [productId1] [productId2] ...") {}
 
-AddCommand::execute(const std::vector<std::string>& args) {
+void AddCommand::execute(const std::vector<std::string>& args) {
     //reset everyting in any execution
     user = nullptr;
     productsToAdd.clear();
@@ -16,7 +16,7 @@ AddCommand::execute(const std::vector<std::string>& args) {
     }
 }
 
-AddCommand::validate(const std::vector<std::string>& args) const {
+bool AddCommand::validate(const std::vector<std::string>& args) const {
     if (args.size() < 2) {
         return false; // Need at least one userId and one productId
     }
@@ -46,6 +46,6 @@ AddCommand::validate(const std::vector<std::string>& args) const {
     return true;
 }
 
-AddCommand::getDescription() const {
+const std::string& AddCommand::getDescription() const {
     return description;
 }

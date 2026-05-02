@@ -40,6 +40,10 @@ void User::setName(string name) {
     this->name = name;
 }
 
+void User::addProductWatched(Product product) {
+    productsWatched.push_back(product);
+}
+
 //isValid method
 bool User::isValid() const {
     return !(id < 0) && !name.empty() && !productsWatched.empty();
