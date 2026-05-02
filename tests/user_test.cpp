@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/User.h"
+#include "../src/include/User.h"
 
 
 TEST(UserTests, InitializationWorks) {

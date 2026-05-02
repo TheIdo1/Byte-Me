@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PRODUCT_H
+#define PRODUCT_H
 #include <string>
 
 class Product {
@@ -28,3 +29,4 @@ public:
 
     bool operator==(const Product& other) const;
 };
+#endif

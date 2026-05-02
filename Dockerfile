@@ -16,4 +16,4 @@ RUN mkdir -p build && cd build && \
     make
 
 # Run the tests when the container starts
-CMD ["./build/run_tests"]
+CMD ["./build/RunTests"]
