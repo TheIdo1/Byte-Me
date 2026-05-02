@@ -30,35 +30,36 @@ protected:
 TEST_F(UserManagerTest, GetInstance) {
     UserManager& instance1 = UserManager::getInstance();
     UserManager& instance2 = UserManager::getInstance();
-    EXPECT_EQ(&instance1, &instance2); 
+    EXPECT_EQ(&instance1, &instance2);
 }
 
 // Test addUser
 TEST_F(UserManagerTest, AddUser) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> products = createSampleProducts();
-    
+
     // Add a user
-    EXPECT_NO_THROW(um.addUser(101, "Alice", products));
+    EXPECT_NO_THROW(um.addUser(101, "Alice"));
     
     // Check if user was added
     User* user = um.getUser(101);
     ASSERT_NE(user, nullptr);
     EXPECT_EQ(user->getId(), 101);
     EXPECT_EQ(user->getName(), "Alice");
-    EXPECT_EQ(user->getProductsWatched().size(), 2u);
+    EXPECT_TRUE(user->getProductsWatched().empty());
+    delete user;
 }
 
 // Test getUser
 TEST_F(UserManagerTest, GetUser) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> products = createSampleProducts();
-    um.addUser(102, "Bob", products);
+    um.addUser(102, "Bob");
     
     User* user = um.getUser(102);
     ASSERT_NE(user, nullptr);
     EXPECT_EQ(user->getId(), 102);
     EXPECT_EQ(user->getName(), "Bob");
+    EXPECT_TRUE(user->getProductsWatched().empty());
+    delete user;
     
     // Test non-existent user
     User* nonUser = um.getUser(999);
@@ -68,8 +69,7 @@ TEST_F(UserManagerTest, GetUser) {
 // Test removeUser
 TEST_F(UserManagerTest, RemoveUser) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> products = createSampleProducts();
-    um.addUser(103, "Charlie", products);
+    um.addUser(103, "Charlie");
     
     // Verify user exists
     EXPECT_NE(um.getUser(103), nullptr);
@@ -84,16 +84,14 @@ TEST_F(UserManagerTest, RemoveUser) {
 // Test getAllUsers
 TEST_F(UserManagerTest, GetAllUsers) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> products = createSampleProducts();
     
     // Add multiple users
-    um.addUser(104, "David", products);
-    um.addUser(105, "Eve", products);
+    um.addUser(104, "David");
+    um.addUser(105, "Eve");
     
     vector<User> allUsers = um.getAllUsers();
-    EXPECT_GE(allUsers.size(), 2u); // At least the ones we added
+    EXPECT_GE(allUsers.size(), 2u);
     
-    // Check if our users are in the list
     bool foundDavid = false, foundEve = false;
     for (const auto& user : allUsers) {
         if (user.getId() == 104 && user.getName() == "David") foundDavid = true;
@@ -106,29 +104,25 @@ TEST_F(UserManagerTest, GetAllUsers) {
 // Test User methods (since UserManager uses User)
 TEST_F(UserManagerTest, UserMethods) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> products = createSampleProducts();
-    um.addUser(106, "Frank", products);
+    um.addUser(106, "Frank");
     User* user = um.getUser(106);
     ASSERT_NE(user, nullptr);
     
-    // Test getters
     EXPECT_EQ(user->getId(), 106);
     EXPECT_EQ(user->getName(), "Frank");
-    EXPECT_EQ(user->getProductsWatched().size(), 2u);
+    EXPECT_TRUE(user->getProductsWatched().empty());
     
-    // Test addProductWatched
     Product newProduct(3, "Keyboard", 49.99);
     user->addProductWatched(newProduct);
-    EXPECT_EQ(user->getProductsWatched().size(), 3u);
+    EXPECT_EQ(user->getProductsWatched().size(), 1u);
     
-    // Test isValid
     EXPECT_TRUE(user->isValid());
+    delete user;
 }
 
-// Test invalid user addition (empty products)
+// Test invalid user addition
 TEST_F(UserManagerTest, AddUserInvalid) {
     UserManager& um = UserManager::getInstance();
-    vector<Product> emptyProducts;
-    
-    EXPECT_THROW(um.addUser(107, "InvalidUser", emptyProducts), invalid_argument);
+    EXPECT_THROW(um.addUser(-1, "Invalid"), invalid_argument);
+    EXPECT_THROW(um.addUser(107, ""), invalid_argument);
 }

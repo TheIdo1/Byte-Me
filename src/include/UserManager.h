@@ -21,7 +21,7 @@ class UserManager {
         static UserManager& getInstance(IDataHandler* dataHandler = nullptr);
 
         //manager functionality
-        void addUser(int id, string name, vector<Product>& productsWatched);
+        void addUser(int id, string name);
         void removeUser(int id);
         User* getUser(int id) const;
         vector<User> getAllUsers() const;

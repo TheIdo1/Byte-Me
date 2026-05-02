@@ -12,14 +12,14 @@ UserManager& UserManager::getInstance(IDataHandler* dataHandler) {
     return instance;
 }
 
-void UserManager::addUser(int id, string name, vector<Product>& productsWatched) {
+void UserManager::addUser(int id, string name) {
     //check if user already exists
     for (const auto& user : users) {
         if (user.getId() == id) {
             throw std::invalid_argument("User with this ID already exists.");
         }
     }
-    User newUser(id, name, productsWatched);
+    User newUser(id, name);
     if (!newUser.isValid()) {
         throw std::invalid_argument("Invalid user data.");
     }
