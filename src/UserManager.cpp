@@ -33,7 +33,7 @@ void UserManager::removeUser(int id) {
     for (auto it = users.begin(); it != users.end(); ++it) {
         if (it->getId() == id) {
             if (dataHandler) {
-                dataHandler->deleteUser(*it);
+                dataHandler->deleteUser(id);
             }
             users.erase(it);
             return;

@@ -1,7 +1,6 @@
-#include "gtest/gtest.h"
-#include "../src/include/HelpCommand.h"  
-#include "HelpCommand.h"
-#include "Console.h"
+#include "gtest/gtest.h" 
+#include "../src/include/HelpCommand.h"
+#include "../src/include/Console.h"
 #include <vector>
 #include <string>
 #include <sstream>
