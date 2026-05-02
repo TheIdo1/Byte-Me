@@ -14,7 +14,7 @@ class User {
         vector<Product> productsWatched;
 
         //constructor is private since it's only called by UserManager
-        User(int id, string name, vector<Product>& productsWatched);
+        User(int id, string name);
     public:
         //getters
         int getId() const;
@@ -24,8 +24,7 @@ class User {
         //setters
         void setId(int id);
         void setName(string name);
-        void addProductWatched(Product product);
-
+        
         //checks if valid user
         bool isValid() const;
 
