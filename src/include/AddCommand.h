@@ -12,8 +12,6 @@ class AddCommand : public ICommand {
         std::string description;
         UserManager* userManager;
         ProductManager* productManager;
-        mutable User* user;
-        mutable std::vector<Product> productsToAdd;
     public:
         AddCommand(UserManager* userManager, ProductManager* productManager);
         void execute(const std::vector<std::string>& args) override;
