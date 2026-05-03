@@ -13,8 +13,13 @@ class IDataHandler {
     // Pure virtual functions (must be implemented by children)
     virtual void saveUser(const User& user) = 0;
     virtual std::vector<User> loadUsers() = 0;
+    virtual void deleteUser(int id) = 0;
+
     
     virtual void saveProduct(const Product& product) = 0;
     virtual std::vector<Product> loadProducts() = 0;
+    virtual void deleteProduct(int id) = 0;
+
+
 };
 #endif

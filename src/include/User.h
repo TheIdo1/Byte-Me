@@ -7,14 +7,15 @@
 using namespace std;
 
 class User {
+    friend class UserManager; // UserManager can access private members of User
     private:
         int id;
         string name;
         vector<Product> productsWatched;
-    public:
-        //constructor
+
+        //constructor is private since it's only called by UserManager
         User(int id, string name);
-        
+    public:
         //getters
         int getId() const;
         string getName() const; 
@@ -23,8 +24,7 @@ class User {
         //setters
         void setId(int id);
         void setName(string name);
-        void addProductWatched(Product product);
-
+        
         //checks if valid user
         bool isValid() const;
 

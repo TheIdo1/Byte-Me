@@ -1,7 +1,8 @@
 #include "include/User.h"
 #include <stdexcept>    
 
-User::User(int id, string name) : id(id), name(name), productsWatched() {
+User::User(int id, string name)
+    : id(id), name(name), productsWatched() {
     //TODO: make validation in UserManager
     if (id < 0) {
         throw std::invalid_argument("ID cannot be negetive.");
@@ -39,13 +40,9 @@ void User::setName(string name) {
     this->name = name;
 }
 
-void User::addProductWatched(Product product) {
-    productsWatched.push_back(product);
-}
-
 //isValid method
 bool User::isValid() const {
-    return !(id < 0) && !name.empty();
+    return !(id < 0) && !name.empty() && !productsWatched.empty();
 }
 
 

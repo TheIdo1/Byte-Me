@@ -44,3 +44,7 @@ void Product::setName(const std::string& newName) {
 bool Product::isValid() const {
     return id > 0 && !name.empty() && price >= 0;
 }
+
+bool Product::operator==(const Product& other) const {
+        return id == other.id && name == other.name && price == other.price;
+    }
