@@ -10,7 +10,7 @@ RecommendCommand::RecommendCommand(UserManager& userManager, ProductManager& pro
     : userManager(userManager), productManager(productManager), ioHandler(ioHandler) {}
 
 // Validation: "recommend [userid] [productid]", aregs[0] = "param1", args[1] = "param2".
-bool RecommendCommand::validate(std::vector<std::string> args) const {
+bool RecommendCommand::validate(const std::vector<std::string>& args) const {
     if (args.size() != 2) {
         return false;
     }
@@ -29,7 +29,7 @@ const std::string& RecommendCommand::getDescription() const {
     return description;
 }
 
-void RecommendCommand::execute(std::vector<std::string> args) {
+void RecommendCommand::execute(const std::vector<std::string>& args) {
     if (!validate(args)) {
         throw std::invalid_argument("Invalid arguments for recommend command. Usage: recommend [userid] [productid]");
     }

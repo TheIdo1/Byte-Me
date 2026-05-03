@@ -12,9 +12,9 @@ public:
 
     RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler);
 
-    void execute(std::vector<std::string> args) override;
+    void execute(const std::vector<std::string>& args) override;
 
-    bool validate(std::vector<std::string> args) const;
+    bool validate(const std::vector<std::string>& args) const;
 
     const std::string& getDescription() const;
 
@@ -23,6 +23,7 @@ private:
 
     UserManager& userManager;
     ProductManager& productManager;
+    IOHandler& ioHandler;
 };
 
 #endif
