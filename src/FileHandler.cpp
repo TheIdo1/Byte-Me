@@ -74,6 +74,14 @@ std::vector<User> FileHandler::loadUsers() {
     }
 }
 
+void FileHandler::saveUser(const User& user) {
+    std::ofstream file(usersFile, std::ios::app);
+    if (file.is_open()) {
+        file << serializeUser(const_cast<User&>(user)) << "\n";
+        file.close();
+    }
+}
+
 std::vector<Product> FileHandler::loadProducts() {
     std::vector<Product> products;
     std::ifstream file(productsFile);
@@ -86,5 +94,13 @@ std::vector<Product> FileHandler::loadProducts() {
         }
     file.close();
     return products;
+    }
+}
+
+void FileHandler::saveProduct(const Product& product) {
+    std::ofstream file(productsFile, std::ios::app); // ios::app מוסיף לסוף הקובץ
+    if (file.is_open()) {
+        file << serializeProduct(const_cast<Product&>(product)) << "\n";
+        file.close();
     }
 }
