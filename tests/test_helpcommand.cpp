@@ -52,7 +52,7 @@ TEST(HelpCommandTest, ValidateReturnsFalseForMultipleArgs) {
 class FakeCommand : public ICommand {
 public:
     // no logic needed - not under test
-    void execute() override {}
+    void execute(const std::vector<std::string>& args) override {}
 
     // always valid - not under test
     bool validate(const std::vector<std::string>& args) const override { return true; }
@@ -75,7 +75,10 @@ TEST(HelpCommandTest, ExecutePrintsAllDescriptions) {
     std::vector<ICommand*> commands = {&cmd1, &cmd2}; // two fake commands with known descriptions
     HelpCommand help(commands, fakeIO);
 
-    help.execute();
+    //args will be empty list
+    std::vector<std::string> args;
+    help.execute(args);
+   
 
     // fakeOutput.str().find("fake command description") returns the index where the substring
     // was found, or std::string::npos which is a special "not found" value, if it wasn't.
@@ -92,8 +95,11 @@ TEST(HelpCommandTest, ExecutePrintsNothingForEmptyCommandList) {
     std::vector<ICommand*> commands; // empty - no commands registered
     HelpCommand help(commands, fakeIO);
 
-    help.execute();
+    //args will be empty list
+    std::vector<std::string> args;
+    help.execute(args);
+ 
 
-    // nothing should be printed to the output stream
-    EXPECT_EQ(fakeOutput.str(), "");
+    // help always prints at least itself
+    EXPECT_EQ(fakeOutput.str(), "help");
 }
