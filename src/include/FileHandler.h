@@ -9,11 +9,13 @@ class FileHandler : public IDataHandler {
         std::string const productsFile = "src/data/products.txt";
         UserManager& userManager = UserManager::getInstance(this);
         ProductManager& productManager = ProductManager::getInstance(this);
+
         //helping methods for parsing and writing data
         std::string serializeUser(User& user);
         std::string serializeProduct(Product& product);
-        User& deserializeUser(std::string str);
-        Product& deserializeProduct(std::string str);
+        User& deserializeUser(std::string& line);
+        Product& deserializeProduct(std::string& line);
+        
     public:
         FileHandler();
         std::vector<User> loadUsers() override;
