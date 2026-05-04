@@ -1,5 +1,4 @@
 #include "include/FileHandler.h"
-#include "include"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -8,8 +7,8 @@
 
 FileHandler::FileHandler() {}
 //implementing hel[ping methods for parsing and writing data
-string FileHandler::serializeUser(User& user) {
-    strig products;
+string FileHandler::serializeUser(const User& user) {
+    std::string products;
     if (!user.getProductsWatched().empty()) {
         for (const auto& product : user.getProductsWatched()) {
             products += std::to_string(product.getId()) + ",";
@@ -18,11 +17,11 @@ string FileHandler::serializeUser(User& user) {
     return user.getId() + "|" + user.getName() + "|" + products;
 }
 
-string FileHandler::serializeProduct(Product& product) {
+string FileHandler::serializeProduct(const Product& product) {
     return std::to_string(product.getId()) + "|" + product.getName() + "|" + std::to_string(product.getPrice());
 }
 
-User& FileHandler::deserializeUser(std::string line) {
+User* FileHandler::deserializeUser(const std::string& line) {
     std::stringstream ss(line);
     std::string segment;
     std::vector<std::string> fields;
@@ -32,18 +31,18 @@ User& FileHandler::deserializeUser(std::string line) {
     }
 
     if (fields.size() == 3) {
-        std::set<Product> productsWatched;
+        std::vector<Product> productsWatched;
         std::stringstream productsStream(fields[2]);
         std::string productSegment;
         while (std::getline(productsStream, productSegment, ',')) {
-            productsWatched.insert(productManager.getProduct(productSegment));
+            productsWatched.push_back(*productManager.getProduct(std::stoi(productSegment)));
         }
         return User(fields[0], fields[1], productsWatched);
     }
     return nullptr;
 }
 
-Product& FileHandler::deserializeProduct(std::string line) {
+Product* FileHandler::deserializeProduct(const std::string& line) {
     std::stringstream ss(line);
     std::string segment;
     std::vector<std::string> fields;
@@ -53,7 +52,7 @@ Product& FileHandler::deserializeProduct(std::string line) {
     }
 
     if (fields.size() == 3) {
-        return Product(std::stoi(fields[0]), fields[1], std::stod(fields[2]));
+        return new Product(std::stoi(fields[0]), fields[1], std::stod(fields[2]));
     }
     return nullptr;
 }

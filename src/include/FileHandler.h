@@ -11,11 +11,11 @@ class FileHandler : public IDataHandler {
         ProductManager& productManager = ProductManager::getInstance(this);
 
         //helping methods for parsing and writing data
-        std::string serializeUser(User& user);
-        std::string serializeProduct(Product& product);
-        User& deserializeUser(std::string& line);
-        Product& deserializeProduct(std::string& line);
-        
+        std::string serializeUser(const User& user);
+        std::string serializeProduct(const Product& product);
+        User* deserializeUser(const std::string& line);
+        Product deserializeProduct(const std::string& line);
+
     public:
         FileHandler();
         std::vector<User> loadUsers() override;
@@ -25,6 +25,6 @@ class FileHandler : public IDataHandler {
         std::vector<Product> loadProducts() override;
         void saveProduct(const Product& product) override;
         void deleteProduct(int productId) override;
-} 
+};
 
 #endif
