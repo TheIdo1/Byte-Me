@@ -9,12 +9,14 @@ public:
     std::vector<User> loadUsers() override { return {}; }
     void saveProduct(const Product& product) override {}
     std::vector<Product> loadProducts() override { return {}; }
+    void deleteUser(int id) override {}
+    void deleteProduct(int id) override {}
 };
 
 // Test valid initialization and data retention
 TEST(ProductManagerTests, ValidInitialization) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
 
@@ -29,7 +31,7 @@ TEST(ProductManagerTests, ValidInitialization) {
 // Test that adding a product with an existing ID throws an error
 TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -40,7 +42,7 @@ TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
 // Test that removing a product works correctly
 TEST(ProductManagerTests, RemoveProductWorks) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     manager.removeProduct(1);
@@ -53,7 +55,7 @@ TEST(ProductManagerTests, RemoveProductWorks) {
 // Test that retrieving a non-existent product returns nullptr
 TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     Product* retrievedProduct = manager.getProduct(999); // ID that doesn't exist
     EXPECT_EQ(retrievedProduct, nullptr);
@@ -62,7 +64,7 @@ TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
 // Test that getAllProducts returns the correct list of products
 TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Product 1", 9.99);
     manager.addProduct(2, "Product 2", 19.99);
@@ -80,7 +82,7 @@ TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
 // Test that removing a non-existent product does not throw an error
 TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     // Attempt to remove a product that doesn't exist
     EXPECT_NO_THROW(manager.removeProduct(999)); // ID that doesn't exist
@@ -89,7 +91,7 @@ TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
 // Test that adding a product with invalid data throws an error
 TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     // Attempt to add a product with a negative price
     EXPECT_THROW(manager.addProduct(1, "Invalid Product", -10.0), std::invalid_argument);
@@ -105,7 +107,7 @@ TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
 // TEST UPDATE: Test that updating a product's price works correctly
 TEST(ProductManagerTests, UpdateProductPriceWorks) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -121,7 +123,7 @@ TEST(ProductManagerTests, UpdateProductPriceWorks) {
 // TEST UPDATE: Test that updating a product's name works correctly
 TEST(ProductManagerTests, UpdateProductNameWorks) {
     MockDataHandler mockHandler;
-    ProductManager manager(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(&mockHandler);
 
     manager.addProduct(1, "Test Product", 9.99);
     
