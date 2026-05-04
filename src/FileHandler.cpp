@@ -82,6 +82,21 @@ void FileHandler::saveUser(const User& user) {
     }
 }
 
+void FileHandler::deleteUser(int userId) {
+    std::vector<User> users = userManager.getAllUsers();
+    std::ofstream outFile(usersFile, std::ios::trunc); 
+    //opens the file in trunc mode to overwrite it with all users except the one with the matching id
+    if (outFile.is_open()) {
+        for (const auto& user : users) {
+            //writes only users that don't match the deleted user's id, effectively removing the user from the file
+            if (user.getId() != userId) {
+                outFile << serializeUser(const_cast<User&>(user)) << "\n";
+            }
+        }
+        outFile.close();
+    }   
+}
+
 std::vector<Product> FileHandler::loadProducts() {
     std::vector<Product> products;
     std::ifstream file(productsFile);
@@ -103,4 +118,19 @@ void FileHandler::saveProduct(const Product& product) {
         file << serializeProduct(const_cast<Product&>(product)) << "\n";
         file.close();
     }
+}
+
+void FileHandler::deleteProduct(int productId) {
+    std::vector<Product> products = productManager.getAllProducts();
+    std::ofstream outFile(productsFile, std::ios::trunc); 
+    //opens the file in trunc mode to overwrite it with all products except the one with the matching id
+    if (outFile.is_open()) {
+        for (const auto& product : products) {
+            //writes only products that don't match the deleted product's id, effectively removing the product from the file
+            if (product.getId() != productId) {
+                outFile << serializeProduct(const_cast<Product&>(product)) << "\n";
+            }
+        }
+        outFile.close();
+    }   
 }
