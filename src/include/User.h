@@ -24,7 +24,7 @@ class User {
         //setters
         void setId(int id);
         void setName(string name);
-        
+        void addProductWatched(Product product);
         //checks if valid user
         bool isValid() const;
 

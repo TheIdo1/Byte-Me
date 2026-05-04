@@ -1,24 +1,20 @@
 #include "../src/include/UserManager.h"
 #include "../src/include/User.h"
 #include "../src/include/Product.h"
+#include "../src/include/ProductManager.h"
 #include <gtest/gtest.h>
 #include <vector>
 
 using namespace std;
 
-// Helper function to create a vector of products
-vector<Product> createSampleProducts() {
-    vector<Product> products;
-    products.push_back(Product(1, "Laptop", 999.99));
-    products.push_back(Product(2, "Mouse", 29.99));
-    return products;
-}
-
 // Test fixture for UserManager tests
 class UserManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Reset UserManager if possible, but since singleton, we use unique IDs
+        // Add some products to ProductManager for testing
+        ProductManager::getInstance().addProduct(1, "Laptop", 999.99);
+        ProductManager::getInstance().addProduct(2, "Mouse", 29.99);
+        ProductManager::getInstance().addProduct(3, "Keyboard", 49.99);
     }
 
     void TearDown() override {
@@ -101,7 +97,7 @@ TEST_F(UserManagerTest, GetAllUsers) {
     EXPECT_TRUE(foundEve);
 }
 
-// Test User methods (since UserManager uses User)
+// Test User methods (using ProductManager for products)
 TEST_F(UserManagerTest, UserMethods) {
     UserManager& um = UserManager::getInstance();
     um.addUser(106, "Frank");
@@ -112,9 +108,12 @@ TEST_F(UserManagerTest, UserMethods) {
     EXPECT_EQ(user->getName(), "Frank");
     EXPECT_TRUE(user->getProductsWatched().empty());
     
-    Product newProduct(3, "Keyboard", 49.99);
-    user->addProductWatched(newProduct);
+    // Get product from ProductManager
+    Product* newProduct = ProductManager::getInstance().getProduct(3);
+    ASSERT_NE(newProduct, nullptr);
+    user->addProductWatched(*newProduct);
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
+    EXPECT_EQ(user->getProductsWatched()[0].getId(), 3);
     
     EXPECT_TRUE(user->isValid());
     delete user;
