@@ -1,18 +1,33 @@
 #include "include/CommandManager.h"
+#include "include/AddCommand.h"
+#include "include/HelpCommand.h"
+#include "include/RecommendCommand.h"
 
 // singleton pattern - ensures only one instance of CommandManager exists
-CommandManager& CommandManager::getInstance(IOHandler& io) {
+CommandManager& CommandManager::getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager) {
     // first call creates the instance with the provided io reference
     // subsequent calls ignore the io argument and return the existing instance.
-    static CommandManager instance(io);
+    static CommandManager instance(io, userManager, productManager);
     return instance;
 }
 
 // private constructor - initializes the commands map with all available commands
 // receives io by reference since all commands need it for input/output operations
 // io is stored as a member field for potential future use
-CommandManager::CommandManager(IOHandler& io) : io(io) {
-    // empty for now - will add commands once we have all the Commands classes implemented
+CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager) : io(io) {
+    // create add and recommend first since HelpCommand needs them
+    //TODO: unify the way addCommand and RecommendCommand recieves their arguments
+    commands["add"]       = new AddCommand(&userManager, &productManager);
+    commands["recommend"] = new RecommendCommand(userManager, productManager, io);
+
+    // collect all commands so far to pass to HelpCommand
+    std::vector<ICommand*> allCommands;
+    for (auto& pair : commands) {
+        allCommands.push_back(pair.second);
+    }
+
+    // HelpCommand gets all others + prints itself separately in execute()
+    commands["help"] = new HelpCommand(allCommands, io);
 }
 
 // returns a reference to the commands map
