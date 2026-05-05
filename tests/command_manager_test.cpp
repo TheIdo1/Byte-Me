@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include "../src/include/CommandManager.h"
+#include "../src/include/UserManager.h"
+#include "../src/include/ProductManager.h"
 
 // Mock IOHandler for testing
 class MockIOHandler : public IOHandler {
@@ -9,18 +11,25 @@ public:
     void parser() override {}
 };
 
+
 // Test 1: singleton returns same instance
 TEST(CommandManagerTest, SingletonReturnsSameInstance) {
     MockIOHandler mockIo;
-    CommandManager& instance1 = CommandManager::getInstance(mockIo);
-    CommandManager& instance2 = CommandManager::getInstance(mockIo);
+    UserManager& userManager = UserManager::getInstance();
+    ProductManager& productManager = ProductManager::getInstance();
+
+    CommandManager& instance1 = CommandManager::getInstance(mockIo, userManager, productManager);
+    CommandManager& instance2 = CommandManager::getInstance(mockIo, userManager, productManager);
     EXPECT_EQ(&instance1, &instance2);
 }
 
 // Test 2: commands map is not empty
 TEST(CommandManagerTest, CommandsMapIsNotEmpty) {
     MockIOHandler mockIo;
-    auto& commands = CommandManager::getInstance(mockIo).getCommands();
+    UserManager& userManager = UserManager::getInstance();
+    ProductManager& productManager = ProductManager::getInstance();
+
+    auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
     EXPECT_FALSE(commands.empty());
 }
 
@@ -28,7 +37,9 @@ TEST(CommandManagerTest, CommandsMapIsNotEmpty) {
 // we check each command key that should exist in the map.
 TEST(CommandManagerTest, MapContainsExpectedCommands) {
     MockIOHandler mockIo;
-    auto& commands = CommandManager::getInstance(mockIo).getCommands();
+    UserManager& userManager = UserManager::getInstance();
+    ProductManager& productManager = ProductManager::getInstance();
+    auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
     // find() returns end() if key doesn't exist so NE means key was found
     EXPECT_NE(commands.find("help"),      commands.end());
     EXPECT_NE(commands.find("add"),       commands.end());
@@ -38,7 +49,10 @@ TEST(CommandManagerTest, MapContainsExpectedCommands) {
 // Test 4: command pointers are not null
 TEST(CommandManagerTest, CommandPointersAreNotNull) {
     MockIOHandler mockIo;
-    auto& commands = CommandManager::getInstance(mockIo).getCommands();
+    UserManager& userManager = UserManager::getInstance();
+    ProductManager& productManager = ProductManager::getInstance();
+
+    auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
     // pair.first = the scommandType string (like "help")
     // pair.second = the ICommand* pointer
     for (auto& pair : commands) {
