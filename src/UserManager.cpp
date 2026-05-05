@@ -50,3 +50,7 @@ User* UserManager::getUser(int id) const {
     }
     return nullptr;
 }
+
+vector<User> UserManager::getAllUsers() const {
+    return users;
+}
