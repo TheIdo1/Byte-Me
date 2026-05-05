@@ -1,10 +1,10 @@
 #include "include/App.h"
 
-#include "IOHandler.h"
-#include "IDataHandler.h"
-#include "CommandManager.h"
-#include "UserManager.h"
-#include "ProductManager.h"
+#include "include/IOHandler.h"
+#include "include/IDataHandler.h"
+#include "include/CommandManager.h"
+#include "include/UserManager.h"
+#include "include/ProductManager.h"
 
 App::App(IOHandler& io, IDataHandler* dataHandler) 
     : io(io), 

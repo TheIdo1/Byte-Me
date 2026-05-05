@@ -6,9 +6,21 @@
 // Mock IOHandler for testing
 class MockIOHandler : public IOHandler {
 public:
+
+    std::string cmdType;
+    std::vector<std::string> args;
+
     void print(const std::string& s) override {}
     void readInput() override {}
     void parser() override {}
+    
+    const std::string& getCmdType() const override {
+        return cmdType;
+    }
+
+    const std::vector<std::string>& getArgs() const override {
+        return args;
+    }
 };
 
 
