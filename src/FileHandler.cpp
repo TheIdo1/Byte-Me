@@ -21,7 +21,7 @@ string FileHandler::serializeProduct(const Product& product) {
     return std::to_string(product.getId()) + "|" + product.getName() + "|" + std::to_string(product.getPrice());
 }
 
-User* FileHandler::deserializeUser(const std::string& line) {
+void FileHandler::deserializeUser(const std::string& line) {
     std::stringstream ss(line);
     std::string segment;
     std::vector<std::string> fields;
@@ -37,12 +37,11 @@ User* FileHandler::deserializeUser(const std::string& line) {
         while (std::getline(productsStream, productSegment, ',')) {
             productsWatched.push_back(*productManager.getProduct(std::stoi(productSegment)));
         }
-        return User(fields[0], fields[1], productsWatched);
+        userManager.addUser(std::stoi(fields[0]), fields[1], productsWatched);
     }
-    return nullptr;
 }
 
-Product* FileHandler::deserializeProduct(const std::string& line) {
+void FileHandler::deserializeProduct(const std::string& line) {
     std::stringstream ss(line);
     std::string segment;
     std::vector<std::string> fields;
@@ -52,9 +51,8 @@ Product* FileHandler::deserializeProduct(const std::string& line) {
     }
 
     if (fields.size() == 3) {
-        return new Product(std::stoi(fields[0]), fields[1], std::stod(fields[2]));
+        productManager.addProduct(std::stoi(fields[0]), fields[1], std::stod(fields[2]));
     }
-    return nullptr;
 }
 
 //implementing class methods
@@ -65,7 +63,7 @@ std::vector<User> FileHandler::loadUsers() {
     if (file.is_open()) {
         while (getline(file, line)) {
             if (!line.empty()) {
-                users.push_back(deserializeUser(line));
+                deserializeUser(line);
             }
         }
     file.close();
@@ -103,7 +101,7 @@ std::vector<Product> FileHandler::loadProducts() {
     if (file.is_open()) {
         while (getline(file, line)) {
             if (!line.empty()) {
-                products.push_back(deserializeProduct(line));
+                deserializeProduct(line);
             }
         }
     file.close();

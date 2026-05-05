@@ -13,8 +13,8 @@ class FileHandler : public IDataHandler {
         //helping methods for parsing and writing data
         std::string serializeUser(const User& user);
         std::string serializeProduct(const Product& product);
-        User* deserializeUser(const std::string& line);
-        Product deserializeProduct(const std::string& line);
+        void deserializeUser(const std::string& line);
+        void deserializeProduct(const std::string& line);
 
     public:
         FileHandler();
