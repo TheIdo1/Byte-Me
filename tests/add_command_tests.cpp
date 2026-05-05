@@ -9,9 +9,22 @@ using namespace std;
 class AddCommandTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        ProductManager::getInstance().addProduct(100, "Keyboard", 49.99);
-        ProductManager::getInstance().addProduct(101, "Mouse", 29.99);
-        ProductManager::getInstance().addProduct(102, "Monitor", 199.99);
+        auto& pm = ProductManager::getInstance();
+        for (int id : {100, 101, 102}) {
+            try { pm.removeProduct(id); } catch (...) {}
+        }
+        pm.addProduct(100, "Keyboard", 49.99);
+        pm.addProduct(101, "Mouse", 29.99);
+        pm.addProduct(102, "Monitor", 199.99);
+    }
+
+    void TearDown() override {
+        for (int id : {100, 101, 102, 200, 201}) {
+            try { ProductManager::getInstance().removeProduct(id); } catch (...) {}
+        }
+        for (int id : {1, 3, 10, 11, 12}) {
+            try { UserManager::getInstance().removeUser(id); } catch (...) {}
+        }
     }
 };
 
@@ -80,7 +93,6 @@ TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 200);
     delete user;
-    delete product;
 }
 
 TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
@@ -99,7 +111,6 @@ TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 201);
     delete user;
-    delete product;
 }
 
 TEST_F(AddCommandTest, ExecuteAddsProductsToUser) {
