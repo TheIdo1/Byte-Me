@@ -1,4 +1,5 @@
 #include "include/AddCommand.h"
+#include <stdexcept>
 
 AddCommand::AddCommand(UserManager* userManager, ProductManager* productManager): 
 userManager(userManager),

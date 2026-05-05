@@ -1,4 +1,5 @@
 #include "include/HelpCommand.h"
+#include <stdexcept>
 
 // initializes commands list, io reference, and the description attributes
 HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
@@ -7,6 +8,11 @@ HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
 //TODO:UPDATE THE FLOW OF EXECUTE: MATCH THE ICCOMMAND NEW DEMANDS AND TO INVOKE VALIDATE FROM WITHIN EXECUTE
 // iterates over all registered commands and prints each one's description via io, and lastly it print help description
 void HelpCommand::execute(const std::vector<std::string>& args) {
+
+    if (!validate(args)) {
+        throw std::invalid_argument("Help command does not accept arguments");
+    }
+
     for (ICommand* cmd : commands) {
         io.print(cmd->getDescription());
     }
