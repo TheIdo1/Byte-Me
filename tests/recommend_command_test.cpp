@@ -3,17 +3,41 @@
 #include <string>
 #include "../src/include/RecommendCommand.h"
 
-// 1. Create a Mock IOHandler to capture algorithm output during the test
+
+// Mock IOHandler used to capture command output during the test
 class MockIOHandler : public IOHandler {
+private:
+    // Stores a mock command type so getCmdType() can safely return a reference.
+    std::string cmdType;
+
+    // Stores mock command arguments so getArgs() can safely return a reference.
+    std::vector<std::string> args;
+
 public:
+    // Stores everything printed by the command.
+    // This allows the test to check the command output.
     std::string capturedOutput = "";
 
+    // Captures output instead of printing it to the console.
     void print(const std::string& s) override {
         capturedOutput += s;
     }
 
+    // Empty implementation because no real input is needed in this test.
     void readInput() override {}
+
+    // Empty implementation because parsing is not tested here.
     void parser() override {}
+
+    // Returns the stored mock command type.
+    const std::string& getCmdType() const override {
+        return cmdType;
+    }
+
+    // Returns the stored mock command arguments.
+    const std::vector<std::string>& getArgs() const override {
+        return args;
+    }
 };
 
 // 2. Create a Mock DataHandler to prevent Singleton from crashing or using real files

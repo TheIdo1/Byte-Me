@@ -2,6 +2,7 @@
 #define IOHANDLER_H
 
 #include <string>
+#include <vector>
 
 class IOHandler {
 public:
