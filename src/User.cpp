@@ -12,6 +12,10 @@ User::User(int id, string name)
     }
 }
 
+void User::addProductWatched(Product product) {
+    productsWatched.push_back(product);
+}
+
 //Getters
 int User::getId() const {
     return id;
