@@ -42,13 +42,13 @@ void UserManager::removeUser(int id) {
     throw std::invalid_argument("User with this ID does not exist.");
 }
 
-User* UserManager::getUser(int id) const {
-    for (const auto& user : users) {
+User* UserManager::getUser(int id) {
+    for (auto& user : users) {
         if (user.getId() == id) {
-            return new User(user);
+            return &user;
         }
     }
-    return nullptr;
+    return nullptr; 
 }
 
 vector<User> UserManager::getAllUsers() const {

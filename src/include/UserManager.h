@@ -23,7 +23,7 @@ class UserManager {
         //manager functionality
         void addUser(int id, string name);
         void removeUser(int id);
-        User* getUser(int id) const;
+        User* getUser(int id);
         vector<User> getAllUsers() const;
 };
 

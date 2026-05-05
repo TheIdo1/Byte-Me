@@ -14,7 +14,7 @@ string FileHandler::serializeUser(const User& user) {
             products += std::to_string(product.getId()) + ",";
         }
     }
-    return user.getId() + "|" + user.getName() + "|" + products;
+    return std::to_string(user.getId()) + "|" + user.getName() + "|" + products;
 }
 
 string FileHandler::serializeProduct(const Product& product) {
@@ -31,13 +31,15 @@ void FileHandler::deserializeUser(const std::string& line) {
     }
 
     if (fields.size() == 3) {
-        std::vector<Product> productsWatched;
+        int userId = std::stoi(fields[0]);
+        userManager.addUser(userId, fields[1]);
         std::stringstream productsStream(fields[2]);
         std::string productSegment;
         while (std::getline(productsStream, productSegment, ',')) {
-            productsWatched.push_back(*productManager.getProduct(std::stoi(productSegment)));
+            if (!productSegment.empty()) {
+                userManager.getUser(userId)->addProductWatched(*productManager.getProduct(std::stoi(productSegment)));
+            }
         }
-        userManager.addUser(std::stoi(fields[0]), fields[1], productsWatched);
     }
 }
 
@@ -66,9 +68,9 @@ std::vector<User> FileHandler::loadUsers() {
                 deserializeUser(line);
             }
         }
-    file.close();
-    return users;
+        file.close();
     }
+    return users;
 }
 
 void FileHandler::saveUser(const User& user) {
@@ -104,9 +106,9 @@ std::vector<Product> FileHandler::loadProducts() {
                 deserializeProduct(line);
             }
         }
-    file.close();
-    return products;
+        file.close();
     }
+    return products;
 }
 
 void FileHandler::saveProduct(const Product& product) {
