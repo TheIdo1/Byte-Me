@@ -3,14 +3,29 @@
 #include <vector>
 #include <string>
 
+
+#include "IOHandler.h"
+#include "IDataHandler.h"
+#include "CommandManager.h"
+#include "UserManager.h"
+#include "ProductManager.h"
+
 class App {
-    public:
-        //constructor
-        App ();
-        
-        void run();
+private:
+    IOHandler& io;
+    IDataHandler* dataHandler;
 
+    // references to the singletons - convenient access without calling getInstance() every time
+    UserManager& userManager;
+    ProductManager& productManager;
+    CommandManager& commandManager;
 
+public:
+    App(IOHandler& io, IDataHandler* dataHandler = nullptr);
+    void run();
+
+    // method for loading data from data source, via managers at the beginning of the program
+    void setup();
 };
 
 #endif
