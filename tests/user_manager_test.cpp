@@ -11,14 +11,19 @@ using namespace std;
 class UserManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Add some products to ProductManager for testing
-        ProductManager::getInstance().addProduct(1, "Laptop", 999.99);
-        ProductManager::getInstance().addProduct(2, "Mouse", 29.99);
-        ProductManager::getInstance().addProduct(3, "Keyboard", 49.99);
+        auto& pm = ProductManager::getInstance();
+        try { pm.addProduct(1, "Laptop", 999.99); } catch (...) {}
+        try { pm.addProduct(2, "Mouse", 29.99); } catch (...) {}
+        try { pm.addProduct(3, "Keyboard", 49.99); } catch (...) {}
     }
 
     void TearDown() override {
-        // Cleanup if needed
+        for (int id : {1, 2, 3}) {
+            try { ProductManager::getInstance().removeProduct(id); } catch (...) {}
+        }
+        for (int id : {101, 102, 103, 104, 105, 106, 107}) {
+            try { UserManager::getInstance().removeUser(id); } catch (...) {}
+        }
     }
 };
 
