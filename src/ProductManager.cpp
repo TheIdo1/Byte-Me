@@ -52,10 +52,8 @@ void ProductManager::removeProduct(int id) {
         products.erase(it, products.end());
     }
 
-    // if product with the given ID doesn't exist, throw an exception
-    else {
-        throw std::invalid_argument("Product with this ID does not exist");
-    }
+    // if product with the given ID doesn't exist, do nothing.
+    
 }
 
 
@@ -66,10 +64,17 @@ Product* ProductManager::getProduct(int id) {
             return &product;
         }
     }
-    throw std::invalid_argument("Product with this ID does not exist");
+    return nullptr; // return nullptr if product with the given ID doesn't exist
 }
 
 // get all products in the product list
 std::vector<Product> ProductManager::getAllProducts() const {
     return products;
+}
+
+// clear all products from the product list, and reset the data handler.
+// used for testing purposes to reset the state of the product manager between tests.
+void ProductManager::cleanUp() {
+    products.clear();
+    dataHandler = nullptr; // reset data handler to avoid unintended interactions with tests
 }
