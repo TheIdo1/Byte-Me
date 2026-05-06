@@ -72,7 +72,6 @@ TEST_F(AddCommandTest, ExecuteCreatesUserIfNotExists) {
     EXPECT_EQ(user->getName(), "User-10");
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 100);
-    delete user;
 }
 
 TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
@@ -92,7 +91,6 @@ TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
     ASSERT_NE(user, nullptr);
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 200);
-    delete user;
 }
 
 TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
@@ -110,7 +108,6 @@ TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
     EXPECT_EQ(product->getName(), "Product-201");
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 201);
-    delete user;
 }
 
 TEST_F(AddCommandTest, ExecuteAddsProductsToUser) {
