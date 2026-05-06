@@ -28,7 +28,7 @@ public:
     Product* getProduct(int id);
     // get all products in the product list
     std::vector<Product> getAllProducts() const;
-    // clean up the product list - used for testing purposes to reset the state of the ProductManager between tests.
+    // clean up the product list, and reset the data handler - used for testing purposes to reset the state of the ProductManager between tests.
     void cleanUp();
 };
 
