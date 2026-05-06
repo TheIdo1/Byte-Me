@@ -4,9 +4,13 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
-FileHandler::FileHandler() {}
-//implementing hel[ping methods for parsing and writing data
+FileHandler::FileHandler() {
+    // Ensure the data directory exists. If it doesn't, create it.
+    std::filesystem::create_directories("src/data");
+}
+//implementing helping methods for parsing and writing data
 string FileHandler::serializeUser(const User& user) {
     std::string products;
     if (!user.getProductsWatched().empty()) {
