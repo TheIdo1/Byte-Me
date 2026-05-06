@@ -73,3 +73,9 @@ Product* ProductManager::getProduct(int id) {
 std::vector<Product> ProductManager::getAllProducts() const {
     return products;
 }
+
+// clear all products from the product list.
+// used for testing purposes to reset the state of the product manager between tests.
+void ProductManager::cleanUp() {
+    products.clear();
+}
