@@ -108,7 +108,7 @@ std::vector<Product> FileHandler::loadProducts() {
         }
         file.close();
     }
-    return products;
+    return productManager.getAllProducts();
 }
 
 void FileHandler::saveProduct(const Product& product) {
