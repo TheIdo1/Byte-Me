@@ -44,8 +44,8 @@ public:
     //first const for stressing the returned string cannot be changed
     //second const for stressing no changes the object itself
     const std::string& getInput() const;
-    const std::string& getCmdType() const;
-    const std::vector<std::string>& getArgs() const;
+    const std::string& getCmdType() const override;
+    const std::vector<std::string>& getArgs() const override;
 
 };
 
