@@ -173,7 +173,7 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     RecommendCommand cmd(um, pm, mockIO);
 
     // 4. Define the arguments: "recommend 1 104"
-    std::vector<std::string> args = {"recommend", "1", "104"};
+    std::vector<std::string> args = {"1", "104"};
     
     // Ensure the command validates the arguments properly
     ASSERT_TRUE(cmd.validate(args)); 

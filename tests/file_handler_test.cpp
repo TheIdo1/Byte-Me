@@ -6,14 +6,16 @@
 class FileHandlerTest : public ::testing::Test {
 protected:
     FileHandler handler;
-    const std::string testUserFile = "test_users.txt";
-    const std::string testProductFile = "test_products.txt";
+    const std::string productsDataFile = "src/data/products.txt";
 
-    void SetUp() override {}
+    void SetUp() override {
+        ProductManager::getInstance().cleanUp();
+        std::ofstream(productsDataFile, std::ios::trunc).close();
+    }
 
     void TearDown() override {
-        std::remove(testUserFile.c_str());
-        std::remove(testProductFile.c_str());
+        ProductManager::getInstance().cleanUp();
+        std::ofstream(productsDataFile, std::ios::trunc).close();
     }
 };
 
@@ -21,11 +23,11 @@ protected:
 TEST_F(FileHandlerTest, SaveAndLoadProduct) {
     ProductManager& pm = ProductManager::getInstance();
     pm.addProduct(1, "Phone", 999.99);
-
     handler.saveProduct(*pm.getProduct(1));
 
-    std::vector<Product> products = handler.loadProducts();
+    pm.cleanUp(); // clear in-memory state so loadProducts re-reads from file
 
+    std::vector<Product> products = handler.loadProducts();
     ASSERT_EQ(products.size(), 1);
     EXPECT_EQ(products[0].getId(), 1);
     EXPECT_EQ(products[0].getName(), "Phone");
@@ -37,14 +39,14 @@ TEST_F(FileHandlerTest, DeleteProductRemovesSpecificEntry) {
     ProductManager& pm = ProductManager::getInstance();
     pm.addProduct(1, "Phone", 500.0);
     pm.addProduct(2, "Tablet", 300.0);
-
     handler.saveProduct(*pm.getProduct(1));
     handler.saveProduct(*pm.getProduct(2));
 
     handler.deleteProduct(1);
 
-    std::vector<Product> products = handler.loadProducts();
+    pm.cleanUp(); // clear in-memory state so loadProducts re-reads from file
 
+    std::vector<Product> products = handler.loadProducts();
     ASSERT_EQ(products.size(), 1);
     EXPECT_EQ(products[0].getId(), 2);
     EXPECT_EQ(products[0].getName(), "Tablet");
