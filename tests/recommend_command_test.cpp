@@ -20,6 +20,7 @@ public:
 
     // Captures output instead of printing it to the console.
     void print(const std::string& s) override {
+        std::cout << "MockIOHandler captured print: " << s; // Debug print to verify what is being captured
         capturedOutput += s;
     }
 
@@ -28,6 +29,10 @@ public:
 
     // Empty implementation because parsing is not tested here.
     void parser() override {}
+
+    void clean() {
+        capturedOutput = "";
+    }
 
     // Returns the stored mock command type.
     const std::string& getCmdType() const override {
@@ -161,10 +166,9 @@ void setupTestData(UserManager& um, ProductManager& pm) {
 TEST(RecommendCommandTests, PdfAlgorithmExample) {
     // 1. Initialize managers and Mock IO
     ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    
     UserManager& um = UserManager::getInstance(&globalMockHandler); 
-    MockIOHandler mockIO; 
-    
+    MockIOHandler mockIO;
+    mockIO.print("test started\n"); // Debug print to verify test execution
 
     // 2. Populate the system with test data
     setupTestData(um, pm);
@@ -173,8 +177,8 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     RecommendCommand cmd(um, pm, mockIO);
 
     // 4. Define the arguments: "recommend 1 104"
-    std::vector<std::string> args = {"recommend", "1", "104"};
-    
+    std::vector<std::string> args = {"1", "104"};
+
     // Ensure the command validates the arguments properly
     ASSERT_TRUE(cmd.validate(args)); 
 
@@ -182,9 +186,10 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     // All output should be routed to mockIO.capturedOutput internally
     cmd.execute(args);
     
+    std::cout << "Captured Output:\n" << mockIO.capturedOutput << std::endl; // Debug print to verify output format
     // 6. Verify the output matches exactly what is required in the PDF
     // Expected output format: "105 106 111 110 112 113 107 108 109 114"
-    EXPECT_NE(mockIO.capturedOutput.find("105 106 111 110 112 113 107 108 109 114"), std::string::npos) // [cite: 19]
+    EXPECT_NE(mockIO.capturedOutput.find("105 106 111 110 112 113 107 108 109 114"), std::string::npos)
         << "Algorithm failed or output formatting is incorrect. Output was: " << mockIO.capturedOutput;
 }
 
