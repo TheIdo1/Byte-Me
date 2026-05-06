@@ -11,14 +11,19 @@ using namespace std;
 class UserManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Add some products to ProductManager for testing
-        ProductManager::getInstance().addProduct(1, "Laptop", 999.99);
-        ProductManager::getInstance().addProduct(2, "Mouse", 29.99);
-        ProductManager::getInstance().addProduct(3, "Keyboard", 49.99);
+        auto& pm = ProductManager::getInstance();
+        try { pm.addProduct(1, "Laptop", 999.99); } catch (...) {}
+        try { pm.addProduct(2, "Mouse", 29.99); } catch (...) {}
+        try { pm.addProduct(3, "Keyboard", 49.99); } catch (...) {}
     }
 
     void TearDown() override {
-        // Cleanup if needed
+        for (int id : {1, 2, 3}) {
+            try { ProductManager::getInstance().removeProduct(id); } catch (...) {}
+        }
+        for (int id : {101, 102, 103, 104, 105, 106, 107}) {
+            try { UserManager::getInstance().removeUser(id); } catch (...) {}
+        }
     }
 };
 
@@ -42,7 +47,6 @@ TEST_F(UserManagerTest, AddUser) {
     EXPECT_EQ(user->getId(), 101);
     EXPECT_EQ(user->getName(), "Alice");
     EXPECT_TRUE(user->getProductsWatched().empty());
-    delete user;
 }
 
 // Test getUser
@@ -55,8 +59,7 @@ TEST_F(UserManagerTest, GetUser) {
     EXPECT_EQ(user->getId(), 102);
     EXPECT_EQ(user->getName(), "Bob");
     EXPECT_TRUE(user->getProductsWatched().empty());
-    delete user;
-    
+
     // Test non-existent user
     User* nonUser = um.getUser(999);
     EXPECT_EQ(nonUser, nullptr);
@@ -114,9 +117,8 @@ TEST_F(UserManagerTest, UserMethods) {
     user->addProductWatched(*newProduct);
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 3);
-    
+
     EXPECT_TRUE(user->isValid());
-    delete user;
 }
 
 // Test invalid user addition
