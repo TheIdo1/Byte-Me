@@ -90,7 +90,8 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
         if (watchedTargetProduct) {
             int similarity = userSimilarity[user.getId()];
             for (const Product& p : user.getProductsWatched()) {
-                if (p.getId() != targetProductId) { // Don't recommend the target product
+                //make sure to not recommend on current product and not recommend products the user already watched.
+                if (p.getId() != targetProductId && targetWatchedIds.count(p.getId()) == 0) {
                     productScores[p.getId()] += similarity;
                 }
             }
@@ -109,7 +110,7 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
         if (a.second != b.second) {
             return a.second > b.second; // Higher score first
         }
-        return a.first > b.first; // Higher ID first
+        return a.first < b.first; // Higher ID first
     });
 
     // Limit to top 10 products
@@ -117,13 +118,6 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
         scoredProducts.resize(10);
     }
 
-    // DEBUG NEED TO DELETE!!!!  NOTICE ME ! DELETE ME !!!!!!!!!   WOWOWOWOWOW DELETE ME !!!!!!!!!
-    std::cout << "Scored Products (Product ID: Score):\n"; // Debug print to verify scoring
-    //loop and print the scored products
-    for (const auto& entry : scoredProducts) {
-        std::cout << "Product ID: " << entry.first << ", Score: " << entry.second << std::endl; // Debug print to verify scoring
-    }
-    
 
     // Build output string
     for(int i = 0; i < scoredProducts.size(); i++) {
@@ -132,10 +126,6 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
             output += " ";
         }
     }
-
-    // Debug print to verify final output delete me !!!!!!!!! DELETE ME !!!!!!!!! DELETE ME !!!!!!!!! 
-    ioHandler.print("TEST_STRING");
-    std::cout << "Final Output (recommend class):\n" << output << std::endl; // Debug print to verify final output
 
     // Print to IOHandler
     ioHandler.print(output + "\n");
