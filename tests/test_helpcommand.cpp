@@ -101,5 +101,5 @@ TEST(HelpCommandTest, ExecutePrintsNothingForEmptyCommandList) {
  
 
     // help always prints at least itself
-    EXPECT_EQ(fakeOutput.str(), "help");
+    EXPECT_EQ(fakeOutput.str(), "help\n");
 }
