@@ -46,7 +46,11 @@ void User::setName(string name) {
 
 //isValid method
 bool User::isValid() const {
+<<<<<<< SCRUM-42-fix-recommendCommand
+    return !(id < 0) && !name.empty();
+=======
     return id >= 0 && !name.empty();
+>>>>>>> main
 }
 
 

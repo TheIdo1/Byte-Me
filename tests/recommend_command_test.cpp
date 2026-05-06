@@ -5,43 +5,29 @@
 
 
 // Mock IOHandler used to capture command output during the test
-class MockIOHandler : public IOHandler {
-private:
-    // Stores a mock command type so getCmdType() can safely return a reference.
-    std::string cmdType;
+class MockIOHandlerRecommend : public IOHandler {
+    private:
+    std::string dummyCmd;
+    std::vector<std::string> dummyArgs;
 
-    // Stores mock command arguments so getArgs() can safely return a reference.
-    std::vector<std::string> args;
-
-public:
-    // Stores everything printed by the command.
-    // This allows the test to check the command output.
-    std::string capturedOutput = "";
-
-    // Captures output instead of printing it to the console.
+    public:
+    std::string capturedOutput;
     void print(const std::string& s) override {
-        capturedOutput += s;
+        capturedOutput = s; // Capture all printed output
+        std::cout << "MockIOHandlerRecommend captured output: " << s << std::endl; // Debug print to verify output capture
     }
-
-    // Empty implementation because no real input is needed in this test.
     void readInput() override {}
-
-    // Empty implementation because parsing is not tested here.
     void parser() override {}
-
-    // Returns the stored mock command type.
     const std::string& getCmdType() const override {
-        return cmdType;
+        return dummyCmd; // Return dummy command type
     }
-
-    // Returns the stored mock command arguments.
     const std::vector<std::string>& getArgs() const override {
-        return args;
+        return dummyArgs; // Return dummy arguments
     }
 };
 
 // 2. Create a Mock DataHandler to prevent Singleton from crashing or using real files
-class MockDataHandler : public IDataHandler {
+class MockDataHandlerRecommend : public IDataHandler {
 public:
     void saveUser(const User& user) override {}
     std::vector<User> loadUsers() override { return {}; }
@@ -53,7 +39,7 @@ public:
 };
 
 // Global instance to avoid dangling pointers between tests
-MockDataHandler globalMockHandler;
+MockDataHandlerRecommend globalMockHandler;
 
 // Helper function to populate the system exactly as shown in the PDF appendix
 void setupTestData(UserManager& um, ProductManager& pm) {
@@ -161,10 +147,8 @@ void setupTestData(UserManager& um, ProductManager& pm) {
 TEST(RecommendCommandTests, PdfAlgorithmExample) {
     // 1. Initialize managers and Mock IO
     ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    
-    UserManager& um = UserManager::getInstance(); 
-    MockIOHandler mockIO; 
-    
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandlerRecommend mockIO;
 
     // 2. Populate the system with test data
     setupTestData(um, pm);
@@ -174,7 +158,7 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
 
     // 4. Define the arguments: "recommend 1 104"
     std::vector<std::string> args = {"1", "104"};
-    
+
     // Ensure the command validates the arguments properly
     ASSERT_TRUE(cmd.validate(args)); 
 
@@ -184,6 +168,71 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     
     // 6. Verify the output matches exactly what is required in the PDF
     // Expected output format: "105 106 111 110 112 113 107 108 109 114"
-    EXPECT_NE(mockIO.capturedOutput.find("105 106 111 110 112 113 107 108 109 114"), std::string::npos) // [cite: 19]
+    EXPECT_NE(mockIO.capturedOutput.find("105 106 111 110 112 113 107 108 109 114"), std::string::npos)
         << "Algorithm failed or output formatting is incorrect. Output was: " << mockIO.capturedOutput;
+}
+
+TEST(RecommendCommandTests, tooFewArguments) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandlerRecommend mockIO = MockIOHandlerRecommend(); 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define invalid arguments (missing product ID)
+    std::vector<std::string> args = {"1"}; 
+
+    // 4. Validate should return false for invalid arguments
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for missing product ID.";
+}
+
+TEST(RecommendCommandTests, nonExistentUser) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandlerRecommend mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define arguments with a non-existent user ID
+    std::vector<std::string> args = {"recommend", "999", "104"}; 
+
+    // 4. Validate should return false for non-existent user
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for non-existent user ID.";
+}
+
+TEST(RecommendCommandTests, nonExistentProduct) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandlerRecommend mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define arguments with a non-existent product ID
+    std::vector<std::string> args = {"recommend", "1", "999"}; 
+
+    // 4. Validate should return false for non-existent product
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for non-existent product ID.";
+}
+
+
+TEST(RecommendCommandTests, tooManyArguments) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandlerRecommend mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define invalid arguments (extra argument)
+    std::vector<std::string> args = {"recommend", "1", "104", "extra"}; 
+
+    // 4. Validate should return false for too many arguments
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for too many arguments.";
 }

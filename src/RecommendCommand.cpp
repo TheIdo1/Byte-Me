@@ -22,6 +22,15 @@ bool RecommendCommand::validate(const std::vector<std::string>& args) const {
     } catch (...) {
         return false; // Not numbers
     }
+
+    if (!userManager.getUser(std::stoi(args[0]))) {
+        return false; // User does not exist
+    }
+
+    if (!productManager.getProduct(std::stoi(args[1]))) {
+        return false; // Product does not exist
+    }
+
     return true;
 }
 
@@ -30,95 +39,95 @@ const std::string& RecommendCommand::getDescription() const {
 }
 
 void RecommendCommand::execute(const std::vector<std::string>& args) {
+    //validate args before executing, if not valid, do nothing
+    //makes sure that user and product exists, and that the args are in the correct format
     if (!validate(args)) {
-        throw std::invalid_argument("Invalid arguments for recommend command. Usage: recommend [userid] [productid]");
+        return; 
     }
 
     int targetUserId = std::stoi(args[0]);
     int targetProductId = std::stoi(args[1]);
 
     User* targetUser = userManager.getUser(targetUserId);
-    if (!targetUser) {
-        throw std::invalid_argument("User not found.");
+
+    // Step 1: Find similaritys between target and all other users
+    // Create a set of product IDs watched by the 
+    std::set<int> targetWatchedIds;
+    for (const Product& p : targetUser->getProductsWatched()) {
+        targetWatchedIds.insert(p.getId());
+
+    }
+    std::map<int, int> userSimilarity; // userId -> similarity score
+    for (const User& user : userManager.getAllUsers()) {
+        if (user.getId() == targetUserId) {
+            continue; // Skip the target user
+        }
+
+        int similarity = 0;
+        for (const Product& p : user.getProductsWatched()) {
+            if (targetWatchedIds.count(p.getId())) {
+                similarity++;
+            }
+        }
+        userSimilarity[user.getId()] = similarity;
     }
 
-    // --- Step 1: Prepare target user's watched products for fast lookup ---
-    std::set<int> targetUserWatchedIds;
-    for (const auto& product : targetUser->getProductsWatched()) {
-        targetUserWatchedIds.insert(product.getId());
-    }
-
-    // Map to accumulate the calculated weights for each recommended product (id, weight)
-    std::map<int, int> productWeights; 
-
-    // --- Step 2 & 3: Find similar users, check if they watched target product, and calculate weights ---
-    std::vector<User> allUsers = userManager.getAllUsers();
-    
-    for (const auto& otherUser : allUsers) {
-        // Skip the target user himself
-        if (otherUser.getId() == targetUserId) {
-            continue;
+    // Step 2: Find who watched the target product, and add weight to each product they watched based on similarty score.
+    std::map<int, int> productScores; // productId -> score
+    for (const User& user : userManager.getAllUsers()) {
+        if (user.getId() == targetUserId) {
+            continue; // Skip the target user
         }
 
         bool watchedTargetProduct = false;
-        int similarityScore = 0;
-        std::vector<int> otherUserWatchedIds;
-
-        // Analyze what this 'other' user has watched
-        for (const auto& product : otherUser.getProductsWatched()) {
-            int pid = product.getId();
-            otherUserWatchedIds.push_back(pid);
-            
-            // Check if they watched the target product
-            if (pid == targetProductId) {
+        for (const Product& p : user.getProductsWatched()) {
+            if (p.getId() == targetProductId) {
                 watchedTargetProduct = true;
-            }
-
-            // Calculate similarity: +1 for every product also watched by the target user
-            if (targetUserWatchedIds.count(pid) > 0) {
-                similarityScore++;
+                break;
             }
         }
 
-        // Apply logic: Only consider users who watched the target product AND have a similarity > 0
-        if (watchedTargetProduct && similarityScore > 0) {
-            // Distribute the similarity score as weight to their other watched products
-            for (int pid : otherUserWatchedIds) {
-                // Do not recommend the target product itself, or products the target user already watched
-                if (pid != targetProductId && targetUserWatchedIds.count(pid) == 0) {
-                    productWeights[pid] += similarityScore;
+        if (watchedTargetProduct) {
+            int similarity = userSimilarity[user.getId()];
+            for (const Product& p : user.getProductsWatched()) {
+                //make sure to not recommend on current product and not recommend products the user already watched.
+                if (p.getId() != targetProductId && targetWatchedIds.count(p.getId()) == 0) {
+                    productScores[p.getId()] += similarity;
                 }
             }
         }
     }
 
-    // If no recommendations found
-    if (productWeights.empty()) {
-        throw std::invalid_argument("No recommendations found.");
+    // output up to 10 products with the highest score, sorted by score and then by product ID in accending order
+    std::string output;
+    std::vector<std::pair<int, int>> scoredProducts; // (productId, score)
+    for (const auto& entry : productScores) {
+        scoredProducts.emplace_back(entry.first, entry.second);
     }
 
-    // --- Step 4: Sort and format the output ---
-    // Transfer from map to a vector so we can sort by values (weights)
-    std::vector<std::pair<int, int>> sortedRecommendations(productWeights.begin(), productWeights.end());
+    // Sort by score (descending) and then by product ID (descending)
+    std::sort(scoredProducts.begin(), scoredProducts.end(), [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+        if (a.second != b.second) {
+            return a.second > b.second; // Higher score first
+        }
+        return a.first < b.first; // Higher ID first
+    });
 
-    // Custom sorting logic as requested in the PDF
-    std::sort(sortedRecommendations.begin(), sortedRecommendations.end(),
-        [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
-            if (a.second != b.second) {
-                return a.second > b.second; // Primary: sort by weight (Descending)
-            }
-            return a.first < b.first;       // Secondary: sort by ID (Ascending)
-        });
+    // Limit to top 10 products
+    if (scoredProducts.size() > 10) {
+        scoredProducts.resize(10);
+    }
 
-    // Build the final output string
-    std::string output = "";
-    for (size_t i = 0; i < sortedRecommendations.size(); ++i) {
-        output += std::to_string(sortedRecommendations[i].first);
-        if (i < sortedRecommendations.size() - 1) {
+
+    // Build output string
+    for(int i = 0; i < scoredProducts.size(); i++) {
+        output += std::to_string(scoredProducts[i].first);
+        if (i < scoredProducts.size() - 1) {
             output += " ";
         }
     }
 
     // Print to IOHandler
     ioHandler.print(output + "\n");
+    
 }
