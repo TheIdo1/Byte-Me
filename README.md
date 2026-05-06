@@ -87,6 +87,21 @@ docker run --rm byte-me ./build/RunTests
 docker run -it --rm byte-me ./build/RunApp
 ```
 
+To run from docker with local data (run from project root folder):
+
+**For Linux / macOS / Git Bash:**
+```bash
+docker run -it -v "$PWD/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+```
+**For Windows (PowerShell):**
+```bash
+docker run -it -v "${PWD}/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+```
+**For Windows (Command Prompt / CMD):**
+```bash
+docker run -it -v "%cd%/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+```
+
 ## Data format
 
 Products file (`src/data/products.txt`):
