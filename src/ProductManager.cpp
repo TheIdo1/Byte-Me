@@ -74,8 +74,9 @@ std::vector<Product> ProductManager::getAllProducts() const {
     return products;
 }
 
-// clear all products from the product list.
+// clear all products from the product list, and reset the data handler.
 // used for testing purposes to reset the state of the product manager between tests.
 void ProductManager::cleanUp() {
     products.clear();
+    dataHandler = nullptr; // reset data handler to avoid unintended interactions with tests
 }
