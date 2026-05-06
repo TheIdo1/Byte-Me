@@ -83,7 +83,8 @@ Build and run the test suite inside a container:
 
 ```bash
 docker build -t byte-me .
-docker run --rm byte-me
+docker run --rm byte-me ./build/RunTests
+docker run -it --rm byte-me ./build/RunApp
 ```
 
 ## Data format
