@@ -46,7 +46,7 @@ void User::setName(string name) {
 
 //isValid method
 bool User::isValid() const {
-    return !(id < 0) && !name.empty() && !productsWatched.empty();
+    return !(id < 0) && !name.empty();
 }
 
 
