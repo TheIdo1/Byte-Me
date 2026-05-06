@@ -162,7 +162,7 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     // 1. Initialize managers and Mock IO
     ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
     
-    UserManager& um = UserManager::getInstance(); 
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
     MockIOHandler mockIO; 
     
 
@@ -186,4 +186,52 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     // Expected output format: "105 106 111 110 112 113 107 108 109 114"
     EXPECT_NE(mockIO.capturedOutput.find("105 106 111 110 112 113 107 108 109 114"), std::string::npos) // [cite: 19]
         << "Algorithm failed or output formatting is incorrect. Output was: " << mockIO.capturedOutput;
+}
+
+TEST(RecommendCommandTests, tooFewArguments) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandler mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define invalid arguments (missing product ID)
+    std::vector<std::string> args = {"1"}; 
+
+    // 4. Validate should return false for invalid arguments
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for missing product ID.";
+}
+
+TEST(RecommendCommandTests, nonExistentUser) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandler mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define arguments with a non-existent user ID
+    std::vector<std::string> args = {"recommend", "999", "104"}; 
+
+    // 4. Validate should return false for non-existent user
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for non-existent user ID.";
+}
+
+TEST(RecommendCommandTests, nonExistentProduct) {
+    // 1. Initialize managers and Mock IO
+    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
+    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    MockIOHandler mockIO; 
+
+    // 2. Create the command instance with the mocked IOHandler and real managers
+    RecommendCommand cmd(um, pm, mockIO);
+
+    // 3. Define arguments with a non-existent product ID
+    std::vector<std::string> args = {"recommend", "1", "999"}; 
+
+    // 4. Validate should return false for non-existent product
+    EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for non-existent product ID.";
 }
