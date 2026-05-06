@@ -13,10 +13,13 @@ public:
     void deleteProduct(int id) override {}
 };
 
+
+
 // Test valid initialization and data retention
 TEST(ProductManagerTests, ValidInitialization) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
 
@@ -32,6 +35,7 @@ TEST(ProductManagerTests, ValidInitialization) {
 TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -43,6 +47,7 @@ TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
 TEST(ProductManagerTests, RemoveProductWorks) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
     manager.removeProduct(1);
@@ -56,6 +61,7 @@ TEST(ProductManagerTests, RemoveProductWorks) {
 TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     Product* retrievedProduct = manager.getProduct(999); // ID that doesn't exist
     EXPECT_EQ(retrievedProduct, nullptr);
@@ -65,6 +71,7 @@ TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
 TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Product 1", 9.99);
     manager.addProduct(2, "Product 2", 19.99);
@@ -83,7 +90,7 @@ TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
 TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
-
+    manager.cleanUp(); // Ensure the product list is empty before the test
     // Attempt to remove a product that doesn't exist
     EXPECT_NO_THROW(manager.removeProduct(999)); // ID that doesn't exist
 }
@@ -92,6 +99,7 @@ TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
 TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     // Attempt to add a product with a negative price
     EXPECT_THROW(manager.addProduct(1, "Invalid Product", -10.0), std::invalid_argument);
@@ -108,6 +116,7 @@ TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
 TEST(ProductManagerTests, UpdateProductPriceWorks) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
     
@@ -124,6 +133,7 @@ TEST(ProductManagerTests, UpdateProductPriceWorks) {
 TEST(ProductManagerTests, UpdateProductNameWorks) {
     MockDataHandler mockHandler;
     ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
     

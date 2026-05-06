@@ -52,10 +52,8 @@ void ProductManager::removeProduct(int id) {
         products.erase(it, products.end());
     }
 
-    // if product with the given ID doesn't exist, throw an exception
-    else {
-        throw std::invalid_argument("Product with this ID does not exist");
-    }
+    // if product with the given ID doesn't exist, do nothing.
+    
 }
 
 
@@ -66,7 +64,7 @@ Product* ProductManager::getProduct(int id) {
             return &product;
         }
     }
-    throw std::invalid_argument("Product with this ID does not exist");
+    return nullptr; // return nullptr if product with the given ID doesn't exist
 }
 
 // get all products in the product list
