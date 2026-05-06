@@ -20,9 +20,6 @@ void UserManager::addUser(int id, string name) {
         throw std::invalid_argument("Invalid user data.");
     }
     users.push_back(newUser);
-    if (dataHandler) {
-        dataHandler->saveUser(newUser);
-    }
 }
 
 void UserManager::removeUser(int id) {

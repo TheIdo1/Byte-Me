@@ -1,9 +1,10 @@
 #include "include/AddCommand.h"
 #include <stdexcept>
 
-AddCommand::AddCommand(UserManager* userManager, ProductManager* productManager): 
+AddCommand::AddCommand(UserManager* userManager, ProductManager* productManager, IDataHandler* dataHandler):
 userManager(userManager),
 productManager(productManager),
+dataHandler(dataHandler),
 description("add [userId] [productId1] [productId2] ...") {}
 
 void AddCommand::execute(const std::vector<std::string>& args) {
@@ -26,6 +27,10 @@ void AddCommand::execute(const std::vector<std::string>& args) {
             product = productManager->getProduct(productId);
         }
         user->addProductWatched(*product);
+    }
+    if (dataHandler) {
+        dataHandler->deleteUser(userId);
+        dataHandler->saveUser(*user);
     }
 }
 
