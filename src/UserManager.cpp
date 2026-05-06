@@ -1,11 +1,7 @@
 #include "include/UserManager.h"
 #include <stdexcept>
 
-UserManager::UserManager(IDataHandler* dataHandler) : dataHandler(dataHandler) {
-    if (dataHandler) {
-        users = dataHandler->loadUsers();
-    }
-}
+UserManager::UserManager(IDataHandler* dataHandler) : dataHandler(dataHandler) {}
 
 UserManager& UserManager::getInstance(IDataHandler* dataHandler) {
     static UserManager instance(dataHandler);

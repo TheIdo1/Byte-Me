@@ -8,11 +8,7 @@ ProductManager& ProductManager::getInstance(IDataHandler* handler) {
     return instance;
 }
 // constructor implementation, loads products from data handler if provided.
-ProductManager::ProductManager(IDataHandler* handler) : dataHandler(handler) {
-    if (dataHandler) {
-        products = dataHandler->loadProducts();
-    }
-}
+ProductManager::ProductManager(IDataHandler* handler) : dataHandler(handler) {}
 
 // add a product to the product list, and save it using the data handler.
 void ProductManager::addProduct(int id, const std::string& name, double price) {
