@@ -12,7 +12,7 @@ App::App(IOHandler& io, IDataHandler* dataHandler)
       // initialize singletons and store references to them
       productManager(ProductManager::getInstance(dataHandler)),
       userManager(UserManager::getInstance(dataHandler)),
-      commandManager(CommandManager::getInstance(io, userManager, productManager)) {
+      commandManager(CommandManager::getInstance(io, userManager, productManager, dataHandler)) {
 }
 
 void App::run(){

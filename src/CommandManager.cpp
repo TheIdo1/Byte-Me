@@ -4,20 +4,20 @@
 #include "include/RecommendCommand.h"
 
 // singleton pattern - ensures only one instance of CommandManager exists
-CommandManager& CommandManager::getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager) {
+CommandManager& CommandManager::getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler) {
     // first call creates the instance with the provided io reference
     // subsequent calls ignore the io argument and return the existing instance.
-    static CommandManager instance(io, userManager, productManager);
+    static CommandManager instance(io, userManager, productManager, dataHandler);
     return instance;
 }
 
 // private constructor - initializes the commands map with all available commands
 // receives io by reference since all commands need it for input/output operations
 // io is stored as a member field for potential future use
-CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager) : io(io) {
+CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler) : io(io) {
     // create add and recommend first since HelpCommand needs them
     //TODO: unify the way addCommand and RecommendCommand recieves their arguments
-    commands["add"]       = new AddCommand(&userManager, &productManager);
+    commands["add"]       = new AddCommand(&userManager, &productManager, dataHandler);
     commands["recommend"] = new RecommendCommand(userManager, productManager, io);
 
     // collect all commands so far to pass to HelpCommand

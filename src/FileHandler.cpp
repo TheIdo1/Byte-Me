@@ -13,6 +13,7 @@ string FileHandler::serializeUser(const User& user) {
         for (const auto& product : user.getProductsWatched()) {
             products += std::to_string(product.getId()) + ",";
         }
+        products.pop_back();
     }
     return std::to_string(user.getId()) + "|" + user.getName() + "|" + products;
 }
