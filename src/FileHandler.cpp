@@ -70,7 +70,7 @@ std::vector<User> FileHandler::loadUsers() {
         }
         file.close();
     }
-    return users;
+    return userManager.getAllUsers();
 }
 
 void FileHandler::saveUser(const User& user) {
