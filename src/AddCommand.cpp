@@ -9,9 +9,19 @@ description("add [userId] [productId1] [productId2] ...") {}
 
 void AddCommand::execute(const std::vector<std::string>& args) {
     if (!validate(args)) {
-        throw std::invalid_argument("Invalid arguments for AddCommand.");
+        return; // Invalid arguments, do nothing
     }
-    int userId = std::stoi(args[0]);
+
+    int userId;
+    try
+    {
+        userId = std::stoi(args[0]);
+    }
+    catch(const std::exception& e)
+    {
+        return; // userId is not a valid integer, do nothing
+    }
+    
     User* user = userManager->getUser(userId);
     if (user==nullptr) {
         //creates user in case it doesn't exist
