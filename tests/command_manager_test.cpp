@@ -4,7 +4,7 @@
 #include "../src/server/include/ProductManager.h"
 
 // Mock IOHandler for testing
-class MockIOHandler : public IOHandler {
+class MockIOHandlerCommandManager : public IOHandler {
 public:
 
     std::string cmdType;
@@ -26,7 +26,7 @@ public:
 
 // Test 1: singleton returns same instance
 TEST(CommandManagerTest, SingletonReturnsSameInstance) {
-    MockIOHandler mockIo;
+    MockIOHandlerCommandManager mockIo;
     UserManager& userManager = UserManager::getInstance();
     ProductManager& productManager = ProductManager::getInstance();
 
@@ -37,7 +37,7 @@ TEST(CommandManagerTest, SingletonReturnsSameInstance) {
 
 // Test 2: commands map is not empty
 TEST(CommandManagerTest, CommandsMapIsNotEmpty) {
-    MockIOHandler mockIo;
+    MockIOHandlerCommandManager mockIo;
     UserManager& userManager = UserManager::getInstance();
     ProductManager& productManager = ProductManager::getInstance();
 
@@ -48,7 +48,7 @@ TEST(CommandManagerTest, CommandsMapIsNotEmpty) {
 // Test 3: expected keys exist in the map
 // we check each command key that should exist in the map.
 TEST(CommandManagerTest, MapContainsExpectedCommands) {
-    MockIOHandler mockIo;
+    MockIOHandlerCommandManager mockIo;
     UserManager& userManager = UserManager::getInstance();
     ProductManager& productManager = ProductManager::getInstance();
     auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
@@ -60,7 +60,7 @@ TEST(CommandManagerTest, MapContainsExpectedCommands) {
 
 // Test 4: command pointers are not null
 TEST(CommandManagerTest, CommandPointersAreNotNull) {
-    MockIOHandler mockIo;
+    MockIOHandlerCommandManager mockIo;
     UserManager& userManager = UserManager::getInstance();
     ProductManager& productManager = ProductManager::getInstance();
 
