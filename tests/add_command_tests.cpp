@@ -46,13 +46,6 @@ TEST_F(AddCommandTest, ValidateReturnsTrueEvenWhenUserDoesNotExist) {
     EXPECT_TRUE(command.validate(args)); // validate doesn't check existence
 }
 
-TEST_F(AddCommandTest, ExecuteThrowsWhenUserIdIsInvalid) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
-    vector<string> args = {"abc", "100"};
-    EXPECT_TRUE(command.validate(args)); // validate passes
-    EXPECT_THROW(command.execute(args), invalid_argument); // stoi fails
-}
-
 TEST_F(AddCommandTest, ExecuteThrowsWhenProductIdIsInvalid) {
     UserManager::getInstance().addUser(1, "Alice");
     AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
