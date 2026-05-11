@@ -6,7 +6,7 @@
 class FileHandlerTest : public ::testing::Test {
 protected:
     FileHandler handler;
-    const std::string productsDataFile = "src/data/products.txt";
+    const std::string productsDataFile = "data/products.txt";
 
     void SetUp() override {
         ProductManager::getInstance().cleanUp();
