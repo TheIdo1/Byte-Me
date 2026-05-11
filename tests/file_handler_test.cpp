@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <vector>
-#include "../src/include/FileHandler.h"
+#include "../src/server/include/FileHandler.h"
 
 class FileHandlerTest : public ::testing::Test {
 protected:

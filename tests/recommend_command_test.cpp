@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>
-#include "../src/include/RecommendCommand.h"
+#include "../src/server/include/RecommendCommand.h"
 
 
 // Mock IOHandler used to capture command output during the test

@@ -1,6 +1,6 @@
-#include "../src/include/AddCommand.h"
-#include "../src/include/ProductManager.h"
-#include "../src/include/UserManager.h"
+#include "../src/server/include/AddCommand.h"
+#include "../src/server/include/ProductManager.h"
+#include "../src/server/include/UserManager.h"
 #include <gtest/gtest.h>
 #include <vector>
 

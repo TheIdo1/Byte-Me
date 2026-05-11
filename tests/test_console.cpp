@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../src/include/Console.h"
+#include "../src/server/include/Console.h"
 #include <sstream>
 
 /**

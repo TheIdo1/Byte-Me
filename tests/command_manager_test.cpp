@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "../src/include/CommandManager.h"
-#include "../src/include/UserManager.h"
-#include "../src/include/ProductManager.h"
+#include "../src/server/include/CommandManager.h"
+#include "../src/server/include/UserManager.h"
+#include "../src/server/include/ProductManager.h"
 
 // Mock IOHandler for testing
 class MockIOHandler : public IOHandler {

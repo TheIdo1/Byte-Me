@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
-#include "../src/include/ProductManager.h"
+#include "../src/server/include/ProductManager.h"
 
 // Create a mock data handler
 class MockDataHandler : public IDataHandler {

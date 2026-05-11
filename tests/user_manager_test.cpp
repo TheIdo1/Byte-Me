@@ -1,7 +1,7 @@
-#include "../src/include/UserManager.h"
-#include "../src/include/User.h"
-#include "../src/include/Product.h"
-#include "../src/include/ProductManager.h"
+#include "../src/server/include/UserManager.h"
+#include "../src/server/include/User.h"
+#include "../src/server/include/Product.h"
+#include "../src/server/include/ProductManager.h"
 #include <gtest/gtest.h>
 #include <vector>
 
