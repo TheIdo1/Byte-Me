@@ -19,15 +19,15 @@ FetchContent_MakeAvailable(googletest)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
 # Exclude main.cpp to prevent multiple main() definitions
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/server/main.cpp")
 
 # Create the core library
 add_library(ProjectCore ${SOURCES})
 
 
-# 2. Main Application Target
-add_executable(RunApp src/main.cpp)
-target_link_libraries(RunApp ProjectCore)
+# 2. Server Application Target
+add_executable(RunServer src/server/main.cpp)
+target_link_libraries(RunServer ProjectCore)
 
 
 # 3. Tests Target
@@ -47,3 +47,15 @@ target_link_libraries(
 # Enable CTest discovery
 include(GoogleTest)
 gtest_discover_tests(RunTests)
+
+# 4. Client Application Target (Python)
+# Find Python interpreter
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+# Create a custom target to run the Python client
+add_custom_target(RunClient
+    COMMAND Python3::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/src/client/main.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/client
+    COMMENT "Running Python client..."
+    USES_TERMINAL
+)

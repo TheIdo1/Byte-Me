@@ -8,7 +8,7 @@
 
 FileHandler::FileHandler() {
     // Ensure the data directory exists. If it doesn't, create it.
-    std::filesystem::create_directories("src/data");
+    std::filesystem::create_directories("data");
 }
 //implementing helping methods for parsing and writing data
 string FileHandler::serializeUser(const User& user) {

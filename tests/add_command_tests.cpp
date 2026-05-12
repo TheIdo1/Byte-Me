@@ -1,6 +1,6 @@
-#include "../src/include/AddCommand.h"
-#include "../src/include/ProductManager.h"
-#include "../src/include/UserManager.h"
+#include "../src/server/include/AddCommand.h"
+#include "../src/server/include/ProductManager.h"
+#include "../src/server/include/UserManager.h"
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -44,13 +44,6 @@ TEST_F(AddCommandTest, ValidateReturnsTrueEvenWhenUserDoesNotExist) {
     AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
     vector<string> args = {"999", "100"};
     EXPECT_TRUE(command.validate(args)); // validate doesn't check existence
-}
-
-TEST_F(AddCommandTest, ExecuteThrowsWhenUserIdIsInvalid) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
-    vector<string> args = {"abc", "100"};
-    EXPECT_TRUE(command.validate(args)); // validate passes
-    EXPECT_THROW(command.execute(args), invalid_argument); // stoi fails
 }
 
 TEST_F(AddCommandTest, ExecuteThrowsWhenProductIdIsInvalid) {

@@ -5,8 +5,8 @@
 
 class FileHandler : public IDataHandler {
     private:
-        std::string const usersFile = "src/data/users.txt";
-        std::string const productsFile = "src/data/products.txt";
+        std::string const usersFile = "data/users.txt";
+        std::string const productsFile = "data/products.txt";
         UserManager& userManager = UserManager::getInstance(this);
         ProductManager& productManager = ProductManager::getInstance(this);
 
