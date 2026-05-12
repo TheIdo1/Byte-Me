@@ -7,13 +7,17 @@ int main() {
     // The Console class manages input and output, defaulting to std::cin and std::cout.
     Console console;
 
+    // Initialize the parser
+    // parser is responsible of taking the rawInput and parse it to cmdType and args
+    CommandParser parser;
+
     // Initialize the DataHandler.
     // The FileHandler is responsible for loading from and saving to the local text files.
     FileHandler fileHandler;
 
     // Instantiate the main Application via Dependency Injection.
-    // We pass the console (by reference) and the fileHandler (by pointer).
-    App app(console, &fileHandler);
+    // We pass the console (by reference), the CommandParser and the fileHandler (by pointer).
+    App app(console, parser, &fileHandler);
 
     // Load initial data.
     // The setup method delegates the loading of products and users to the DataHandler,

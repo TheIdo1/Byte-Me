@@ -12,11 +12,6 @@
 
 class Console : public IOHandler {
 private:
-    //commands attribute in second thought does not belong to Console logic and should by higher in hierarchy
-    //std::map<std::string, std::unique_ptr<ICommand>> commands;
-    std::string input;              // the input - read from cin
-    std::string cmdType;            // the command type :add, recomend, help etc. 
-    std::vector<std::string> args;  // the rest of entries extracted from input [userId, prodId1, prodId2, ...]
 
     // Input/output streams used by the console. refs to refer an existing stream, not create its own copy
     // In normal runtime: std::cin / std::cout
@@ -31,21 +26,11 @@ public:
             std::ostream& outputStream = std::cout);
 
     //reads one full line from the input stream into 'input' field.
-    void readInput() override;
-
-    // parses the current input line into command type and arguments.
-    void parser() override;
+    std::string readInput() override;
 
     //print given string s to cout
     void print(const std::string& s) override;
 
-    //getters
-
-    //first const for stressing the returned string cannot be changed
-    //second const for stressing no changes the object itself
-    const std::string& getInput() const;
-    const std::string& getCmdType() const override;
-    const std::vector<std::string>& getArgs() const override;
 
 };
 
