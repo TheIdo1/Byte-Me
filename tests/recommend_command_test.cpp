@@ -6,24 +6,18 @@
 
 // Mock IOHandler used to capture command output during the test
 class MockIOHandlerRecommend : public IOHandler {
-    private:
+private:
     std::string dummyCmd;
     std::vector<std::string> dummyArgs;
 
-    public:
+public:
     std::string capturedOutput;
     void print(const std::string& s) override {
         capturedOutput = s; // Capture all printed output
         std::cout << "MockIOHandlerRecommend captured output: " << s << std::endl; // Debug print to verify output capture
     }
-    void readInput() override {}
-    void parser() override {}
-    const std::string& getCmdType() const override {
-        return dummyCmd; // Return dummy command type
-    }
-    const std::vector<std::string>& getArgs() const override {
-        return dummyArgs; // Return dummy arguments
-    }
+
+    std::string readInput() override { return ""; }
 };
 
 // 2. Create a Mock DataHandler to prevent Singleton from crashing or using real files
