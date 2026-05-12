@@ -1,9 +1,6 @@
 import socket
 import sys
 
-print("hello from main.py")
-
-
 def main():
     if len(sys.argv) != 3:
         # print("Usage: python main.py <IP> <PORT>")
