@@ -1,10 +1,10 @@
 #include "include/App.h"
-
 #include "include/IOHandler.h"
 #include "include/IDataHandler.h"
 #include "include/CommandManager.h"
 #include "include/UserManager.h"
 #include "include/ProductManager.h"
+#include "include/StatusCode.h"
 
 App::App(IOHandler& io, CommandParser& parser, IDataHandler* dataHandler) 
     : io(io), 
@@ -29,10 +29,6 @@ void App::run(){
         const std::string& cmdType = parser.getCmdType();
         const std::vector<std::string>& args = parser.getArgs();
         
-        // skip execution if the user pressed 'Enter' without typing any command
-        if (cmdType.empty()) {
-            continue;
-        }
 
         // Get the reference to the commands map from the CommandManager
         std::map<std::string, ICommand*>& commands = commandManager.getCommands();
@@ -44,11 +40,11 @@ void App::run(){
         // Check if the command wasnt found (iterator did reach the end of the map)
         if (iterator == commands.end()) {
             // Command does not exist! do nothing
+            io.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
             continue;
         } 
         // 'it->second' accesses the ICommand* associated with the key.
         iterator->second->execute(args);
-
     }
 }
 

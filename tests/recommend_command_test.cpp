@@ -14,7 +14,6 @@ public:
     std::string capturedOutput;
     void print(const std::string& s) override {
         capturedOutput = s; // Capture all printed output
-        std::cout << "MockIOHandlerRecommend captured output: " << s << std::endl; // Debug print to verify output capture
     }
 
     std::string readInput() override { return ""; }
