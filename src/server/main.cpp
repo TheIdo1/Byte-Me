@@ -1,11 +1,26 @@
 #include "include/App.h"
-#include "include/Console.h"
+#include "include/SocketHandler.h"
 #include "include/FileHandler.h"
+#include "include/TcpServer.h"
+#include <iostream>
 
 int main() {
-    // Initialize the IOHandler. 
-    // The Console class manages input and output, defaulting to std::cin and std::cout.
-    Console console;
+
+    //Setup the Network Server
+    TcpServer server(5555); // Instantiate the TcpServer to listen on port 5555.
+    server.start();         // Performs socket(), bind(), and listen()
+
+    // wait for a client
+    // The execution blocks here until a client connects
+    // It returns the client's file descriptor (client_sock)
+    int client_sock = server.acceptClient();
+
+    // --- Initialize the IOHandler ---
+
+    // Setup the Application Components
+    // Instantiate the SocketHandler with the newly connected client.
+    // This replaces the old Console IOHandler.
+    SocketHandler socketHandler(client_sock);
 
     // Initialize the parser
     // parser is responsible of taking the rawInput and parse it to cmdType and args
@@ -16,9 +31,9 @@ int main() {
     FileHandler fileHandler;
 
     // Instantiate the main Application via Dependency Injection.
-    // We pass the console (by reference), the CommandParser and the fileHandler (by pointer).
-    App app(console, parser, &fileHandler);
-
+    // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by pointer).
+    App app(socketHandler, parser, &fileHandler);
+    
     // Load initial data.
     // The setup method delegates the loading of products and users to the DataHandler,
     // which populates the ProductManager and UserManager.
