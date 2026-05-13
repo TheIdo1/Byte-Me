@@ -11,16 +11,8 @@ public:
     std::vector<std::string> args;
 
     void print(const std::string& s) override {}
-    void readInput() override {}
-    void parser() override {}
+    std::string readInput() override {}
     
-    const std::string& getCmdType() const override {
-        return cmdType;
-    }
-
-    const std::vector<std::string>& getArgs() const override {
-        return args;
-    }
 };
 
 

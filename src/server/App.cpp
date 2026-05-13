@@ -6,8 +6,9 @@
 #include "include/UserManager.h"
 #include "include/ProductManager.h"
 
-App::App(IOHandler& io, IDataHandler* dataHandler) 
+App::App(IOHandler& io, CommandParser& parser, IDataHandler* dataHandler) 
     : io(io), 
+      parser(parser),
       dataHandler(dataHandler),
       // initialize singletons and store references to them
       productManager(ProductManager::getInstance(dataHandler)),
@@ -21,12 +22,12 @@ void App::run(){
     
     while(true){
         // read and parse the user's input
-        io.readInput();
-        io.parser();
+        std::string rawInput = io.readInput();
+        parser.parse(rawInput);
         
         // fetch the parsed command type and arguments.
-        const std::string& cmdType = io.getCmdType();
-        const std::vector<std::string>& args = io.getArgs();
+        const std::string& cmdType = parser.getCmdType();
+        const std::vector<std::string>& args = parser.getArgs();
         
         // skip execution if the user pressed 'Enter' without typing any command
         if (cmdType.empty()) {
