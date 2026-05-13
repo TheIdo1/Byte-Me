@@ -48,14 +48,3 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(RunTests)
 
-# 4. Client Application Target (Python)
-# Find Python interpreter
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
-# Create a custom target to run the Python client
-add_custom_target(RunClient
-    COMMAND Python3::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/src/client/main.py
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/client
-    COMMENT "Running Python client..."
-    USES_TERMINAL
-)
