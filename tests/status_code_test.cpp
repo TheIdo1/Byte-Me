@@ -3,23 +3,13 @@
 #include "../src/server/include/IOHandler.h"
 
 class MockIOHandlerStatusCodeTest : public IOHandler {
-    private:
-    std::string dummyCmd;
-    std::vector<std::string> dummyArgs;
 
     public:
     std::string capturedOutput;
     void print(const std::string& s) override {
         capturedOutput += s; // Capture all printed output
     }
-    void readInput() override {}
-    void parser() override {}
-    const std::string& getCmdType() const override {
-        return dummyCmd; // Return dummy command type
-    }
-    const std::vector<std::string>& getArgs() const override {
-        return dummyArgs; // Return dummy arguments
-    }
+    std::string readInput() override {}
 };
 
 TEST(StatusCodeText, getExpectedOutputOK) {
