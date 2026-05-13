@@ -1,7 +1,7 @@
 #include "include/AddCommand.h"
 #include <stdexcept>
 
-AddCommand::AddCommand(UserManager* userManager, ProductManager* productManager, IDataHandler* dataHandler):
+AddCommand::AddCommand(UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler):
 userManager(userManager),
 productManager(productManager),
 dataHandler(dataHandler),
@@ -22,19 +22,19 @@ void AddCommand::execute(const std::vector<std::string>& args) {
         return; // userId is not a valid integer, do nothing
     }
     
-    User* user = userManager->getUser(userId);
+    User* user = userManager.getUser(userId);
     if (user==nullptr) {
         //creates user in case it doesn't exist
-        userManager->addUser(userId, "User-" + std::to_string(userId));
-        user = userManager->getUser(userId);
+        userManager.addUser(userId, "User-" + std::to_string(userId));
+        user = userManager.getUser(userId);
     }
     for  (int i=1; i<args.size(); i++) {
         int productId = std::stoi(args[i]);
-        Product* product = productManager->getProduct(productId);
+        Product* product = productManager.getProduct(productId);
         if (product == nullptr) {
             //creates product in case it doesn't exist
-            productManager->addProduct(productId, "Product-" + std::to_string(productId), rand() % 1000);
-            product = productManager->getProduct(productId);
+            productManager.addProduct(productId, "Product-" + std::to_string(productId), rand() % 1000);
+            product = productManager.getProduct(productId);
         }
         user->addProductWatched(*product);
     }
