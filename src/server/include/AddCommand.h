@@ -11,11 +11,11 @@
 class AddCommand : public ICommand {
     private:
         std::string description;
-        UserManager* userManager;
-        ProductManager* productManager;
+        UserManager& userManager;
+        ProductManager& productManager;
         IDataHandler* dataHandler;
     public:
-        AddCommand(UserManager* userManager, ProductManager* productManager, IDataHandler* dataHandler = nullptr);
+        AddCommand(UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler = nullptr);
         void execute(const std::vector<std::string>& args) override;
         bool validate(const std::vector<std::string>& args) const override;
         const std::string& getDescription() const override;    
