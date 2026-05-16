@@ -3,11 +3,9 @@
 #include <stdexcept>
 
 PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
-userManager(userManager),
-productManager(productManager),
-ioHandler(ioHandler),
-dataHandler(dataHandler),
-description("PATCH [userId] [productId1] [productId2] ...") {}
+AddCommand(userManager, productManager, ioHandler, dataHandler) {
+    description = "PATCH [userId] [productId1] [productId2] ...";
+}
 
 void PatchCommand::execute(const std::vector<std::string>& args) {
     if (!validate(args)) {
@@ -43,15 +41,4 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
         dataHandler->saveUser(*user);
     }
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
-}
-
-bool PatchCommand::validate(const std::vector<std::string>& args) const {
-    if (args.size() < 2) {
-        return false;
-    }
-    return true;
-}
-
-const std::string& PatchCommand::getDescription() const {
-    return description;
 }

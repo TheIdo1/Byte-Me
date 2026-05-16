@@ -3,11 +3,9 @@
 #include <stdexcept>
 
 PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
-userManager(userManager),
-productManager(productManager),
-ioHandler(ioHandler),
-dataHandler(dataHandler),
-description("POST [userId] [productId1] [productId2] ...") {}
+AddCommand(userManager, productManager, ioHandler, dataHandler) {
+    description = "POST [userId] [productId1] [productId2] ...";
+}
 
 void PostCommand::execute(const std::vector<std::string>& args) {
     if (!validate(args)) {
@@ -45,15 +43,4 @@ void PostCommand::execute(const std::vector<std::string>& args) {
         dataHandler->saveUser(*user);
     }
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::Created));
-}
-
-bool PostCommand::validate(const std::vector<std::string>& args) const {
-    if (args.size() < 2) {
-        return false;
-    }
-    return true;
-}
-
-const std::string& PostCommand::getDescription() const {
-    return description;
 }
