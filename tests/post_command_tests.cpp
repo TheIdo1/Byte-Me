@@ -1,13 +1,22 @@
-#include "../src/server/include/AddCommand.h"
+#include "../src/server/include/PostCommand.h"
 #include "../src/server/include/ProductManager.h"
 #include "../src/server/include/UserManager.h"
+#include "../src/server/include/IOHandler.h"
 #include <gtest/gtest.h>
 #include <vector>
 
 using namespace std;
 
-class AddCommandTest : public ::testing::Test {
+class NullIOHandlerPost : public IOHandler {
+public:
+    void print(const std::string&) override {}
+    std::string readInput() override { return ""; }
+};
+
+class PostCommandTest : public ::testing::Test {
 protected:
+    NullIOHandlerPost io;
+
     void SetUp() override {
         auto& pm = ProductManager::getInstance();
         for (int id : {100, 101, 102}) {
@@ -28,34 +37,33 @@ protected:
     }
 };
 
-TEST_F(AddCommandTest, ReturnsFalseWhenTooFewArguments) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ReturnsFalseWhenTooFewArguments) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"1"};
     EXPECT_FALSE(command.validate(args));
 }
 
-TEST_F(AddCommandTest, ValidateReturnsTrueForValidArgs) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ValidateReturnsTrueForValidArgs) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"1", "100"};
     EXPECT_TRUE(command.validate(args));
 }
 
-TEST_F(AddCommandTest, ValidateReturnsTrueEvenWhenUserDoesNotExist) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ValidateReturnsTrueEvenWhenUserDoesNotExist) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"999", "100"};
-    EXPECT_TRUE(command.validate(args)); // validate doesn't check existence
+    EXPECT_TRUE(command.validate(args));
 }
 
-TEST_F(AddCommandTest, ExecuteThrowsWhenProductIdIsInvalid) {
-    UserManager::getInstance().addUser(1, "Alice");
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ExecuteThrowsWhenProductIdIsInvalid) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"1", "xyz"};
-    EXPECT_TRUE(command.validate(args)); // validate passes
-    EXPECT_THROW(command.execute(args), invalid_argument); // stoi fails
+    EXPECT_TRUE(command.validate(args));
+    EXPECT_THROW(command.execute(args), invalid_argument);
 }
 
-TEST_F(AddCommandTest, ExecuteCreatesUserIfNotExists) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ExecuteCreatesUserIfNotExists) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"10", "100"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -67,9 +75,8 @@ TEST_F(AddCommandTest, ExecuteCreatesUserIfNotExists) {
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 100);
 }
 
-TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
-    UserManager::getInstance().addUser(11, "Dave");
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ExecuteCreatesProductIfNotExists) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"11", "200"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -77,7 +84,6 @@ TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
     ASSERT_NE(product, nullptr);
     EXPECT_EQ(product->getId(), 200);
     EXPECT_EQ(product->getName(), "Product-200");
-    // Price is random, just check it's set
     EXPECT_GE(product->getPrice(), 0.0);
     EXPECT_LE(product->getPrice(), 999.0);
     User* user = UserManager::getInstance().getUser(11);
@@ -86,8 +92,8 @@ TEST_F(AddCommandTest, ExecuteCreatesProductIfNotExists) {
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 200);
 }
 
-TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"12", "201"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -103,9 +109,8 @@ TEST_F(AddCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 201);
 }
 
-TEST_F(AddCommandTest, ExecuteAddsProductsToUser) {
-    UserManager::getInstance().addUser(3, "Charlie");
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
+TEST_F(PostCommandTest, ExecuteAddsProductsToUser) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
     vector<string> args = {"3", "100", "101"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -116,7 +121,17 @@ TEST_F(AddCommandTest, ExecuteAddsProductsToUser) {
     EXPECT_EQ(user->getProductsWatched()[1].getId(), 101);
 }
 
-TEST_F(AddCommandTest, GetDescriptionReturnsExpectedString) {
-    AddCommand command(&UserManager::getInstance(), &ProductManager::getInstance());
-    EXPECT_EQ(command.getDescription(), "add [userId] [productId1] [productId2] ...");
+TEST_F(PostCommandTest, ExecuteDoesNothingWhenUserAlreadyExists) {
+    UserManager::getInstance().addUser(1, "Alice");
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    vector<string> args = {"1", "100"};
+    command.execute(args);
+    User* user = UserManager::getInstance().getUser(1);
+    ASSERT_NE(user, nullptr);
+    EXPECT_EQ(user->getProductsWatched().size(), 0u);
+}
+
+TEST_F(PostCommandTest, GetDescriptionReturnsExpectedString) {
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    EXPECT_EQ(command.getDescription(), "POST [userId] [productId1] [productId2] ...");
 }
