@@ -84,22 +84,36 @@ Build and run the test suite inside a container:
 ```bash
 docker build -t byte-me .
 docker run --rm byte-me ./build/RunTests
-docker run -it --rm byte-me ./build/RunApp
 ```
 
-To run from docker with local data (run from project root folder):
+To run Server
+```bash
+docker run -it --rm -p PORT:PORT byte-me ./build/RunServer PORT
+```
 
-**For Linux / macOS / Git Bash:**
+And with local data
+For Linux / macOS / Git Bash:
 ```bash
-docker run -it -v "$PWD/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+docker run -it --rm -p PORT:PORT -v "$PWD/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
 ```
-**For Windows (PowerShell):**
+
+For Windows (PowerShell):
 ```bash
-docker run -it -v "${PWD}/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+docker run -it --rm -p PORT:PORT -v "${PWD}/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
 ```
-**For Windows (Command Prompt / CMD):**
+
+For Windows (Command Prompt / CMD):
 ```bash
-docker run -it -v "%cd%/src/data:/usr/src/app/src/data" byte-me ./build/RunApp
+docker run -it --rm -p PORT:PORT -v "%cd%/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
+```
+
+To run Client
+```bash
+docker run -it --rm byte-me python3 src/client/main.py IP PORT
+```
+for docker localhost
+```bash
+docker run -it --rm byte-me python3 src/client/main.py host.docker.internal 8081
 ```
 
 ## Data format
