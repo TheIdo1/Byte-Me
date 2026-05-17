@@ -111,7 +111,7 @@ TEST(DeleteCommandTest, ExecuteSucceedsAndRemovesProductWatch) {
     ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
     
     prodMgr.cleanUp();
-    userMgr.cleanup();
+    userMgr.cleanUp();
 
 
     // Use unique IDs to avoid conflicts with other tests since Singletons carry over data
