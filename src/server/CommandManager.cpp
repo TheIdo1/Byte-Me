@@ -21,7 +21,7 @@ CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductM
     //TODO: unify the way addCommand and RecommendCommand recieves their arguments
     commands["POST"]      = new PostCommand(userManager, productManager, io, dataHandler);
     commands["PATCH"]     = new PatchCommand(userManager, productManager, io, dataHandler);
-    commands["DELTE"]     = new DeleteCommand(userManager, productManager, io, *dataHandler);
+    commands["DELETE"]     = new DeleteCommand(userManager, productManager, io, *dataHandler);
     commands["recommend"] = new RecommendCommand(userManager, productManager, io);
 
     // collect all commands so far to pass to HelpCommand
