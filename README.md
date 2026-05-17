@@ -94,17 +94,17 @@ docker run -it --rm -p PORT:PORT byte-me ./build/RunServer PORT
 And with local data
 For Linux / macOS / Git Bash:
 ```bash
-docker run -it --rm -p PORT:PORT -v "$PWD/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
+docker run -it --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (PowerShell):
 ```bash
-docker run -it --rm -p PORT:PORT -v "${PWD}/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
+docker run -it --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (Command Prompt / CMD):
 ```bash
-docker run -it --rm -p PORT:PORT -v "%cd%/src/data:/usr/src/app/src/data" byte-me ./build/RunServer PORT
+docker run -it --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 To run Client
@@ -113,17 +113,17 @@ docker run -it --rm byte-me python3 src/client/main.py IP PORT
 ```
 for docker localhost
 ```bash
-docker run -it --rm byte-me python3 src/client/main.py host.docker.internal 8081
+docker run -it --rm byte-me python3 src/client/main.py host.docker.internal PORT
 ```
 
 ## Data format
 
-Products file (`src/data/products.txt`):
+Products file (`data/products.txt`):
 ```
 id|name|price
 ```
 
-Users file (`src/data/users.txt`):
+Users file (`data/users.txt`):
 ```
 id|name|productId1,productId2,...
 ```
