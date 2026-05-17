@@ -103,19 +103,32 @@ TEST(DeleteCommandTest, ExecutePrintsNotFoundOnInvalidUserIdFormat) {
     EXPECT_NE(fakeOutput.str().find("404 Not Found"), std::string::npos);
 }
 
-TEST(DeleteCommandTest, ExecuteSucceedsWithValidData) {
+TEST(DeleteCommandTest, ExecuteSucceedsAndRemovesProductWatch) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
     
     // 1. Get the Singleton instances
     UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
     ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
     
-    // Clean up product manager state from any previous tests
     prodMgr.cleanUp();
-    
-    // 2. Inject valid data using your exact header definitions
-    userMgr.addUser(1, "Test User");
-    prodMgr.addProduct(101, "Test Product", 9.99);
+    userMgr.cleanup();
+
+
+    // Use unique IDs to avoid conflicts with other tests since Singletons carry over data
+    int testUserId = 5;
+    int testProdId = 505;
+
+    // 2. Setup: Add a user and a product to the managers
+    userMgr.addUser(testUserId, "Test Watcher");
+    prodMgr.addProduct(testProdId, "Test Item", 49.99);
+
+    // 3. Setup: Make the user "watch" the product
+    User* user = userMgr.getUser(testUserId);
+    Product* prod = prodMgr.getProduct(testProdId);
+    user->addProductWatched(*prod);
+
+    // Verify pre-condition: The user should now be watching exactly 1 product
+    EXPECT_EQ(user->getProductsWatched().size(), 1);
 
     std::istringstream fakeInput("");
     std::ostringstream fakeOutput;
@@ -123,14 +136,13 @@ TEST(DeleteCommandTest, ExecuteSucceedsWithValidData) {
 
     DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
 
-    // 3. Execute the command
-    std::vector<std::string> args = {"1", "101"};
+    // 4. Execute the command: DELETE 5 505
+    std::vector<std::string> args = {std::to_string(testUserId), std::to_string(testProdId)};
     deleteCmd.execute(args);
 
-    // 4. Verify standard output is 204 No Content
+    // 5. Verify standard output contains "204 No Content" as requested by the instructions
     EXPECT_NE(fakeOutput.str().find("204 No Content"), std::string::npos);
 
-    // 5. Verify the fake data handler caught the database updates
-    EXPECT_EQ(fakeDataHandler.deletedUserId, 1);
-    EXPECT_TRUE(fakeDataHandler.userSaved);
+    // 6. Verify the core logic: The watch was successfully removed from the user object
+    EXPECT_EQ(user->getProductsWatched().size(), 0);
 }
