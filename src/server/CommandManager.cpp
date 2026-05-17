@@ -1,5 +1,6 @@
 #include "include/CommandManager.h"
-#include "include/AddCommand.h"
+#include "include/PostCommand.h"
+#include "include/PatchCommand.h"
 #include "include/HelpCommand.h"
 #include "include/RecommendCommand.h"
 
@@ -17,7 +18,8 @@ CommandManager& CommandManager::getInstance(IOHandler& io, UserManager& userMana
 CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler) : io(io) {
     // create add and recommend first since HelpCommand needs them
     //TODO: unify the way addCommand and RecommendCommand recieves their arguments
-    commands["add"]       = new AddCommand(&userManager, &productManager, dataHandler);
+    commands["POST"]      = new PostCommand(userManager, productManager, io, dataHandler);
+    commands["PATCH"]     = new PatchCommand(userManager, productManager, io, dataHandler);
     commands["recommend"] = new RecommendCommand(userManager, productManager, io);
 
     // collect all commands so far to pass to HelpCommand
