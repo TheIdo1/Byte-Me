@@ -3,7 +3,9 @@
 #include <vector>
 
 DeleteCommand::DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler)
-: userManager(userManager), productManager(productManager), ioHandler(ioHandler), dataHandler(dataHandler) {};
+: userManager(userManager), productManager(productManager), ioHandler(ioHandler), dataHandler(dataHandler) {
+    description = "DELETE [userid] [productid1] [productid2] ...";
+};
 
 const std::string& DeleteCommand::getDescription() const {
     return description;

@@ -18,7 +18,7 @@ class DeleteCommand : public ICommand {
     const std::string& getDescription() const override;
 
 private:
-    std::string description = "DELETE [userid] [productid1] [productid2] ...";
+    std::string description;
 
     UserManager& userManager;
     ProductManager& productManager;
