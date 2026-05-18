@@ -8,9 +8,7 @@ PostCommand::PostCommand(UserManager& userManager, ProductManager& productManage
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
-dataHandler(dataHandler) {
-    description = "POST [userId] [productId1] [productId2] ...";
-}
+dataHandler(dataHandler) {}
 
 // creates a new user and populates their watch list
 // prints 400 if fewer than 2 args or user already exists, 404 if userId cannot be parsed
@@ -56,6 +54,10 @@ bool PostCommand::validate(const std::vector<std::string>& args) const {
     return args.size() >= 2;
 }
 
-const std::string& PostCommand::getDescription() const {
-    return description;
+//description methods
+const std::string& PostCommand::getName() const {
+    return name;
+}
+const std::string& PostCommand::getArgsDescription() const {
+    return argsDescription;
 }

@@ -8,9 +8,7 @@ PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productMana
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
-dataHandler(dataHandler) {
-    description = "PATCH [userId] [productId1] [productId2] ...";
-}
+dataHandler(dataHandler) {}
 
 // adds each listed product to the user's watch list
 // prints 400 if fewer than 2 args, 404 if userId cannot be parsed or user does not exist
@@ -54,6 +52,11 @@ bool PatchCommand::validate(const std::vector<std::string>& args) const {
     return args.size() >= 2;
 }
 
-const std::string& PatchCommand::getDescription() const {
-    return description;
+
+//description methods
+const std::string& PatchCommand::getName() const {
+    return name;
+}
+const std::string& PatchCommand::getArgsDescription() const {
+    return argsDescription;
 }

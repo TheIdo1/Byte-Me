@@ -16,10 +16,14 @@ public:
 
     bool validate(const std::vector<std::string>& args) const override;
 
-    const std::string& getDescription() const override;
+    //description methods
+    const std::string& getName() const override;
+    const std::string& getArgsDescription() const override;
 
 private:
-    std::string description = "recommend [userid] [productid]";
+    //description attributes
+    std::string name = "GET";
+    std::string argsDescription = "[userid] [productid]";
 
     UserManager& userManager;
     ProductManager& productManager;

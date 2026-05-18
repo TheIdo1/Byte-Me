@@ -131,7 +131,8 @@ TEST_F(PostCommandTest, ExecuteDoesNothingWhenUserAlreadyExists) {
     EXPECT_EQ(user->getProductsWatched().size(), 0u);
 }
 
-TEST_F(PostCommandTest, GetDescriptionReturnsExpectedString) {
+TEST_F(PostCommandTest, GetNameAndArgsReturnExpectedStrings) {
     PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
-    EXPECT_EQ(command.getDescription(), "POST [userId] [productId1] [productId2] ...");
+    EXPECT_EQ(command.getName(), "POST");
+    EXPECT_EQ(command.getArgsDescription(), "[userId] [productId1] [productId2] ...");
 }

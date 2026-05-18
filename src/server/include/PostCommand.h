@@ -11,7 +11,10 @@
 // creates a new user with the given products on their watch list
 // returns 201 on success, 400 if the user already exists, 404 if arguments cannot be parsed
 class PostCommand : public ICommand {
-    std::string description;
+    //description attributes
+    std::string name = "POST";
+    std::string argsDescription = "[userId] [productId1] [productId2] ...";
+
     UserManager& userManager;
     ProductManager& productManager;
     IOHandler& ioHandler;
@@ -20,7 +23,10 @@ public:
     PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler = nullptr);
     void execute(const std::vector<std::string>& args) override;
     bool validate(const std::vector<std::string>& args) const override;
-    const std::string& getDescription() const override;
+    
+     //description methods
+    const std::string& getName() const override;
+    const std::string& getArgsDescription() const override;
 };
 
 #endif

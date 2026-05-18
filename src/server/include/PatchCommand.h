@@ -11,7 +11,10 @@
 // adds the given products to an existing user's watch list
 // returns 204 on success, 404 if the user is not found or arguments cannot be parsed
 class PatchCommand : public ICommand {
-    std::string description;
+    //description attributes
+    std::string name = "PATCH";
+    std::string argsDescription = "[userId] [productId1] [productId2] ...";
+    
     UserManager& userManager;
     ProductManager& productManager;
     IOHandler& ioHandler;
@@ -20,7 +23,10 @@ public:
     PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler = nullptr);
     void execute(const std::vector<std::string>& args) override;
     bool validate(const std::vector<std::string>& args) const override;
-    const std::string& getDescription() const override;
+    
+    //description methods
+    const std::string& getName() const override;
+    const std::string& getArgsDescription() const override;
 };
 
 #endif
