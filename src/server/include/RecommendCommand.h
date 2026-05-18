@@ -22,7 +22,7 @@ public:
 
 private:
     //description attributes
-    std::string name = "recommend";
+    std::string name = "GET";
     std::string argsDescription = "[userid] [productid]";
 
     UserManager& userManager;
