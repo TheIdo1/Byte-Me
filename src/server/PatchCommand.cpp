@@ -23,7 +23,7 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
 
     User* user = userManager.getUser(userId);
     if (user == nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
         return;
     }
 
