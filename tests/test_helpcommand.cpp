@@ -48,22 +48,27 @@ TEST(HelpCommandTest, ValidateReturnsFalseForMultipleArgs) {
 }
 
 
-//implementation of ICommand used only in tests to simulate
+// implementation of ICommand used only in tests to simulate commands
 class FakeCommand : public ICommand {
+private:
+    std::string name;
+    std::string argsDesc;
 public:
+    // Added a constructor with parameters to create commands with different names for the sorting test.
+    // Default values are used so that the existing tests continue to work without any changes.
+    FakeCommand(std::string n = "fake", std::string a = "command description") 
+        : name(n), argsDesc(a) {}
+
     // no logic needed - not under test
     void execute(const std::vector<std::string>& args) override {}
 
     // always valid - not under test
     bool validate(const std::vector<std::string>& args) const override { return true; }
 
-    // returns a fixed known description so tests can assert on it
     const std::string& getName() const override {
-        static std::string n = "fake";
-        return n;
+        return name;
     }
     const std::string& getArgsDescription() const override {
-        static std::string argsDesc = "command description";
         return argsDesc;
     }
 };
@@ -106,4 +111,55 @@ TEST(HelpCommandTest, ExecutePrintsNothingForEmptyCommandList) {
 
     // help always prints at least itself
     EXPECT_EQ(fakeOutput.str(), "help\n");
+}
+
+// test for alphabetical sorting
+TEST(HelpCommandTest, ExecutePrintsCommandsInAlphabeticalOrder) {
+    std::istringstream fakeInput("");
+    std::ostringstream fakeOutput;
+    Console fakeIO(fakeInput, fakeOutput);
+
+    // Create commands with different names in an unsorted order
+    FakeCommand cmd1("zebra", "arg1");
+    FakeCommand cmd2("apple", "arg2");
+    FakeCommand cmd3("mango", ""); // A command without arguments to test the output format as well
+
+    // Insert them into the array in an unsorted order
+    std::vector<ICommand*> commands = {&cmd1, &cmd2, &cmd3}; 
+    
+    // Inside the HelpCommand constructor, the commands should be sorted alphabetically
+    HelpCommand help(commands, fakeIO);
+
+    std::vector<std::string> args;
+    help.execute(args);
+
+    // Build the expected output: 'apple' first, then 'mango', then 'zebra', and finally 'help'
+    std::string expectedOutput = 
+        "apple,arguments: arg2\n"
+        "mango\n"
+        "zebra,arguments: arg1\n"
+        "help\n";
+
+    // Verify that the actual printed output matches the expected sorted output exactly
+    EXPECT_EQ(fakeOutput.str(), expectedOutput);
+}
+
+// test for execute with invalid arguments
+TEST(HelpCommandTest, ExecutePrintsBadRequestOnInvalidArgs) {
+    std::istringstream fakeInput("");
+    std::ostringstream fakeOutput;
+    Console fakeIO(fakeInput, fakeOutput);
+
+    std::vector<ICommand*> commands;
+    HelpCommand help(commands, fakeIO);
+
+    // Create a vector with an argument to force 'validate' to return false
+    std::vector<std::string> args = {"123"}; 
+    
+    // Execute the command - it should fail validation and print the error
+    help.execute(args);
+
+    // Verify that the output is exactly the Bad Request message (Status 400)
+    std::string expectedOutput = "400 Bad Request\n";
+    EXPECT_EQ(fakeOutput.str(), expectedOutput);
 }

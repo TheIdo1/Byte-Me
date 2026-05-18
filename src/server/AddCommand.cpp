@@ -13,6 +13,11 @@ bool AddCommand::validate(const std::vector<std::string>& args) const {
     return true;
 }
 
-const std::string& AddCommand::getDescription() const {
-    return description;
+
+//description methods
+const std::string& AddCommand::getName() const {
+    return name;
+}
+const std::string& AddCommand::getArgsDescription() const {
+    return argsDescription;
 }
