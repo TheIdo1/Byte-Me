@@ -20,7 +20,7 @@ HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
 
 // iterates over all registered commands and prints each one's description via io, and lastly it print help description
 void HelpCommand::execute(const std::vector<std::string>& args) {
-    // if validation does not pass,  excecute nothing
+    // if validation does not pass,  excecute nothing and return bad request
     if (!validate(args)) {
         io.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
         return;

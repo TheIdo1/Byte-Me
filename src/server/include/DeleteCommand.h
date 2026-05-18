@@ -15,10 +15,14 @@ class DeleteCommand : public ICommand {
 
     bool validate(const std::vector<std::string>& args) const override;
 
-    const std::string& getDescription() const override;
+    //description methods
+    const std::string& getName() const override;
+    const std::string& getArgsDescription() const override;
 
 private:
-    std::string description;
+    //description attributes
+    std::string name = "DELETE";
+    std::string argsDescription = "[userid] [productid1] [productid2] ...";
 
     UserManager& userManager;
     ProductManager& productManager;

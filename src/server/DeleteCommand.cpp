@@ -4,11 +4,14 @@
 
 DeleteCommand::DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler)
 : userManager(userManager), productManager(productManager), ioHandler(ioHandler), dataHandler(dataHandler) {
-    description = "DELETE [userid] [productid1] [productid2] ...";
 };
 
-const std::string& DeleteCommand::getDescription() const {
-    return description;
+//description methods
+const std::string& DeleteCommand::getName() const {
+    return name;
+}
+const std::string& DeleteCommand::getArgsDescription() const {
+    return argsDescription;
 }
 
 // check if args are in the appropriate size.
