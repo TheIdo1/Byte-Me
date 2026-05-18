@@ -1,4 +1,5 @@
 #include "include/RecommendCommand.h"
+#include "include/StatusCode.h"
 #include <iostream>
 #include <algorithm>
 #include <set>
@@ -14,23 +15,6 @@ bool RecommendCommand::validate(const std::vector<std::string>& args) const {
     if (args.size() != 2) {
         return false;
     }
-
-    // Check if args[0] and args[1] are valid integers
-    try {
-        std::stoi(args[0]);
-        std::stoi(args[1]);
-    } catch (...) {
-        return false; // Not numbers
-    }
-
-    if (!userManager.getUser(std::stoi(args[0]))) {
-        return false; // User does not exist
-    }
-
-    if (!productManager.getProduct(std::stoi(args[1]))) {
-        return false; // Product does not exist
-    }
-
     return true;
 }
 
@@ -42,13 +26,42 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
     //validate args before executing, if not valid, do nothing
     //makes sure that user and product exists, and that the args are in the correct format
     if (!validate(args)) {
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
         return; 
     }
 
-    int targetUserId = std::stoi(args[0]);
-    int targetProductId = std::stoi(args[1]);
+    int targetUserId;
+    int targetProductId;
 
+    // Parse arguments to integers. If fails, return Not Found (404)
+    try {
+        targetUserId = std::stoi(args[0]);
+    } catch(const std::exception& e) {
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        return;
+    }
+
+    try {
+        targetProductId = std::stoi(args[1]);
+    } catch(const std::exception& e) {
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        return;
+    }
+    
+    // Logical existence checks - if it fails, it's Not Found (404)
     User* targetUser = userManager.getUser(targetUserId);
+    if (targetUser == nullptr) {
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        return; // User does not exist
+    }
+
+    if (productManager.getProduct(targetProductId) == nullptr) {
+        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        return;  // Product does not exist
+    }
+
+    // Return 200 OK status code upon successful validated command
+    ioHandler.print(Http::getStatusMessage(Http::StatusCode::OK));
 
     // Step 1: Find similaritys between target and all other users
     // Create a set of product IDs watched by the 
@@ -128,6 +141,8 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
     }
 
     // Print to IOHandler
+
     ioHandler.print(output + "\n");
+    
     
 }
