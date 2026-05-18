@@ -7,10 +7,7 @@
 
 // Constructor with Dependency Injection
 RecommendCommand::RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler)
-    : userManager(userManager), productManager(productManager), ioHandler(ioHandler) {
-        name = "recommend";
-        argsDescription = "[userid] [productid]";
-    }
+    : userManager(userManager), productManager(productManager), ioHandler(ioHandler) {}
 
 // Validation: "recommend [userid] [productid]", aregs[0] = "param1", args[1] = "param2".
 bool RecommendCommand::validate(const std::vector<std::string>& args) const {
