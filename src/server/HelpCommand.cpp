@@ -5,7 +5,7 @@
 
 // initializes commands list, io reference, and the description attributes
 HelpCommand::HelpCommand(const std::vector<ICommand*>& commands, IOHandler& io)
-    : commands(commands), description("help"), io(io) {
+    : commands(commands), io(io) {
 
     // Sort the vector once here. It will remain sorted for the entire lifecycle of the program
     // LAMBDA SYNTAX EXPLANATION
