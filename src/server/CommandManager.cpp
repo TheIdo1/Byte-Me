@@ -3,6 +3,7 @@
 #include "include/PatchCommand.h"
 #include "include/HelpCommand.h"
 #include "include/RecommendCommand.h"
+#include "include/DeleteCommand.h"
 
 // singleton pattern - ensures only one instance of CommandManager exists
 CommandManager& CommandManager::getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler) {
@@ -20,6 +21,7 @@ CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductM
     //TODO: unify the way addCommand and RecommendCommand recieves their arguments
     commands["POST"]      = new PostCommand(userManager, productManager, io, dataHandler);
     commands["PATCH"]     = new PatchCommand(userManager, productManager, io, dataHandler);
+    commands["DELETE"]     = new DeleteCommand(userManager, productManager, io, *dataHandler);
     commands["recommend"] = new RecommendCommand(userManager, productManager, io);
 
     // collect all commands so far to pass to HelpCommand

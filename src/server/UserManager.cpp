@@ -47,3 +47,8 @@ User* UserManager::getUser(int id) {
 vector<User> UserManager::getAllUsers() const {
     return users;
 }
+
+void UserManager::cleanUp() {
+    users.clear();
+    dataHandler = nullptr; // reset data handler to avoid unintended interactions with tests
+}
