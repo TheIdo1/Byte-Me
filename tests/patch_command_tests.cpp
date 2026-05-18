@@ -83,7 +83,8 @@ TEST_F(PatchCommandTest, ExecuteCreatesProductIfNotExists) {
     EXPECT_EQ(user->getProductsWatched()[0].getId(), 200);
 }
 
-TEST_F(PatchCommandTest, GetDescriptionReturnsExpectedString) {
+TEST_F(PatchCommandTest, GetNameAndArgsReturnExpectedStrings) {
     PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
-    EXPECT_EQ(command.getDescription(), "PATCH [userId] [productId1] [productId2] ...");
+    EXPECT_EQ(command.getName(), "PATCH");
+    EXPECT_EQ(command.getArgsDescription(), "[userId] [productId1] [productId2] ...");
 }

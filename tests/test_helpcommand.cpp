@@ -58,9 +58,13 @@ public:
     bool validate(const std::vector<std::string>& args) const override { return true; }
 
     // returns a fixed known description so tests can assert on it
-    const std::string& getDescription() const override {
-        static std::string desc = "fake command description";
-        return desc;
+    const std::string& getName() const override {
+        static std::string n = "fake";
+        return n;
+    }
+    const std::string& getArgsDescription() const override {
+        static std::string argsDesc = "command description";
+        return argsDesc;
     }
 };
 
@@ -83,7 +87,7 @@ TEST(HelpCommandTest, ExecutePrintsAllDescriptions) {
     // fakeOutput.str().find("fake command description") returns the index where the substring
     // was found, or std::string::npos which is a special "not found" value, if it wasn't.
     // EXPECT_NE checks that the result is NOT npos — meaning the description was printed.
-    EXPECT_NE(fakeOutput.str().find("fake command description"), std::string::npos);
+    EXPECT_NE(fakeOutput.str().find("fake,arguments: command description"), std::string::npos);
 }
 
 // execute prints nothing when command list is empty
