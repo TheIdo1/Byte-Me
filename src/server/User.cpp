@@ -1,5 +1,6 @@
 #include "include/User.h"
 #include <stdexcept>    
+#include <algorithm>
 
 User::User(int id, string name)
     : id(id), name(name), productsWatched() {
@@ -13,8 +14,25 @@ User::User(int id, string name)
 }
 
 void User::addProductWatched(Product product) {
+    //Make sure product does not exist in user's products before adding it.
+    for (auto &p : productsWatched){
+        if(p == product){
+            return;
+        }
+    }
     productsWatched.push_back(product);
 }
+
+void User::removedProductWatched(Product product){
+// Find the product in the vector
+    auto it = std::find(productsWatched.begin(), productsWatched.end(), product);
+    // If it was found (meaning we didn't reach the end of the vector)
+    if (it != productsWatched.end()) {
+        productsWatched.erase(it); // Delete it!
+    }
+}
+
+
 
 //Getters
 int User::getId() const {

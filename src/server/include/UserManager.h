@@ -25,6 +25,9 @@ class UserManager {
         void removeUser(int id);
         User* getUser(int id);
         vector<User> getAllUsers() const;
+
+        // clean up the product list, and reset the data handler - used for testing purposes to reset the state of the ProductManager between tests.
+        void cleanUp();
 };
 
 #endif
