@@ -22,7 +22,7 @@ CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductM
     commands["POST"]      = new PostCommand(userManager, productManager, io, dataHandler);
     commands["PATCH"]     = new PatchCommand(userManager, productManager, io, dataHandler);
     commands["DELETE"]     = new DeleteCommand(userManager, productManager, io, *dataHandler);
-    commands["recommend"] = new RecommendCommand(userManager, productManager, io);
+    commands["GET"] = new RecommendCommand(userManager, productManager, io);
 
     // collect all commands so far to pass to HelpCommand
     std::vector<ICommand*> allCommands;
