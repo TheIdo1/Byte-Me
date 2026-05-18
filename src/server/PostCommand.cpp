@@ -4,7 +4,8 @@
 
 PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
 AddCommand(userManager, productManager, ioHandler, dataHandler) {
-    description = "POST [userId] [productId1] [productId2] ...";
+    name = "POST";
+    argsDescription = "[userId] [productId1] [productId2] ...";
 }
 
 void PostCommand::execute(const std::vector<std::string>& args) {

@@ -17,7 +17,13 @@ public:
 
     // returns description of the command - will be used by some IOHandler
     // exemple: for the recommend command the description is 'recommend [userId] [prodId]'
-    virtual const std::string& getDescription() const = 0;
+    // virtual const std::string& getDescription() const = 0;
+
+    // description methods to describe the command
+    // name=the command name (like GET,POST etc)
+    // argsDescription=what args the command accept (like  [userId] [prodId])
+    virtual const std::string& getName() const = 0;
+    virtual const std::string& getArgsDescription() const = 0;
 };
 
 #endif

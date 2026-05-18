@@ -4,7 +4,8 @@
 
 PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
 AddCommand(userManager, productManager, ioHandler, dataHandler) {
-    description = "PATCH [userId] [productId1] [productId2] ...";
+    name = "PATCH";
+    argsDescription = "[userId] [productId1] [productId2] ...";
 }
 
 void PatchCommand::execute(const std::vector<std::string>& args) {

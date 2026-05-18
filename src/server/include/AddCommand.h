@@ -11,7 +11,11 @@
 
 class AddCommand : public ICommand {
 protected:
-    std::string description;
+    // std::string description;
+    //description attributes
+    std::string name;           
+    std::string argsDescription;
+
     UserManager& userManager;
     ProductManager& productManager;
     IOHandler& ioHandler;
@@ -20,7 +24,10 @@ public:
     AddCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler = nullptr);
     virtual void execute(const std::vector<std::string>& args) override = 0;
     bool validate(const std::vector<std::string>& args) const override;
-    const std::string& getDescription() const override;
+
+    //description methods
+    const std::string& getName() const override;
+    const std::string& getArgsDescription() const override;
 };
 
 #endif
