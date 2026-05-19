@@ -7,15 +7,28 @@
 
 using namespace std;
 
-class NullIOHandlerPatch : public IOHandler {
+class FakeIOHandlerPatch : public IOHandler {
 public:
     void print(const std::string&) override {}
     std::string readInput() override { return ""; }
 };
 
+class FakeDataHandlerPatch : public IDataHandler {
+public:
+    void saveUser(const User&) override {}
+    std::vector<User> loadUsers() override { return {}; }
+    void deleteUser(int) override {}
+    void updateUser(const User&) override {}
+    void saveProduct(const Product&) override {}
+    std::vector<Product> loadProducts() override { return {}; }
+    void deleteProduct(int) override {}
+    void updateProduct(const Product&) override {}
+};
+
 class PatchCommandTest : public ::testing::Test {
 protected:
-    NullIOHandlerPatch io;
+    FakeIOHandlerPatch io;
+    FakeDataHandlerPatch dataHandler;
 
     void SetUp() override {
         auto& pm = ProductManager::getInstance();
@@ -41,26 +54,26 @@ protected:
 };
 
 TEST_F(PatchCommandTest, ReturnsFalseWhenTooFewArguments) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1"};
     EXPECT_FALSE(command.validate(args));
 }
 
 TEST_F(PatchCommandTest, ValidateReturnsTrueForValidArgs) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "100"};
     EXPECT_TRUE(command.validate(args));
 }
 
 TEST_F(PatchCommandTest, ExecuteDoesNothingWhenUserDoesNotExist) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"2", "100"};
     command.execute(args);
     EXPECT_EQ(UserManager::getInstance().getUser(2), nullptr);
 }
 
 TEST_F(PatchCommandTest, ExecuteAddsProductsToExistingUser) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "100", "101"};
     command.execute(args);
     User* user = UserManager::getInstance().getUser(1);
@@ -71,7 +84,7 @@ TEST_F(PatchCommandTest, ExecuteAddsProductsToExistingUser) {
 }
 
 TEST_F(PatchCommandTest, ExecuteCreatesProductIfNotExists) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "200"};
     command.execute(args);
     Product* product = ProductManager::getInstance().getProduct(200);
@@ -84,7 +97,7 @@ TEST_F(PatchCommandTest, ExecuteCreatesProductIfNotExists) {
 }
 
 TEST_F(PatchCommandTest, GetNameAndArgsReturnExpectedStrings) {
-    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PatchCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     EXPECT_EQ(command.getName(), "PATCH");
     EXPECT_EQ(command.getArgsDescription(), "[userId] [productId1] [productId2] ...");
 }

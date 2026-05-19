@@ -2,9 +2,7 @@
 #include "include/StatusCode.h"
 #include <stdexcept>
 
-// initializes managers, io reference, and description attributes
-// dataHandler is optional - when provided, changes are persisted to storage
-PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
+PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler):
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
@@ -43,9 +41,7 @@ void PostCommand::execute(const std::vector<std::string>& args) {
         }
         user->addProductWatched(*product);
     }
-    if (dataHandler) {
-        dataHandler->saveUser(*user);
-    }
+    dataHandler.saveUser(*user);
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::Created));
 }
 

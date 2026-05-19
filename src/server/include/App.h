@@ -15,7 +15,7 @@ class App {
 private:
     IOHandler& io;
     CommandParser& parser;
-    IDataHandler* dataHandler;
+    IDataHandler& dataHandler;
 
     // references to the singletons - convenient access without calling getInstance() every time
     UserManager& userManager;
@@ -23,7 +23,7 @@ private:
     CommandManager& commandManager;
 
 public:
-    App(IOHandler& io,CommandParser& parser, IDataHandler* dataHandler = nullptr);
+    App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler);
     void run();
 
     // method for loading data from data source, via managers at the beginning of the program

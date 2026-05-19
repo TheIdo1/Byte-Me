@@ -7,15 +7,28 @@
 
 using namespace std;
 
-class NullIOHandlerPost : public IOHandler {
+class FakeIOHandlerPost : public IOHandler {
 public:
     void print(const std::string&) override {}
     std::string readInput() override { return ""; }
 };
 
+class FakeDataHandlerPost : public IDataHandler {
+public:
+    void saveUser(const User&) override {}
+    std::vector<User> loadUsers() override { return {}; }
+    void deleteUser(int) override {}
+    void updateUser(const User&) override {}
+    void saveProduct(const Product&) override {}
+    std::vector<Product> loadProducts() override { return {}; }
+    void deleteProduct(int) override {}
+    void updateProduct(const Product&) override {}
+};
+
 class PostCommandTest : public ::testing::Test {
 protected:
-    NullIOHandlerPost io;
+    FakeIOHandlerPost io;
+    FakeDataHandlerPost dataHandler;
 
     void SetUp() override {
         auto& pm = ProductManager::getInstance();
@@ -38,32 +51,32 @@ protected:
 };
 
 TEST_F(PostCommandTest, ReturnsFalseWhenTooFewArguments) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1"};
     EXPECT_FALSE(command.validate(args));
 }
 
 TEST_F(PostCommandTest, ValidateReturnsTrueForValidArgs) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "100"};
     EXPECT_TRUE(command.validate(args));
 }
 
 TEST_F(PostCommandTest, ValidateReturnsTrueEvenWhenUserDoesNotExist) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"999", "100"};
     EXPECT_TRUE(command.validate(args));
 }
 
 TEST_F(PostCommandTest, ExecuteThrowsWhenProductIdIsInvalid) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "xyz"};
     EXPECT_TRUE(command.validate(args));
     EXPECT_THROW(command.execute(args), invalid_argument);
 }
 
 TEST_F(PostCommandTest, ExecuteCreatesUserIfNotExists) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"10", "100"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -76,7 +89,7 @@ TEST_F(PostCommandTest, ExecuteCreatesUserIfNotExists) {
 }
 
 TEST_F(PostCommandTest, ExecuteCreatesProductIfNotExists) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"11", "200"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -93,7 +106,7 @@ TEST_F(PostCommandTest, ExecuteCreatesProductIfNotExists) {
 }
 
 TEST_F(PostCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"12", "201"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -110,7 +123,7 @@ TEST_F(PostCommandTest, ExecuteCreatesBothUserAndProductIfNotExist) {
 }
 
 TEST_F(PostCommandTest, ExecuteAddsProductsToUser) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"3", "100", "101"};
     EXPECT_TRUE(command.validate(args));
     command.execute(args);
@@ -123,7 +136,7 @@ TEST_F(PostCommandTest, ExecuteAddsProductsToUser) {
 
 TEST_F(PostCommandTest, ExecuteDoesNothingWhenUserAlreadyExists) {
     UserManager::getInstance().addUser(1, "Alice");
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     vector<string> args = {"1", "100"};
     command.execute(args);
     User* user = UserManager::getInstance().getUser(1);
@@ -132,7 +145,7 @@ TEST_F(PostCommandTest, ExecuteDoesNothingWhenUserAlreadyExists) {
 }
 
 TEST_F(PostCommandTest, GetNameAndArgsReturnExpectedStrings) {
-    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io);
+    PostCommand command(UserManager::getInstance(), ProductManager::getInstance(), io, dataHandler);
     EXPECT_EQ(command.getName(), "POST");
     EXPECT_EQ(command.getArgsDescription(), "[userId] [productId1] [productId2] ...");
 }
