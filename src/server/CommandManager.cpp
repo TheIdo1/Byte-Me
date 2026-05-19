@@ -31,7 +31,7 @@ CommandManager::CommandManager(IOHandler& io, UserManager& userManager, ProductM
     }
 
     // HelpCommand gets all others + prints itself separately in execute()
-    commands["help"] = new HelpCommand(allCommands, io);
+    commands["HELP"] = new HelpCommand(allCommands, io);
 }
 
 // returns a reference to the commands map
