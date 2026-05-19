@@ -20,20 +20,45 @@ A CLI-based product recommendation system written in C++17. Given a user and a p
 ```
 Byte-Me/
 ├── src/
-│   ├── main.cpp              # Entry point
-│   ├── App.cpp / App.h       # Application orchestrator
-│   ├── CommandManager        # Registers and dispatches commands
-│   ├── AddCommand            # "add" command implementation
-│   ├── RecommendCommand      # "recommend" command implementation
-│   ├── HelpCommand           # "help" command implementation
-│   ├── ProductManager        # Singleton: manages Product instances
-│   ├── UserManager           # Singleton: manages User instances
-│   ├── FileHandler           # Loads/saves data to txt files
-│   ├── Console               # IOHandler backed by stdin/stdout
-│   └── data/
-│       ├── products.txt      # Persisted product data
-│       └── users.txt         # Persisted user data
-└── tests/                    # Google Test unit tests
+│   ├── server/
+│   │   ├── main.cpp              # Server entry point
+│   │   ├── App.cpp               # Application orchestrator
+│   │   ├── TcpServer.cpp         # TCP server (accepts connections)
+│   │   ├── SocketHandler.cpp     # Per-client socket I/O
+│   │   ├── CommandManager.cpp    # Registers and dispatches commands
+│   │   ├── CommandParser.cpp     # Parses raw request strings
+│   │   ├── PostCommand.cpp       # POST — add/update user watch history
+│   │   ├── PatchCommand.cpp      # PATCH — update user data
+│   │   ├── DeleteCommand.cpp     # DELETE — remove user data
+│   │   ├── RecommendCommand.cpp  # GET recommend — collaborative filtering
+│   │   ├── HelpCommand.cpp       # Help — list available commands
+│   │   ├── ProductManager.cpp    # Singleton: manages Product instances
+│   │   ├── UserManager.cpp       # Singleton: manages User instances
+│   │   ├── Product.cpp           # Product model
+│   │   ├── User.cpp              # User model
+│   │   ├── FileHandler.cpp       # Loads/saves data to txt files
+│   │   ├── Console.cpp           # IOHandler backed by stdin/stdout
+│   │   ├── StatusCode.cpp        # HTTP-style status code helpers
+│   │   └── include/              # Header files for all of the above
+│   └── client/
+│       └── main.py               # Python TCP client
+├── tests/                        # Google Test unit tests
+│   ├── command_manager_test.cpp
+│   ├── file_handler_test.cpp
+│   ├── patch_command_tests.cpp
+│   ├── post_command_tests.cpp
+│   ├── product_manager_test.cpp
+│   ├── recommend_command_test.cpp
+│   ├── socket_handler_test.cpp
+│   ├── status_code_test.cpp
+│   ├── test_command_parser.cpp
+│   ├── test_console.cpp
+│   ├── test_delete_command.cpp
+│   ├── test_helpcommand.cpp
+│   └── user_manager_test.cpp
+└── data/
+    ├── products.txt              # Persisted product data
+    └── users.txt                 # Persisted user data
 ```
 
 ## Building
