@@ -6,6 +6,7 @@
 class MockDataHandlerProductManagerTest : public IDataHandler {
 public:
     void saveUser(const User& user) override {}
+    void updateUser(const User& user) override {}
     std::vector<User> loadUsers() override { return {}; }
     void saveProduct(const Product& product) override {}
     std::vector<Product> loadProducts() override { return {}; }

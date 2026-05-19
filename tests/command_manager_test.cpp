@@ -46,7 +46,7 @@ TEST(CommandManagerTest, MapContainsExpectedCommands) {
     auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
     // find() returns end() if key doesn't exist so NE means key was found
     EXPECT_NE(commands.find("help"),      commands.end());
-    EXPECT_NE(commands.find("add"),       commands.end());
+    EXPECT_NE(commands.find("POST"),      commands.end());
     EXPECT_NE(commands.find("recommend"), commands.end());
 }
 

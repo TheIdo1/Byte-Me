@@ -86,6 +86,21 @@ void FileHandler::saveUser(const User& user) {
     }
 }
 
+void FileHandler::updateUser(const User& user) {
+    std::vector<User> users = userManager.getAllUsers();
+    std::ofstream outFile(usersFile, std::ios::trunc);
+    if (outFile.is_open()) {
+        for (const auto& u : users) {
+            if (u.getId() == user.getId()) {
+                outFile << serializeUser(const_cast<User&>(user)) << "\n";
+            } else {
+                outFile << serializeUser(const_cast<User&>(u)) << "\n";
+            }
+        }
+        outFile.close();
+    }
+}
+
 void FileHandler::deleteUser(int userId) {
     std::vector<User> users = userManager.getAllUsers();
     std::ofstream outFile(usersFile, std::ios::trunc); 

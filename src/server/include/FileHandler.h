@@ -20,6 +20,7 @@ class FileHandler : public IDataHandler {
         FileHandler();
         std::vector<User> loadUsers() override;
         void saveUser(const User& user) override;
+        void updateUser(const User& user) override;
         void deleteUser(int userId) override;
 
         std::vector<Product> loadProducts() override;
