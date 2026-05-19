@@ -29,6 +29,8 @@ public:
     std::vector<User> loadUsers() override { return {}; }
     std::vector<Product> loadProducts() override { return {}; }
     void deleteProduct(int id) override {}
+    void updateUser(const User& user) override {}
+    void updateProduct(const Product& product) override {}
 };
 
 // =====================================================================
@@ -37,8 +39,8 @@ public:
 
 TEST(DeleteCommandTest, ValidateReturnsTrueForValidArgs) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
-    UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
-    ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
+    UserManager& userMgr = UserManager::getInstance(fakeDataHandler);
+    ProductManager& prodMgr = ProductManager::getInstance(fakeDataHandler);
     
     std::istringstream fakeInput("");
     std::ostringstream fakeOutput;
@@ -52,8 +54,8 @@ TEST(DeleteCommandTest, ValidateReturnsTrueForValidArgs) {
 
 TEST(DeleteCommandTest, ValidateReturnsFalseForNotEnoughArgs) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
-    UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
-    ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
+    UserManager& userMgr = UserManager::getInstance(fakeDataHandler);
+    ProductManager& prodMgr = ProductManager::getInstance(fakeDataHandler);
     
     std::istringstream fakeInput("");
     std::ostringstream fakeOutput;
@@ -71,8 +73,8 @@ TEST(DeleteCommandTest, ValidateReturnsFalseForNotEnoughArgs) {
 
 TEST(DeleteCommandTest, ExecutePrintsBadRequestOnInvalidArgs) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
-    UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
-    ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
+    UserManager& userMgr = UserManager::getInstance(fakeDataHandler);
+    ProductManager& prodMgr = ProductManager::getInstance(fakeDataHandler);
     
     std::istringstream fakeInput("");
     std::ostringstream fakeOutput;
@@ -88,8 +90,8 @@ TEST(DeleteCommandTest, ExecutePrintsBadRequestOnInvalidArgs) {
 
 TEST(DeleteCommandTest, ExecutePrintsNotFoundOnInvalidUserIdFormat) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
-    UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
-    ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
+    UserManager& userMgr = UserManager::getInstance(fakeDataHandler);
+    ProductManager& prodMgr = ProductManager::getInstance(fakeDataHandler);
     
     std::istringstream fakeInput("");
     std::ostringstream fakeOutput;
@@ -107,8 +109,8 @@ TEST(DeleteCommandTest, ExecuteSucceedsAndRemovesProductWatch) {
     FakeDataHandlerTestDeleteCommand fakeDataHandler;
     
     // 1. Get the Singleton instances
-    UserManager& userMgr = UserManager::getInstance(&fakeDataHandler);
-    ProductManager& prodMgr = ProductManager::getInstance(&fakeDataHandler);
+    UserManager& userMgr = UserManager::getInstance(fakeDataHandler);
+    ProductManager& prodMgr = ProductManager::getInstance(fakeDataHandler);
     
     prodMgr.cleanUp();
     userMgr.cleanUp();

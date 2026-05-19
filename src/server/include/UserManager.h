@@ -6,19 +6,19 @@
 class UserManager {
     private:
         vector<User> users;
-        IDataHandler* dataHandler;
+        IDataHandler& dataHandler;
         //private constructor since it's singleton
-        UserManager(IDataHandler* dataHandler = nullptr);
+        UserManager(IDataHandler& dataHandler);
     public:
         //implementing rule of 5 for singleton
         UserManager(const UserManager&) = delete;
-        UserManager& operator=(const UserManager&) = delete; 
-        UserManager(UserManager&&) = delete; 
+        UserManager& operator=(const UserManager&) = delete;
+        UserManager(UserManager&&) = delete;
         UserManager& operator=(UserManager&&) = delete;
-        ~UserManager() = default; 
+        ~UserManager() = default;
 
         //singleton instance getter
-        static UserManager& getInstance(IDataHandler* dataHandler = nullptr);
+        static UserManager& getInstance(IDataHandler& dataHandler);
 
         //manager functionality
         void addUser(int id, string name);

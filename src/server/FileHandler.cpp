@@ -88,7 +88,7 @@ void FileHandler::saveUser(const User& user) {
 
 void FileHandler::deleteUser(int userId) {
     std::vector<User> users = userManager.getAllUsers();
-    std::ofstream outFile(usersFile, std::ios::trunc); 
+    std::ofstream outFile(usersFile, std::ios::trunc);
     //opens the file in trunc mode to overwrite it with all users except the one with the matching id
     if (outFile.is_open()) {
         for (const auto& user : users) {
@@ -98,7 +98,24 @@ void FileHandler::deleteUser(int userId) {
             }
         }
         outFile.close();
-    }   
+    }
+}
+
+void FileHandler::updateUser(const User& user) {
+    std::vector<User> users = userManager.getAllUsers();
+    // opens the file in trunc mode to rewrite it, replacing the matching user with the updated version
+    std::ofstream outFile(usersFile, std::ios::trunc);
+    if (outFile.is_open()) {
+        for (const auto& u : users) {
+            // write the updated user in place of the old entry; write all others unchanged
+            if (u.getId() == user.getId()) {
+                outFile << serializeUser(const_cast<User&>(user)) << "\n";
+            } else {
+                outFile << serializeUser(const_cast<User&>(u)) << "\n";
+            }
+        }
+        outFile.close();
+    }
 }
 
 std::vector<Product> FileHandler::loadProducts() {
@@ -126,7 +143,7 @@ void FileHandler::saveProduct(const Product& product) {
 
 void FileHandler::deleteProduct(int productId) {
     std::vector<Product> products = productManager.getAllProducts();
-    std::ofstream outFile(productsFile, std::ios::trunc); 
+    std::ofstream outFile(productsFile, std::ios::trunc);
     //opens the file in trunc mode to overwrite it with all products except the one with the matching id
     if (outFile.is_open()) {
         for (const auto& product : products) {
@@ -136,5 +153,22 @@ void FileHandler::deleteProduct(int productId) {
             }
         }
         outFile.close();
-    }   
+    }
+}
+
+void FileHandler::updateProduct(const Product& product) {
+    std::vector<Product> products = productManager.getAllProducts();
+    // opens the file in trunc mode to rewrite it, replacing the matching product with the updated version
+    std::ofstream outFile(productsFile, std::ios::trunc);
+    if (outFile.is_open()) {
+        for (const auto& p : products) {
+            // write the updated product in place of the old entry; write all others unchanged
+            if (p.getId() == product.getId()) {
+                outFile << serializeProduct(const_cast<Product&>(product)) << "\n";
+            } else {
+                outFile << serializeProduct(const_cast<Product&>(p)) << "\n";
+            }
+        }
+        outFile.close();
+    }
 }

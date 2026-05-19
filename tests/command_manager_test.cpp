@@ -38,18 +38,25 @@ TEST(CommandManagerTest, CommandsMapIsNotEmpty) {
 }
 
 // Test 3: expected keys exist in the map
-// we check each command key that should exist in the map.
+// We check each command key that should exist in the map based on the real CommandManager implementation.
 TEST(CommandManagerTest, MapContainsExpectedCommands) {
     MockIOHandlerCommandManager mockIo;
     UserManager& userManager = UserManager::getInstance();
     ProductManager& productManager = ProductManager::getInstance();
     auto& commands = CommandManager::getInstance(mockIo, userManager, productManager).getCommands();
-    // find() returns end() if key doesn't exist so NE means key was found
-    EXPECT_NE(commands.find("help"),      commands.end());
-    EXPECT_NE(commands.find("add"),       commands.end());
-    EXPECT_NE(commands.find("recommend"), commands.end());
-}
+    
+    // Verify that all the uppercase REST-like command keys are present in the map
+    EXPECT_NE(commands.find("POST"),      commands.end());
+    EXPECT_NE(commands.find("PATCH"),     commands.end());
+    EXPECT_NE(commands.find("DELETE"),    commands.end());
+    EXPECT_NE(commands.find("GET"),       commands.end());
+    EXPECT_NE(commands.find("HELP"),      commands.end());
 
+    // Verify that the old lowercase keys are NO LONGER in the map
+    EXPECT_EQ(commands.find("add"),       commands.end());
+    EXPECT_EQ(commands.find("recommend"), commands.end());
+    EXPECT_EQ(commands.find("help"),      commands.end());
+}
 // Test 4: command pointers are not null
 TEST(CommandManagerTest, CommandPointersAreNotNull) {
     MockIOHandlerCommandManager mockIo;
