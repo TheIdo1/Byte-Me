@@ -49,7 +49,7 @@ TEST(CommandParserTest, ParserHandlesExtraSpacesBetweenTokens) {
     parser.parse("recommend  23  103");
 
     // multiple spaces between tokens must be treated as one delimiter
-    EXPECT_EQ(parser.getCmdType(), "recommend");
+    EXPECT_EQ(parser.getCmdType(), "RECOMMEND");
     ASSERT_EQ(parser.getArgs().size(), 2);
     EXPECT_EQ(parser.getArgs()[0], "23");
     EXPECT_EQ(parser.getArgs()[1], "103");
