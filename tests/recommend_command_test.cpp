@@ -151,8 +151,8 @@ void setupTestData(UserManager& um, ProductManager& pm) {
 
 // Main test to verify the algorithm's correctness against the PDF example
 TEST(RecommendCommandTests, PdfAlgorithmExample) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO;
 
     setupTestData(um, pm);
@@ -169,8 +169,8 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
 
 // TEST UPDATE: Check if the 204 No Content status code is printed on success
 TEST(RecommendCommandTests, ExecuteReturns200OnSuccess) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO;
 
     setupTestData(um, pm);
@@ -185,8 +185,8 @@ TEST(RecommendCommandTests, ExecuteReturns200OnSuccess) {
 }
 
 TEST(RecommendCommandTests, tooFewArguments) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
     RecommendCommand cmd(um, pm, mockIO);
@@ -197,8 +197,8 @@ TEST(RecommendCommandTests, tooFewArguments) {
 
 // TEST UPDATE: Check that execute prints 400 Bad Request on invalid arguments
 TEST(RecommendCommandTests, ExecuteReturns400OnInvalidArgs) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
     RecommendCommand cmd(um, pm, mockIO);
@@ -210,8 +210,8 @@ TEST(RecommendCommandTests, ExecuteReturns400OnInvalidArgs) {
 
 // TEST UPDATE: Since validate no longer checks existence, we test execute for 404
 TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentUser) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
     RecommendCommand cmd(um, pm, mockIO);
@@ -223,8 +223,8 @@ TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentUser) {
 
 // TEST UPDATE: Since validate no longer checks existence, we test execute for 404
 TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentProduct) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
     RecommendCommand cmd(um, pm, mockIO);
@@ -236,8 +236,8 @@ TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentProduct) {
 }
 
 TEST(RecommendCommandTests, tooManyArguments) {
-    ProductManager& pm = ProductManager::getInstance(&globalMockHandler);
-    UserManager& um = UserManager::getInstance(&globalMockHandler); 
+    ProductManager& pm = ProductManager::getInstance(globalMockHandler);
+    UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
     RecommendCommand cmd(um, pm, mockIO);

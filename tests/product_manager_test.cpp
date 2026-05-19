@@ -20,7 +20,7 @@ public:
 // Test valid initialization and data retention
 TEST(ProductManagerTests, ValidInitialization) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
@@ -36,7 +36,7 @@ TEST(ProductManagerTests, ValidInitialization) {
 // Test that adding a product with an existing ID throws an error
 TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
@@ -48,7 +48,7 @@ TEST(ProductManagerTests, AddProductWithExistingIdThrows) {
 // Test that removing a product works correctly
 TEST(ProductManagerTests, RemoveProductWorks) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
@@ -62,7 +62,7 @@ TEST(ProductManagerTests, RemoveProductWorks) {
 // Test that retrieving a non-existent product returns nullptr
 TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     Product* retrievedProduct = manager.getProduct(999); // ID that doesn't exist
@@ -72,7 +72,7 @@ TEST(ProductManagerTests, GetNonExistentProductReturnsNullptr) {
 // Test that getAllProducts returns the correct list of products
 TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Product 1", 9.99);
@@ -91,7 +91,7 @@ TEST(ProductManagerTests, GetAllProductsReturnsCorrectList) {
 // Test that removing a non-existent product does not throw an error
 TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
     // Attempt to remove a product that doesn't exist
     EXPECT_NO_THROW(manager.removeProduct(999)); // ID that doesn't exist
@@ -100,7 +100,7 @@ TEST(ProductManagerTests, RemoveNonExistentProductDoesNotThrow) {
 // Test that adding a product with invalid data throws an error
 TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     // Attempt to add a product with a negative price
@@ -117,7 +117,7 @@ TEST(ProductManagerTests, AddProductWithInvalidDataThrows) {
 // TEST UPDATE: Test that updating a product's price works correctly
 TEST(ProductManagerTests, UpdateProductPriceWorks) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
@@ -134,7 +134,7 @@ TEST(ProductManagerTests, UpdateProductPriceWorks) {
 // TEST UPDATE: Test that updating a product's name works correctly
 TEST(ProductManagerTests, UpdateProductNameWorks) {
     MockDataHandlerProductManagerTest mockHandler;
-    ProductManager& manager = ProductManager::getInstance(&mockHandler);
+    ProductManager& manager = ProductManager::getInstance(mockHandler);
     manager.cleanUp(); // Ensure the product list is empty before the test
 
     manager.addProduct(1, "Test Product", 9.99);
