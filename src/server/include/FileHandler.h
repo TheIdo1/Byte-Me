@@ -7,8 +7,8 @@ class FileHandler : public IDataHandler {
     private:
         std::string const usersFile = "data/users.txt";
         std::string const productsFile = "data/products.txt";
-        UserManager& userManager = UserManager::getInstance(this);
-        ProductManager& productManager = ProductManager::getInstance(this);
+        UserManager& userManager = UserManager::getInstance(*this);
+        ProductManager& productManager = ProductManager::getInstance(*this);
 
         //helping methods for parsing and writing data
         std::string serializeUser(const User& user);

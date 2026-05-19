@@ -66,8 +66,8 @@ int main(int argc, char* argv[]) {
     FileHandler fileHandler;
 
     // Instantiate the main Application via Dependency Injection.
-    // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by pointer).
-    App app(socketHandler, parser, &fileHandler);
+    // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by reference).
+    App app(socketHandler, parser, fileHandler);
 
     // Load initial data.
     // The setup method delegates the loading of products and users to the DataHandler,
