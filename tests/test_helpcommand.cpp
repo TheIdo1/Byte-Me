@@ -110,7 +110,7 @@ TEST(HelpCommandTest, ExecutePrintsNothingForEmptyCommandList) {
  
 
     // help always prints at least itself
-    EXPECT_EQ(fakeOutput.str(), "help\n");
+    EXPECT_EQ(fakeOutput.str(), "HELP\n");
 }
 
 // test for alphabetical sorting
