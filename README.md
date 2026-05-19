@@ -20,20 +20,65 @@ A CLI-based product recommendation system written in C++17. Given a user and a p
 ```
 Byte-Me/
 ├── src/
-│   ├── main.cpp              # Entry point
-│   ├── App.cpp / App.h       # Application orchestrator
-│   ├── CommandManager        # Registers and dispatches commands
-│   ├── AddCommand            # "add" command implementation
-│   ├── RecommendCommand      # "recommend" command implementation
-│   ├── HelpCommand           # "help" command implementation
-│   ├── ProductManager        # Singleton: manages Product instances
-│   ├── UserManager           # Singleton: manages User instances
-│   ├── FileHandler           # Loads/saves data to txt files
-│   ├── Console               # IOHandler backed by stdin/stdout
-│   └── data/
-│       ├── products.txt      # Persisted product data
-│       └── users.txt         # Persisted user data
-└── tests/                    # Google Test unit tests
+│   ├── server/
+│   │   ├── main.cpp
+│   │   ├── App.cpp
+│   │   ├── TcpServer.cpp
+│   │   ├── SocketHandler.cpp
+│   │   ├── Console.cpp
+│   │   ├── CommandParser.cpp
+│   │   ├── CommandManager.cpp
+│   │   ├── PostCommand.cpp
+│   │   ├── PatchCommand.cpp
+│   │   ├── DeleteCommand.cpp
+│   │   ├── RecommendCommand.cpp
+│   │   ├── HelpCommand.cpp
+│   │   ├── User.cpp
+│   │   ├── UserManager.cpp
+│   │   ├── Product.cpp
+│   │   ├── ProductManager.cpp
+│   │   ├── FileHandler.cpp
+│   │   ├── StatusCode.cpp
+│   │   └── include/
+│   │       ├── ICommand.h
+│   │       ├── IDataHandler.h
+│   │       ├── IOHandler.h
+│   │       ├── App.h
+│   │       ├── TcpServer.h
+│   │       ├── SocketHandler.h
+│   │       ├── Console.h
+│   │       ├── CommandParser.h
+│   │       ├── CommandManager.h
+│   │       ├── PostCommand.h
+│   │       ├── PatchCommand.h
+│   │       ├── DeleteCommand.h
+│   │       ├── RecommendCommand.h
+│   │       ├── HelpCommand.h
+│   │       ├── User.h
+│   │       ├── UserManager.h
+│   │       ├── Product.h
+│   │       ├── ProductManager.h
+│   │       ├── FileHandler.h
+│   │       └── StatusCode.h
+│   └── client/
+│       └── main.py
+├── data/
+│   ├── products.txt
+│   └── users.txt
+└── tests/
+    ├── command_manager_test.cpp
+    ├── file_handler_test.cpp
+    ├── patch_command_tests.cpp
+    ├── post_command_tests.cpp
+    ├── product_manager_test.cpp
+    ├── recommend_command_test.cpp
+    ├── socket_handler_test.cpp
+    ├── status_code_test.cpp
+    ├── test_command_parser.cpp
+    ├── test_console.cpp
+    ├── test_delete_command.cpp
+    ├── test_helpcommand.cpp
+    └── user_manager_test.cpp
 ```
 
 ## Building
