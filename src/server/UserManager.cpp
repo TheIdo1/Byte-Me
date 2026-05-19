@@ -1,9 +1,9 @@
 #include "include/UserManager.h"
 #include <stdexcept>
 
-UserManager::UserManager(IDataHandler* dataHandler) : dataHandler(dataHandler) {}
+UserManager::UserManager(IDataHandler& dataHandler) : dataHandler(dataHandler) {}
 
-UserManager& UserManager::getInstance(IDataHandler* dataHandler) {
+UserManager& UserManager::getInstance(IDataHandler& dataHandler) {
     static UserManager instance(dataHandler);
     return instance;
 }
@@ -25,9 +25,7 @@ void UserManager::addUser(int id, string name) {
 void UserManager::removeUser(int id) {
     for (auto it = users.begin(); it != users.end(); ++it) {
         if (it->getId() == id) {
-            if (dataHandler) {
-                dataHandler->deleteUser(id);
-            }
+            dataHandler.deleteUser(id);
             users.erase(it);
             return;
         }
@@ -50,5 +48,4 @@ vector<User> UserManager::getAllUsers() const {
 
 void UserManager::cleanUp() {
     users.clear();
-    dataHandler = nullptr; // reset data handler to avoid unintended interactions with tests
 }

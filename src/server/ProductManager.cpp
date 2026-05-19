@@ -3,12 +3,12 @@
 #include <algorithm>
 
 // singleton pattern implementation
-ProductManager& ProductManager::getInstance(IDataHandler* handler) {
+ProductManager& ProductManager::getInstance(IDataHandler& handler) {
     static ProductManager instance(handler);
     return instance;
 }
-// constructor implementation, loads products from data handler if provided.
-ProductManager::ProductManager(IDataHandler* handler) : dataHandler(handler) {}
+// constructor implementation
+ProductManager::ProductManager(IDataHandler& handler) : dataHandler(handler) {}
 
 // add a product to the product list, and save it using the data handler.
 void ProductManager::addProduct(int id, const std::string& name, double price) {
@@ -28,10 +28,7 @@ void ProductManager::addProduct(int id, const std::string& name, double price) {
     }
     Product newProduct(id, name, price);
     products.push_back(newProduct);
-    if (dataHandler) {
-        dataHandler->saveProduct(newProduct);
-    }
-
+    dataHandler.saveProduct(newProduct);
 }
 
 // remove a product from the product list by ID, and delete it using the data handler.
@@ -42,9 +39,7 @@ void ProductManager::removeProduct(int id) {
 
     // check if has any product with the given ID
     if (it != products.end()) {
-        if (dataHandler) {
-            dataHandler->deleteProduct(id);
-        }
+        dataHandler.deleteProduct(id);
         products.erase(it, products.end());
     }
 
@@ -72,5 +67,4 @@ std::vector<Product> ProductManager::getAllProducts() const {
 // used for testing purposes to reset the state of the product manager between tests.
 void ProductManager::cleanUp() {
     products.clear();
-    dataHandler = nullptr; // reset data handler to avoid unintended interactions with tests
 }

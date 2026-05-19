@@ -6,8 +6,8 @@
 #include "include/ProductManager.h"
 #include "include/StatusCode.h"
 
-App::App(IOHandler& io, CommandParser& parser, IDataHandler* dataHandler) 
-    : io(io), 
+App::App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler)
+    : io(io),
       parser(parser),
       dataHandler(dataHandler),
       // initialize singletons and store references to them
@@ -53,7 +53,7 @@ void App::run(){
 // Assumes that DataHandler::loadProducts() and DataHandler::loadUsers()
 // load the data and insert it into ProductManager and UsersManager
 void App::setup(){
-    dataHandler->loadProducts();
-    dataHandler->loadUsers();
+    dataHandler.loadProducts();
+    dataHandler.loadUsers();
      
 }

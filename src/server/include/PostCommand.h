@@ -18,9 +18,9 @@ class PostCommand : public ICommand {
     UserManager& userManager;
     ProductManager& productManager;
     IOHandler& ioHandler;
-    IDataHandler* dataHandler;
+    IDataHandler& dataHandler;
 public:
-    PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler = nullptr);
+    PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler);
     void execute(const std::vector<std::string>& args) override;
     bool validate(const std::vector<std::string>& args) const override;
     

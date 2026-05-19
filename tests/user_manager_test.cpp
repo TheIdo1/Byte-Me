@@ -7,11 +7,25 @@
 
 using namespace std;
 
+class MockDataHandlerUserTest : public IDataHandler {
+public:
+    void saveUser(const User&) override {}
+    vector<User> loadUsers() override { return {}; }
+    void deleteUser(int) override {}
+    void updateUser(const User&) override {}
+    void saveProduct(const Product&) override {}
+    vector<Product> loadProducts() override { return {}; }
+    void deleteProduct(int) override {}
+    void updateProduct(const Product&) override {}
+};
+
 // Test fixture for UserManager tests
 class UserManagerTest : public ::testing::Test {
 protected:
+    MockDataHandlerUserTest mockHandler;
+
     void SetUp() override {
-        auto& pm = ProductManager::getInstance();
+        auto& pm = ProductManager::getInstance(mockHandler);
         try { pm.addProduct(1, "Laptop", 999.99); } catch (...) {}
         try { pm.addProduct(2, "Mouse", 29.99); } catch (...) {}
         try { pm.addProduct(3, "Keyboard", 49.99); } catch (...) {}
@@ -19,24 +33,24 @@ protected:
 
     void TearDown() override {
         for (int id : {1, 2, 3}) {
-            try { ProductManager::getInstance().removeProduct(id); } catch (...) {}
+            try { ProductManager::getInstance(mockHandler).removeProduct(id); } catch (...) {}
         }
         for (int id : {101, 102, 103, 104, 105, 106, 107}) {
-            try { UserManager::getInstance().removeUser(id); } catch (...) {}
+            try { UserManager::getInstance(mockHandler).removeUser(id); } catch (...) {}
         }
     }
 };
 
 // Test getInstance
 TEST_F(UserManagerTest, GetInstance) {
-    UserManager& instance1 = UserManager::getInstance();
-    UserManager& instance2 = UserManager::getInstance();
+    UserManager& instance1 = UserManager::getInstance(mockHandler);
+    UserManager& instance2 = UserManager::getInstance(mockHandler);
     EXPECT_EQ(&instance1, &instance2);
 }
 
 // Test addUser
 TEST_F(UserManagerTest, AddUser) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
 
     // Add a user
     EXPECT_NO_THROW(um.addUser(101, "Alice"));
@@ -51,7 +65,7 @@ TEST_F(UserManagerTest, AddUser) {
 
 // Test getUser
 TEST_F(UserManagerTest, GetUser) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
     um.addUser(102, "Bob");
     
     User* user = um.getUser(102);
@@ -67,7 +81,7 @@ TEST_F(UserManagerTest, GetUser) {
 
 // Test removeUser
 TEST_F(UserManagerTest, RemoveUser) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
     um.addUser(103, "Charlie");
     
     // Verify user exists
@@ -82,7 +96,7 @@ TEST_F(UserManagerTest, RemoveUser) {
 
 // Test getAllUsers
 TEST_F(UserManagerTest, GetAllUsers) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
     
     // Add multiple users
     um.addUser(104, "David");
@@ -102,7 +116,7 @@ TEST_F(UserManagerTest, GetAllUsers) {
 
 // Test User methods (using ProductManager for products)
 TEST_F(UserManagerTest, UserMethods) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
     um.addUser(106, "Frank");
     User* user = um.getUser(106);
     ASSERT_NE(user, nullptr);
@@ -112,7 +126,7 @@ TEST_F(UserManagerTest, UserMethods) {
     EXPECT_TRUE(user->getProductsWatched().empty());
     
     // Get product from ProductManager
-    Product* newProduct = ProductManager::getInstance().getProduct(3);
+    Product* newProduct = ProductManager::getInstance(mockHandler).getProduct(3);
     ASSERT_NE(newProduct, nullptr);
     user->addProductWatched(*newProduct);
     EXPECT_EQ(user->getProductsWatched().size(), 1u);
@@ -123,7 +137,7 @@ TEST_F(UserManagerTest, UserMethods) {
 
 // Test invalid user addition
 TEST_F(UserManagerTest, AddUserInvalid) {
-    UserManager& um = UserManager::getInstance();
+    UserManager& um = UserManager::getInstance(mockHandler);
     EXPECT_THROW(um.addUser(-1, "Invalid"), invalid_argument);
     EXPECT_THROW(um.addUser(107, ""), invalid_argument);
 }

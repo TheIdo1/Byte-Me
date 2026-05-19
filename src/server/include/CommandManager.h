@@ -17,11 +17,11 @@ private:
     std::map<std::string, ICommand*> commands;
     IOHandler& io;
 
-    //private constructor since it's singleton. need the reference of the io since it is passed to the Commands 
-    CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler = nullptr);
+    //private constructor since it's singleton. need the reference of the io since it is passed to the Commands
+    CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler);
 
 public:
-    static CommandManager& getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler* dataHandler = nullptr);
+    static CommandManager& getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler);
 
     CommandManager(const CommandManager&) = delete;
     CommandManager& operator=(const CommandManager&) = delete;

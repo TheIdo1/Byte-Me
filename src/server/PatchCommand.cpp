@@ -3,8 +3,7 @@
 #include <stdexcept>
 
 // initializes managers, io reference, and description attributes
-// dataHandler is optional - when provided, changes are persisted to storage
-PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler* dataHandler):
+PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler):
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
@@ -41,10 +40,7 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
         }
         user->addProductWatched(*product);
     }
-    if (dataHandler) {
-        dataHandler->deleteUser(userId);
-        dataHandler->saveUser(*user);
-    }
+    dataHandler.updateUser(*user);
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
 }
 
