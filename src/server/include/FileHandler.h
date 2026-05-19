@@ -21,10 +21,12 @@ class FileHandler : public IDataHandler {
         std::vector<User> loadUsers() override;
         void saveUser(const User& user) override;
         void deleteUser(int userId) override;
+        void updateUser(const User& user) override;
 
         std::vector<Product> loadProducts() override;
         void saveProduct(const Product& product) override;
         void deleteProduct(int productId) override;
+        void updateProduct(const Product& product) override;
 };
 
 #endif

@@ -26,10 +26,12 @@ public:
     void saveUser(const User& user) override {}
     std::vector<User> loadUsers() override { return {}; }
     void deleteUser(int userId) override {}
+    void updateUser(const User& user) override {}
 
     void saveProduct(const Product& product) override {}
     std::vector<Product> loadProducts() override { return {}; }
     void deleteProduct(int productId) override {}
+    void updateProduct(const Product& product) override {}
 };
 
 // Global instance to avoid dangling pointers between tests

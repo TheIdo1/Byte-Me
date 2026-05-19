@@ -44,7 +44,6 @@ void PostCommand::execute(const std::vector<std::string>& args) {
         user->addProductWatched(*product);
     }
     if (dataHandler) {
-        dataHandler->deleteUser(userId);
         dataHandler->saveUser(*user);
     }
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::Created));

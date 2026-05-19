@@ -29,6 +29,8 @@ public:
     std::vector<User> loadUsers() override { return {}; }
     std::vector<Product> loadProducts() override { return {}; }
     void deleteProduct(int id) override {}
+    void updateUser(const User& user) override {}
+    void updateProduct(const Product& product) override {}
 };
 
 // =====================================================================

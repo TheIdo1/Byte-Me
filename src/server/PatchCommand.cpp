@@ -42,8 +42,7 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
         user->addProductWatched(*product);
     }
     if (dataHandler) {
-        dataHandler->deleteUser(userId);
-        dataHandler->saveUser(*user);
+        dataHandler->updateUser(*user);
     }
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
 }

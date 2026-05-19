@@ -69,9 +69,7 @@ void DeleteCommand::execute(const std::vector<std::string>& args) {
         user->removedProductWatched(*p);
     }
     
-    //update user.
-    dataHandler.deleteUser(userId);
-    dataHandler.saveUser(*user);
+    dataHandler.updateUser(*user);
 
 
     ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
