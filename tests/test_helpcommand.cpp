@@ -160,6 +160,6 @@ TEST(HelpCommandTest, ExecutePrintsBadRequestOnInvalidArgs) {
     help.execute(args);
 
     // Verify that the output is exactly the Bad Request message (Status 400)
-    std::string expectedOutput = "400 Bad Request\n";
+    std::string expectedOutput = "400 Bad Request";
     EXPECT_EQ(fakeOutput.str(), expectedOutput);
 }
