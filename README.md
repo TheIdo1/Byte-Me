@@ -12,6 +12,24 @@ A CLI-based product recommendation system written in C++17. Given a user and a p
 - **`get [userId] [productId]`** — Output up to 10 recommended product IDs for a user, ranked by collaborative-filtering score, then by product ID ascending.
 - **`help`** — Print all available commands and their usage.
 
+### Session Example
+```bash
+post 1 2 3 4 5
+201 Created
+post 2 3 4 5 6 7 8
+201 Created
+get 1 3
+200 Ok
+
+6 7 8
+help
+DELETE,arguments: [userid] [productid1] [productid2] ...
+GET,arguments: [userid] [productid]
+PATCH,arguments: [userId] [productId1] [productId2] ...
+POST,arguments: [userId] [productId1] [productId2] ...
+help
+```
+
 ## How the recommendation works
 
 1. For the target user, compute a similarity score with every other user (count of shared products watched).
