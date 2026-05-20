@@ -5,6 +5,7 @@
 #include "IOHandler.h"
 #include "UserManager.h"
 #include "ProductManager.h"
+#include "IFormatter.h"
 #include <string>
 
 // handles POST [userId] [productId1] [productId2] ...
@@ -19,8 +20,10 @@ class PostCommand : public ICommand {
     ProductManager& productManager;
     IOHandler& ioHandler;
     IDataHandler& dataHandler;
+    IFormatter& formatter;
+
 public:
-    PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler);
+    PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler, IFormatter& formatter);
     void execute(const std::vector<std::string>& args) override;
     bool validate(const std::vector<std::string>& args) const override;
     

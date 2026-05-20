@@ -112,13 +112,30 @@ This produces two binaries inside `build/`:
 Example session:
 
 ```
-post 1 101 102 103
-post 2 101 104 105
-patch 2 106
-delete 2 104
-get 2
-recommend 1 101
-104 105
+post 1 1 2 3 4
+201 Created
+
+post 2 1 3 6 7 8
+201 Created
+
+get 1 6
+200 Ok
+
+7 8
+help
+DELETE,arguments: [userid] [productid1] [productid2] ...
+GET,arguments: [userid] [productid]
+PATCH,arguments: [userId] [productId1] [productId2] ...
+POST,arguments: [userId] [productId1] [productId2] ...
+help
+
+delete 2 8
+204 No Content
+
+get 1 6 
+200 Ok
+
+7
 ```
 
 ## Running the tests
@@ -144,23 +161,23 @@ docker run --rm byte-me ./build/RunTests
 
 To run Server
 ```bash
-docker run -it --rm -p PORT:PORT byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT byte-me ./build/RunServer PORT
 ```
 
 And with local data
 For Linux / macOS / Git Bash:
 ```bash
-docker run -it --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (PowerShell):
 ```bash
-docker run -it --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (Command Prompt / CMD):
 ```bash
-docker run -it --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 To run Client
@@ -171,7 +188,10 @@ for docker localhost
 ```bash
 docker run -it --rm byte-me python3 src/client/main.py host.docker.internal PORT
 ```
-
+To kill all docker containers (PS)
+```bash
+docker stop $(docker ps -q) 
+```
 ## Data format
 
 Products file (`data/products.txt`):

@@ -5,11 +5,12 @@
 #include "ProductManager.h"
 #include "IOHandler.h"
 #include "IDataHandler.h"
+#include "IFormatter.h"
 
 
 class DeleteCommand : public ICommand {
     public:
-    DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler);
+    DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler, IFormatter& formatter);
 
     void execute(const std::vector<std::string>& args) override;
 
@@ -28,6 +29,7 @@ private:
     ProductManager& productManager;
     IOHandler& ioHandler;
     IDataHandler& dataHandler;
+    IFormatter& formatter;
 
     
 };

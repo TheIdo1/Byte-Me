@@ -2,30 +2,38 @@
 #include "include/StatusCode.h"
 #include <stdexcept>
 
-PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler):
+PostCommand::PostCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler, IFormatter& formatter):
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
-dataHandler(dataHandler) {}
+dataHandler(dataHandler), 
+formatter(formatter) {}
 
 // creates a new user and populates their watch list
 // prints 400 if fewer than 2 args or user already exists, 404 if userId cannot be parsed
 void PostCommand::execute(const std::vector<std::string>& args) {
+    std::string result;
     if (!validate(args)) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        result = formatter.format((Http::StatusCode::BadRequest), {});
+        ioHandler.print(result);
         return;
     }
 
+
+    // try to conver id to int
     int userId;
     try {
         userId = std::stoi(args[0]);
     } catch(const std::exception& e) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
-
+    
+    //check if ID exists, if yes 
     if (userManager.getUser(userId) != nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
@@ -42,7 +50,8 @@ void PostCommand::execute(const std::vector<std::string>& args) {
         user->addProductWatched(*product);
     }
     dataHandler.saveUser(*user);
-    ioHandler.print(Http::getStatusMessage(Http::StatusCode::Created));
+    result = formatter.format((Http::StatusCode::Created), {});
+    ioHandler.print(result);
 }
 
 bool PostCommand::validate(const std::vector<std::string>& args) const {

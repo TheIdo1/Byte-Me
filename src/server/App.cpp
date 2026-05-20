@@ -6,14 +6,15 @@
 #include "include/ProductManager.h"
 #include "include/StatusCode.h"
 
-App::App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler)
+App::App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler, IFormatter& formatter)
     : io(io),
       parser(parser),
       dataHandler(dataHandler),
+      formatter(formatter),
       // initialize singletons and store references to them
       productManager(ProductManager::getInstance(dataHandler)),
       userManager(UserManager::getInstance(dataHandler)),
-      commandManager(CommandManager::getInstance(io, userManager, productManager, dataHandler)) {
+      commandManager(CommandManager::getInstance(io, userManager, productManager, dataHandler, formatter)) {
 }
 
 void App::run(){

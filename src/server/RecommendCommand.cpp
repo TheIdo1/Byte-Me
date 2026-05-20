@@ -7,8 +7,8 @@
 
 
 // Constructor with Dependency Injection
-RecommendCommand::RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler)
-    : userManager(userManager), productManager(productManager), ioHandler(ioHandler) {}
+RecommendCommand::RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IFormatter& formatter)
+    : userManager(userManager), productManager(productManager), ioHandler(ioHandler), formatter(formatter) {}
 
 // Validation: "recommend [userid] [productid]", aregs[0] = "param1", args[1] = "param2".
 bool RecommendCommand::validate(const std::vector<std::string>& args) const {
@@ -23,10 +23,12 @@ const std::string& RecommendCommand::getName() const { return name; }
 const std::string& RecommendCommand::getArgsDescription() const { return argsDescription; }
 
 void RecommendCommand::execute(const std::vector<std::string>& args) {
+    std::string result;
     //validate args before executing, if not valid, do nothing
     //makes sure that user and product exists, and that the args are in the correct format
     if (!validate(args)) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        result = formatter.format((Http::StatusCode::BadRequest), {});
+        ioHandler.print(result);
         return; 
     }
 
@@ -37,31 +39,32 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
     try {
         targetUserId = std::stoi(args[0]);
     } catch(const std::exception& e) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
     try {
         targetProductId = std::stoi(args[1]);
     } catch(const std::exception& e) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
     
     // Logical existence checks - if it fails, it's Not Found (404)
     User* targetUser = userManager.getUser(targetUserId);
     if (targetUser == nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return; // User does not exist
     }
 
     if (productManager.getProduct(targetProductId) == nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;  // Product does not exist
     }
-
-    // Return 200 OK status code upon successful validated command
-    ioHandler.print(Http::getStatusMessage(Http::StatusCode::OK));
 
     // Step 1: Find similaritys between target and all other users
     // Create a set of product IDs watched by the 
@@ -112,7 +115,6 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
     }
 
     // output up to 10 products with the highest score, sorted by score and then by product ID in accending order
-    std::string output;
     std::vector<std::pair<int, int>> scoredProducts; // (productId, score)
     for (const auto& entry : productScores) {
         scoredProducts.emplace_back(entry.first, entry.second);
@@ -132,17 +134,15 @@ void RecommendCommand::execute(const std::vector<std::string>& args) {
     }
 
 
-    // Build output string
-    for(int i = 0; i < scoredProducts.size(); i++) {
-        output += std::to_string(scoredProducts[i].first);
-        if (i < scoredProducts.size() - 1) {
-            output += " ";
-        }
+    // Build output vector
+    std::vector<std::string> rawOutput;
+    for(const auto& product : scoredProducts) {
+        rawOutput.push_back(std::to_string(product.first));
     }
 
     // Print to IOHandler
 
-    ioHandler.print(output + "\n");
-    
+    result = formatter.format((Http::StatusCode::OK), rawOutput);
+    ioHandler.print(result);
     
 }

@@ -2,8 +2,8 @@
 #include "include/StatusCode.h"
 #include <vector>
 
-DeleteCommand::DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler)
-: userManager(userManager), productManager(productManager), ioHandler(ioHandler), dataHandler(dataHandler) {
+DeleteCommand::DeleteCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler, IFormatter& formatter)
+: userManager(userManager), productManager(productManager), ioHandler(ioHandler), dataHandler(dataHandler), formatter(formatter) {
 };
 
 //description methods
@@ -24,9 +24,11 @@ bool DeleteCommand::validate(const std::vector<std::string>& args) const {
 }
 
 void DeleteCommand::execute(const std::vector<std::string>& args) {
+    std::string result;
     // if invalid call, arguemnt structure wise - return bad request.
     if (!DeleteCommand::validate(args)){
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        result = formatter.format((Http::StatusCode::BadRequest), {});
+        ioHandler.print(result);
         return;
     }
     
@@ -35,13 +37,15 @@ void DeleteCommand::execute(const std::vector<std::string>& args) {
     try {
         userId = std::stoi(args[0]);
     } catch(const std::exception& e) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
     User* user = userManager.getUser(userId);
     if (user == nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
@@ -53,13 +57,15 @@ void DeleteCommand::execute(const std::vector<std::string>& args) {
             // 404 if typed string as id.
             productId = std::stoi(args[i]);
         } catch (const std::exception& e){
-            ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+            result = formatter.format((Http::StatusCode::NotFound), {});
+            ioHandler.print(result);
             return;
         }
         Product* product = productManager.getProduct(productId);
         if (product == nullptr) {
             // product does not exist, return NotFound.
-            ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+            result = formatter.format((Http::StatusCode::NotFound), {});
+            ioHandler.print(result);
             return;
         }
         removeProducts.push_back(product);
@@ -72,7 +78,8 @@ void DeleteCommand::execute(const std::vector<std::string>& args) {
     dataHandler.updateUser(*user);
 
 
-    ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
+    result = formatter.format((Http::StatusCode::NoContent), {});
+    ioHandler.print(result);
 
 
 }
