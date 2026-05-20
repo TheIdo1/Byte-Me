@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
 #include "../src/server/include/DeleteCommand.h"
 #include "../src/server/include/Console.h"
-#include "../src/server/include/StatusCode.h" 
+#include "../src/server/include/StatusCode.h"
+#include "../src/server/include/IFormatter.h"
 #include <vector>
 #include <string>
 #include <sstream>
@@ -33,6 +34,19 @@ public:
     void updateProduct(const Product& product) override {}
 };
 
+
+class FakeFormatterDeleteCommand : public IFormatter {
+public:
+    std::string format(Http::StatusCode code, const std::vector<std::string>& payload) const override {
+        std::string result = Http::getStatusMessage(code);
+        for (size_t i = 0; i < payload.size(); ++i) {
+            result += payload[i];
+            if (i < payload.size() - 1) result += " ";
+        }
+        return result;
+    }
+};
+
 // =====================================================================
 // VALIDATION TESTS
 // =====================================================================
@@ -46,7 +60,8 @@ TEST(DeleteCommandTest, ValidateReturnsTrueForValidArgs) {
     std::ostringstream fakeOutput;
     Console fakeIO(fakeInput, fakeOutput);
 
-    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
+    FakeFormatterDeleteCommand fakeFormatter;
+    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler, fakeFormatter);
 
     std::vector<std::string> args = {"1", "101"}; 
     EXPECT_TRUE(deleteCmd.validate(args));
@@ -61,7 +76,8 @@ TEST(DeleteCommandTest, ValidateReturnsFalseForNotEnoughArgs) {
     std::ostringstream fakeOutput;
     Console fakeIO(fakeInput, fakeOutput);
 
-    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
+    FakeFormatterDeleteCommand fakeFormatter;
+    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler, fakeFormatter);
 
     std::vector<std::string> argsEmpty; 
     EXPECT_FALSE(deleteCmd.validate(argsEmpty));
@@ -80,7 +96,8 @@ TEST(DeleteCommandTest, ExecutePrintsBadRequestOnInvalidArgs) {
     std::ostringstream fakeOutput;
     Console fakeIO(fakeInput, fakeOutput);
 
-    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
+    FakeFormatterDeleteCommand fakeFormatter;
+    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler, fakeFormatter);
 
     std::vector<std::string> args = {"1"}; // Invalid: missing product ID
     deleteCmd.execute(args);
@@ -97,7 +114,8 @@ TEST(DeleteCommandTest, ExecutePrintsNotFoundOnInvalidUserIdFormat) {
     std::ostringstream fakeOutput;
     Console fakeIO(fakeInput, fakeOutput);
 
-    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
+    FakeFormatterDeleteCommand fakeFormatter;
+    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler, fakeFormatter);
 
     std::vector<std::string> args = {"not_a_number", "101"}; 
     deleteCmd.execute(args);
@@ -136,7 +154,8 @@ TEST(DeleteCommandTest, ExecuteSucceedsAndRemovesProductWatch) {
     std::ostringstream fakeOutput;
     Console fakeIO(fakeInput, fakeOutput);
 
-    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler);
+    FakeFormatterDeleteCommand fakeFormatter;
+    DeleteCommand deleteCmd(userMgr, prodMgr, fakeIO, fakeDataHandler, fakeFormatter);
 
     // 4. Execute the command: DELETE 5 505
     std::vector<std::string> args = {std::to_string(testUserId), std::to_string(testProdId)};
