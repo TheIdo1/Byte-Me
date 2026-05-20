@@ -15,30 +15,30 @@ class MockIOHandlerStatusCodeTest : public IOHandler {
 TEST(StatusCodeText, getExpectedOutputOK) {
     MockIOHandlerStatusCodeTest mc;
     mc.print(Http::getStatusMessage(Http::StatusCode::OK));
-    EXPECT_EQ(mc.capturedOutput, "200 Ok\n\n");
+    EXPECT_EQ(mc.capturedOutput, "200 Ok\n");
 }
 
 TEST(StatusCodeText, getExpectedOutputCreated) {
     MockIOHandlerStatusCodeTest mc;
     mc.print(Http::getStatusMessage(Http::StatusCode::Created));
-    EXPECT_EQ(mc.capturedOutput, "201 Created\n");
+    EXPECT_EQ(mc.capturedOutput, "201 Created");
 }
 
 TEST(StatusCodeText, getExpectedOutputNoContent) {
     MockIOHandlerStatusCodeTest mc;
     mc.print(Http::getStatusMessage(Http::StatusCode::NoContent));
-    EXPECT_EQ(mc.capturedOutput, "204 No Content\n");
+    EXPECT_EQ(mc.capturedOutput, "204 No Content");
 }
 
 TEST(StatusCodeText, getExpectedOutputNotFound) {
     MockIOHandlerStatusCodeTest mc;
     mc.print(Http::getStatusMessage(Http::StatusCode::NotFound));
-    EXPECT_EQ(mc.capturedOutput, "404 Not Found\n");
+    EXPECT_EQ(mc.capturedOutput, "404 Not Found");
 }
 
 TEST(StatusCodeText, getExpectedOutputBadRequest) {
     MockIOHandlerStatusCodeTest mc;
     mc.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
-    EXPECT_EQ(mc.capturedOutput, "400 Bad Request\n");
+    EXPECT_EQ(mc.capturedOutput, "400 Bad Request");
 }
 

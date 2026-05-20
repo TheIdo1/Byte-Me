@@ -6,12 +6,12 @@
 namespace Http{
     std::string getStatusMessage(Http::StatusCode code){
         switch(code){
-            case Http::StatusCode::OK:         return "200 Ok\n\n"; 
-            case Http::StatusCode::Created:    return "201 Created\n";
-            case Http::StatusCode::NoContent:  return "204 No Content\n";
-            case Http::StatusCode::BadRequest: return "400 Bad Request\n";
-            case Http::StatusCode::NotFound:   return "404 Not Found\n";
-            default:                     return "Unknown\n";
+            case Http::StatusCode::OK:         return "200 Ok\n"; 
+            case Http::StatusCode::Created:    return "201 Created";
+            case Http::StatusCode::NoContent:  return "204 No Content";
+            case Http::StatusCode::BadRequest: return "400 Bad Request";
+            case Http::StatusCode::NotFound:   return "404 Not Found";
+            default:                     return "Unknown";
         }
     }
 }

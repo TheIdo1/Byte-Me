@@ -7,7 +7,7 @@ std::string PlainTextFormatter::format(Http::StatusCode code, const std::vector<
     
     // If there is payload data, add a newline and join the items with spaces
     if (!payload.empty()) {
-        // result += "\n";
+        result += "\n";
         for (size_t i = 0; i < payload.size(); ++i) {
             result += payload[i];
             
@@ -19,5 +19,5 @@ std::string PlainTextFormatter::format(Http::StatusCode code, const std::vector<
     }
     
     // Return the final string with a trailing newline for clean console output
-    return result;
+    return result + "\n";
 }

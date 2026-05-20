@@ -109,34 +109,6 @@ This produces two binaries inside `build/`:
 ./build/RunApp
 ```
 
-Example session:
-
-```
-post 1 1 2 3 4
-201 Created
-
-post 2 1 3 6 7 8
-201 Created
-
-get 1 6
-200 Ok
-
-7 8
-help
-DELETE,arguments: [userid] [productid1] [productid2] ...
-GET,arguments: [userid] [productid]
-PATCH,arguments: [userId] [productId1] [productId2] ...
-POST,arguments: [userId] [productId1] [productId2] ...
-help
-
-delete 2 8
-204 No Content
-
-get 1 6 
-200 Ok
-
-7
-```
 
 ## Running the tests
 

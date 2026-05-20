@@ -29,7 +29,7 @@ def main():
             #send messege to the server
             soc.send(bytes(user_input + "\n", 'utf-8'))
             data = soc.recv(4096)
-            print(data.decode("utf-8"))
+            print(data.decode("utf-8"), end="")
             
     except:
         return
