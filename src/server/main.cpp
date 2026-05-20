@@ -39,13 +39,19 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error: Port number must be between 1 and 65535." << std::endl;
         exit(1);
     }
-
+    
     // --- Server Initialization ---
-
+    
+    // Initialize the DataHandler.
+    // The FileHandler is responsible for loading from and saving to the local text files.
+    FileHandler fileHandler;
+    fileHandler.loadProducts();
+    fileHandler.loadUsers();
+    
     // Initialize and start the TCP Server with the validated port.
     TcpServer server(server_port);  // Instantiate the TcpServer to listen on given port
     server.start();                 // Performs socket(), bind(), and listen()
-
+    
     while (true) {
         try {
             // Wait for a client to connect.
@@ -64,9 +70,6 @@ int main(int argc, char* argv[]) {
             // parser is responsible of taking the rawInput and parse it to cmdType and args
             CommandParser parser;
 
-            // Initialize the DataHandler.
-            // The FileHandler is responsible for loading from and saving to the local text files.
-            FileHandler fileHandler;
 
             //Initialze Formatter 
             // The Formatter is responsible for formatting http request messages and their payloads (for example commands output).
@@ -79,7 +82,7 @@ int main(int argc, char* argv[]) {
             // Load initial data.
             // The setup method delegates the loading of products and users to the DataHandler,
             // which populates the ProductManager and UserManager.
-            app.setup();
+            //app.setup();
 
             // Start the application.
             // This triggers the infinite loop that reads user input, parses it, and executes commands.
