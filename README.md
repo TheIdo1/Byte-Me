@@ -104,10 +104,30 @@ This produces two binaries inside `build/`:
 Example session:
 
 ```
-add 1 101 102 103
-add 2 101 104 105
-recommend 1 101
-104 105
+post 1 1 2 3 4
+201 Created
+
+post 2 1 3 6 7 8
+201 Created
+
+get 1 6
+200 Ok
+
+7 8
+help
+DELETE,arguments: [userid] [productid1] [productid2] ...
+GET,arguments: [userid] [productid]
+PATCH,arguments: [userId] [productId1] [productId2] ...
+POST,arguments: [userId] [productId1] [productId2] ...
+help
+
+delete 2 8
+204 No Content
+
+get 1 6 
+200 Ok
+
+7
 ```
 
 ## Running the tests
