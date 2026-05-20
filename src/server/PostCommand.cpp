@@ -46,6 +46,7 @@ void PostCommand::execute(const std::vector<std::string>& args) {
         if (product == nullptr) {
             productManager.addProduct(productId, "Product-" + std::to_string(productId), rand() % 1000);
             product = productManager.getProduct(productId);
+            dataHandler.saveProduct(*product);
         }
         user->addProductWatched(*product);
     }

@@ -28,7 +28,6 @@ void ProductManager::addProduct(int id, const std::string& name, double price) {
     }
     Product newProduct(id, name, price);
     products.push_back(newProduct);
-    dataHandler.saveProduct(newProduct);
 }
 
 // remove a product from the product list by ID, and delete it using the data handler.
