@@ -46,42 +46,52 @@ int main(int argc, char* argv[]) {
     TcpServer server(server_port);  // Instantiate the TcpServer to listen on given port
     server.start();                 // Performs socket(), bind(), and listen()
 
-    // Wait for a client to connect.
-    // acceptClient() is a blocking call that returns the client's socket descriptor.
-    int client_sock = server.acceptClient();
+    while (true) {
+        try {
+            // Wait for a client to connect.
+            // acceptClient() is a blocking call that returns the client's socket descriptor.
+            int client_sock = server.acceptClient();
 
 
-    // --- Setup the Application Components ---
+            // --- Setup the Application Components ---
+            
+            //Initialize the IOHandler
+            // Instantiate the SocketHandler with the newly connected client.
+            // This replaces the old Console IOHandler.
+            SocketHandler socketHandler(client_sock);
+
+            // Initialize the parser
+            // parser is responsible of taking the rawInput and parse it to cmdType and args
+            CommandParser parser;
+
+            // Initialize the DataHandler.
+            // The FileHandler is responsible for loading from and saving to the local text files.
+            FileHandler fileHandler;
+
+            //Initialze Formatter 
+            // The Formatter is responsible for formatting http request messages and their payloads (for example commands output).
+            PlainTextFormatter PlainTextFormatter;
+
+            // Instantiate the main Application via Dependency Injection.
+            // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by reference).
+            App app(socketHandler, parser, fileHandler, PlainTextFormatter);
+
+            // Load initial data.
+            // The setup method delegates the loading of products and users to the DataHandler,
+            // which populates the ProductManager and UserManager.
+            app.setup();
+
+            // Start the application.
+            // This triggers the infinite loop that reads user input, parses it, and executes commands.
+            app.run();
+        } catch (const std::exception& e) {
+            // Handle unexpected connection errors silently or log them
+
+        }
+        
+        
+    }
     
-    //Initialize the IOHandler
-    // Instantiate the SocketHandler with the newly connected client.
-    // This replaces the old Console IOHandler.
-    SocketHandler socketHandler(client_sock);
-
-    // Initialize the parser
-    // parser is responsible of taking the rawInput and parse it to cmdType and args
-    CommandParser parser;
-
-    // Initialize the DataHandler.
-    // The FileHandler is responsible for loading from and saving to the local text files.
-    FileHandler fileHandler;
-
-    //Initialze Formatter 
-    // The Formatter is responsible for formatting http request messages and their payloads (for example commands output).
-    PlainTextFormatter PlainTextFormatter;
-
-    // Instantiate the main Application via Dependency Injection.
-    // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by reference).
-    App app(socketHandler, parser, fileHandler, PlainTextFormatter);
-
-    // Load initial data.
-    // The setup method delegates the loading of products and users to the DataHandler,
-    // which populates the ProductManager and UserManager.
-    app.setup();
-
-    // Start the application.
-    // This triggers the infinite loop that reads user input, parses it, and executes commands.
-    app.run();
 
     return 0;
 }

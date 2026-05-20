@@ -20,33 +20,39 @@ App::App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler, IForma
 void App::run(){
     //use IOHandler type
     //have infinte loop reading input
-    
-    while(true){
-        // read and parse the user's input
-        std::string rawInput = io.readInput();
-        parser.parse(rawInput);
-        
-        // fetch the parsed command type and arguments.
-        const std::string& cmdType = parser.getCmdType();
-        const std::vector<std::string>& args = parser.getArgs();
-        
+    try{
+        while(true){
+            // read and parse the user's input
+            std::string rawInput = io.readInput();
+            parser.parse(rawInput);
+            
+            // fetch the parsed command type and arguments.
+            const std::string& cmdType = parser.getCmdType();
+            const std::vector<std::string>& args = parser.getArgs();
+            
 
-        // Get the reference to the commands map from the CommandManager
-        std::map<std::string, ICommand*>& commands = commandManager.getCommands();
-        
-        // search for the command in the map using find().
-        // This prevents the map from auto-inserting a null pointer for unknown keys.
-        auto iterator = commands.find(cmdType);
-        
-        // Check if the command wasnt found (iterator did reach the end of the map)
-        if (iterator == commands.end()) {
-            // Command does not exist! do nothing
-            io.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
-            continue;
-        } 
-        // 'it->second' accesses the ICommand* associated with the key.
-        iterator->second->execute(args);
+            // Get the reference to the commands map from the CommandManager
+            std::map<std::string, ICommand*>& commands = commandManager.getCommands();
+            
+            // search for the command in the map using find().
+            // This prevents the map from auto-inserting a null pointer for unknown keys.
+            auto iterator = commands.find(cmdType);
+            
+            // Check if the command wasnt found (iterator did reach the end of the map)
+            if (iterator == commands.end()) {
+                // Command does not exist! do nothing
+                io.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+                continue;
+            } 
+            // 'it->second' accesses the ICommand* associated with the key.
+            iterator->second->execute(args);
+        }
     }
+    catch (const std::exception& e) {
+        // Leave empty to fail silently. 
+        // This breaks the loop cleanly when a client disconnects.
+    } 
+    
 }
 
 
