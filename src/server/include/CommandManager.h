@@ -8,6 +8,8 @@
 #include "IDataHandler.h"
 #include "UserManager.h"
 #include "ProductManager.h"
+#include "IFormatter.h"
+
 
 #include <map> // Include the map library
 #include <string> // Include the string library
@@ -18,10 +20,10 @@ private:
     IOHandler& io;
 
     //private constructor since it's singleton. need the reference of the io since it is passed to the Commands
-    CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler);
+    CommandManager(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler, IFormatter& formatter);
 
 public:
-    static CommandManager& getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler);
+    static CommandManager& getInstance(IOHandler& io, UserManager& userManager, ProductManager& productManager, IDataHandler& dataHandler, IFormatter& formatter);
 
     CommandManager(const CommandManager&) = delete;
     CommandManager& operator=(const CommandManager&) = delete;

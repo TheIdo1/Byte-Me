@@ -4,13 +4,14 @@
 #include "UserManager.h"
 #include "ProductManager.h"
 #include "IOHandler.h"
+#include "IFormatter.h"
 #include <vector>
 #include <string>
 
 class RecommendCommand : public ICommand {
 public:
 
-    RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler);
+    RecommendCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IFormatter& formatter);
 
     void execute(const std::vector<std::string>& args) override;
 
@@ -28,6 +29,8 @@ private:
     UserManager& userManager;
     ProductManager& productManager;
     IOHandler& ioHandler;
+    IFormatter& formatter;
+
 };
 
 #endif

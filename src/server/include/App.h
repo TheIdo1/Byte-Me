@@ -10,6 +10,7 @@
 #include "UserManager.h"
 #include "ProductManager.h"
 #include "CommandParser.h"
+#include "IFormatter.h"
 
 class App {
 private:
@@ -21,9 +22,10 @@ private:
     UserManager& userManager;
     ProductManager& productManager;
     CommandManager& commandManager;
+    IFormatter& formatter;
 
 public:
-    App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler);
+    App(IOHandler& io, CommandParser& parser, IDataHandler& dataHandler, IFormatter& formatter);
     void run();
 
     // method for loading data from data source, via managers at the beginning of the program

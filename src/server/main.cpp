@@ -2,6 +2,7 @@
 #include "include/SocketHandler.h"
 #include "include/FileHandler.h"
 #include "include/TcpServer.h"
+#include "include/PlainTextFormatter.h"
 #include <iostream>
 
 
@@ -65,9 +66,13 @@ int main(int argc, char* argv[]) {
     // The FileHandler is responsible for loading from and saving to the local text files.
     FileHandler fileHandler;
 
+    //Initialze Formatter 
+    // The Formatter is responsible for formatting http request messages and their payloads (for example commands output).
+    PlainTextFormatter PlainTextFormatter;
+
     // Instantiate the main Application via Dependency Injection.
     // We pass the socketHandler (by reference), the CommandParser, and the fileHandler (by reference).
-    App app(socketHandler, parser, fileHandler);
+    App app(socketHandler, parser, fileHandler, PlainTextFormatter);
 
     // Load initial data.
     // The setup method delegates the loading of products and users to the DataHandler,

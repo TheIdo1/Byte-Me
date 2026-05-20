@@ -3,17 +3,20 @@
 #include <stdexcept>
 
 // initializes managers, io reference, and description attributes
-PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler):
+PatchCommand::PatchCommand(UserManager& userManager, ProductManager& productManager, IOHandler& ioHandler, IDataHandler& dataHandler, IFormatter& formatter):
 userManager(userManager),
 productManager(productManager),
 ioHandler(ioHandler),
-dataHandler(dataHandler) {}
+dataHandler(dataHandler),
+formatter(formatter) {}
 
 // adds each listed product to the user's watch list
 // prints 400 if fewer than 2 args, 404 if userId cannot be parsed or user does not exist
 void PatchCommand::execute(const std::vector<std::string>& args) {
+    std::string result;
     if (!validate(args)) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::BadRequest));
+        result = formatter.format((Http::StatusCode::BadRequest), {});
+        ioHandler.print(result);
         return;
     }
 
@@ -21,13 +24,15 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
     try {
         userId = std::stoi(args[0]);
     } catch(const std::exception& e) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
     User* user = userManager.getUser(userId);
     if (user == nullptr) {
-        ioHandler.print(Http::getStatusMessage(Http::StatusCode::NotFound));
+        result = formatter.format((Http::StatusCode::NotFound), {});
+        ioHandler.print(result);
         return;
     }
 
@@ -41,7 +46,8 @@ void PatchCommand::execute(const std::vector<std::string>& args) {
         user->addProductWatched(*product);
     }
     dataHandler.updateUser(*user);
-    ioHandler.print(Http::getStatusMessage(Http::StatusCode::NoContent));
+    result = formatter.format((Http::StatusCode::NoContent), {});
+    ioHandler.print(result);
 }
 
 bool PatchCommand::validate(const std::vector<std::string>& args) const {

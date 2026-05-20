@@ -133,23 +133,23 @@ docker run --rm byte-me ./build/RunTests
 
 To run Server
 ```bash
-docker run -it --rm -p PORT:PORT byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT byte-me ./build/RunServer PORT
 ```
 
 And with local data
 For Linux / macOS / Git Bash:
 ```bash
-docker run -it --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (PowerShell):
 ```bash
-docker run -it --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 For Windows (Command Prompt / CMD):
 ```bash
-docker run -it --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
+docker run --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
 ```
 
 To run Client
@@ -160,7 +160,10 @@ for docker localhost
 ```bash
 docker run -it --rm byte-me python3 src/client/main.py host.docker.internal PORT
 ```
-
+To kill all docker containers (PS)
+```bash
+docker stop $(docker ps -q) 
+```
 ## Data format
 
 Products file (`data/products.txt`):
