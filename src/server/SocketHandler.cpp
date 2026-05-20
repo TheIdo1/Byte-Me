@@ -39,9 +39,10 @@ std::string SocketHandler::readInput() {
         // If data was received, convert the C-style character buffer into a C++ std::string.
         return std::string(buffer);
     } else {
-        // If read_bytes is 0 (client gracefully disconnected) or < 0 (an error occurred),
-        // we creturn empty string
-        return ""; 
+        // If read_bytes is 0, the client disconnected gracefully.
+        // If read_bytes < 0, a network error occurred.
+        // In both cases, the connection is dead, so we throw an exception to notify the App.
+        throw std::runtime_error("Client disconnected or network error occurred.");
     }
 }
 
