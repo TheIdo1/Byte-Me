@@ -1,5 +1,7 @@
 # Byte-Me
 
+![byte me wide picture](resources\byteme_wide_picture.png)
+
 A CLI-based product recommendation system written in C++17. Given a user and a product they are viewing, it recommends up to 10 other products they might like — using a collaborative filtering algorithm based on shared watch history with similar users.
 
 **For Tragil2's questions scroll to the bottom of the page.
@@ -11,6 +13,25 @@ A CLI-based product recommendation system written in C++17. Given a user and a p
 - **`delete [userId] [productId1] [productId2] ...`** — delete a product from user viewed list, one or more products.
 - **`get [userId] [productId]`** — Output up to 10 recommended product IDs for a user, ranked by collaborative-filtering score, then by product ID ascending.
 - **`help`** — Print all available commands and their usage.
+
+### Session Example
+```bash
+post 1 2 3 4 5
+201 Created
+post 2 3 4 5 6 7 8
+201 Created
+get 1 3
+200 Ok
+
+6 7 8
+help
+DELETE,arguments: [userid] [productid1] [productid2] ...
+GET,arguments: [userid] [productid]
+PATCH,arguments: [userId] [productId1] [productId2] ...
+POST,arguments: [userId] [productId1] [productId2] ...
+help
+```
+![run example](resources\run_example.png)
 
 ## How the recommendation works
 
@@ -192,3 +213,6 @@ Both files are read on startup and updated automatically as `add` commands are e
 - Q4: Did the fact that input/output now comes from sockets instead of the console require you to modify code that should be "closed for modification but open for extension"?
 
 - Answer: No. we implemented IIOhandler interface, and Console that implementes it in Assignment 1 that prints to the console, for this assignment all we had to do is create SocketHandler that implements IIOHandler and pass it as the IO handler for our App in main.
+
+
+![byte me logo](resources\byteme_logo.png)
