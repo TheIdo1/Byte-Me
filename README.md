@@ -1,5 +1,7 @@
 # Byte-Me
 
+![byte me wide picture](resources\byteme_wide_picture.png)
+
 A CLI-based product recommendation system written in C++17. Given a user and a product they are viewing, it recommends up to 10 other products they might like — using a collaborative filtering algorithm based on shared watch history with similar users.
 
 **For Tragil2's questions scroll to the bottom of the page.
@@ -29,6 +31,7 @@ PATCH,arguments: [userId] [productId1] [productId2] ...
 POST,arguments: [userId] [productId1] [productId2] ...
 help
 ```
+![run example](resources\run_example.png)
 
 ## How the recommendation works
 
@@ -210,3 +213,6 @@ Both files are read on startup and updated automatically as `add` commands are e
 - Q4: Did the fact that input/output now comes from sockets instead of the console require you to modify code that should be "closed for modification but open for extension"?
 
 - Answer: No. we implemented IIOhandler interface, and Console that implementes it in Assignment 1 that prints to the console, for this assignment all we had to do is create SocketHandler that implements IIOHandler and pass it as the IO handler for our App in main.
+
+
+![byte me logo](resources\byteme_logo.png)
