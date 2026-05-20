@@ -34,8 +34,21 @@ public:
     void updateProduct(const Product& product) override {}
 };
 
-// Global instance to avoid dangling pointers between tests
+class MockFormatterRecommend : public IFormatter {
+public:
+    std::string format(Http::StatusCode code, const std::vector<std::string>& payload) const override {
+        std::string result = Http::getStatusMessage(code);
+        for (size_t i = 0; i < payload.size(); ++i) {
+            result += payload[i];
+            if (i < payload.size() - 1) result += " ";
+        }
+        return result;
+    }
+};
+
+// Global instances to avoid dangling pointers between tests
 MockDataHandlerRecommend globalMockHandler;
+MockFormatterRecommend globalMockFormatter;
 
 // Helper function to populate the system exactly as shown in the PDF appendix.
 // It uses a static flag to ensure the database is populated only once per test run.
@@ -156,7 +169,7 @@ TEST(RecommendCommandTests, PdfAlgorithmExample) {
     MockIOHandlerRecommend mockIO;
 
     setupTestData(um, pm);
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
 
     std::vector<std::string> args = {"1", "104"};
     ASSERT_TRUE(cmd.validate(args)); 
@@ -174,7 +187,7 @@ TEST(RecommendCommandTests, ExecuteReturns200OnSuccess) {
     MockIOHandlerRecommend mockIO;
 
     setupTestData(um, pm);
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
 
     std::vector<std::string> args = {"1", "104"};
     cmd.execute(args);
@@ -189,7 +202,7 @@ TEST(RecommendCommandTests, tooFewArguments) {
     UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
     std::vector<std::string> args = {"1"}; 
 
     EXPECT_FALSE(cmd.validate(args)) << "Validation should fail for missing product ID.";
@@ -201,7 +214,7 @@ TEST(RecommendCommandTests, ExecuteReturns400OnInvalidArgs) {
     UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
     std::vector<std::string> args = {"1"}; // Invalid (too few)
     
     cmd.execute(args);
@@ -214,7 +227,7 @@ TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentUser) {
     UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
     std::vector<std::string> args = {"999", "104"}; // User 999 does not exist
 
     cmd.execute(args);
@@ -227,7 +240,7 @@ TEST(RecommendCommandTests, ExecuteReturns404ForNonExistentProduct) {
     UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
     setupTestData(um, pm); // Populates user 1
     std::vector<std::string> args = {"1", "999"}; // Product 999 does not exist
 
@@ -240,7 +253,7 @@ TEST(RecommendCommandTests, tooManyArguments) {
     UserManager& um = UserManager::getInstance(globalMockHandler); 
     MockIOHandlerRecommend mockIO; 
 
-    RecommendCommand cmd(um, pm, mockIO);
+    RecommendCommand cmd(um, pm, mockIO, globalMockFormatter);
     // Removed "recommend" from args, testing strict arg length validation
     std::vector<std::string> args = {"1", "104", "extra"}; 
 

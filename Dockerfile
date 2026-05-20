@@ -2,7 +2,7 @@
 FROM gcc:latest
 
 # Install CMake and Python 3
-RUN apt-get update && apt-get install -y cmake python
+RUN apt-get update && apt-get install -y cmake python3
 
 # Set working directory inside the container
 WORKDIR /usr/src/app
