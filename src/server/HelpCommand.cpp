@@ -26,22 +26,18 @@ void HelpCommand::execute(const std::vector<std::string>& args) {
         return;
     }
 
-    // iterate through all commands - the vector is already sorted
+    // Build full output as one string so it is sent in a single send(), avoiding partial reads on the client side.
+    std::string output;
     for (ICommand* cmd : commands) {
         std::string argsDesc = cmd->getArgsDescription();
-        
-        // Check if the command requires arguments and print in the appropriate format
         if (argsDesc.empty()) {
-            // Command does not take any arguments -> print only the name
-            io.print(cmd->getName() + "\n");
+            output += cmd->getName() + "\n";
         } else {
-            // Command takes arguments -> print in the requested format
-            io.print(cmd->getName() + ",arguments: " + argsDesc + "\n");
+            output += cmd->getName() + ",arguments: " + argsDesc + "\n";
         }
     }
-
-    // prints help's own description at the end
-    io.print(this->getName() + "\n");
+    output += this->getName() + "\n";
+    io.print(output);
 }
 
 // validates that no args were passed to help command
