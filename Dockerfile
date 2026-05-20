@@ -1,8 +1,8 @@
 # Use a standard C++ environment
 FROM gcc:latest
 
-# Install CMake
-RUN apt-get update && apt-get install -y cmake
+# Install CMake and Python 3
+RUN apt-get update && apt-get install -y cmake python
 
 # Set working directory inside the container
 WORKDIR /usr/src/app
