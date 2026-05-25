@@ -1,6 +1,9 @@
 # Compiled source
 build/
 
+#node js
+src/webServer/node_modules/
+
 #vscode
 .vscode/
 
