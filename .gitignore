@@ -1,6 +1,9 @@
 # Compiled source
 build/
 
+#.env
+.env
+
 #node js
 src/webServer/node_modules/
 

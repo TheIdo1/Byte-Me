@@ -2,7 +2,9 @@
 
 ![byte me wide picture](resources/byteme_wide_picture.png)
 
-A CLI-based product recommendation system written in C++17. Given a user and a product they are viewing, it recommends up to 10 other products they might like — using a collaborative filtering algorithm based on shared watch history with similar users.
+A CLI-based product recommendation system written in C++17. Given a user and a product they are viewing, it recommends up to 10 other products they might like — using a collaborative filtering algorithm based on shared watch history with similar users.\
+
+After cloning this git you should rename src\webServer\config\.env.test to src\webServer\config\.env
 
 **For Tragil2's questions scroll to the bottom of the page.
 
