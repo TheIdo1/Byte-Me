@@ -6,31 +6,26 @@ const { v4: uuidv4 } = require('uuid');
 // In-memory array to store all orders. Resets when the server restarts.
 const orders = [];
 
-// A simple counter to generate unique IDs for new orders
-let currentId = 1;
 
-/**
- * Retrieves all orders from the memory.
- * @returns {Array} Array of all order objects.
- */
+// Retrieves all orders from the memory.
 const getAllOrders = () => {
     return orders;
 };
 
-/**
- * Retrieves a specific order by its ID.
- * @param {number} id - The ID of the order to find.
- * @returns {Object|undefined} The order object if found, otherwise undefined.
- */
+/*
+Retrieves a specific order by its ID.
+id - The ID of the order to find.
+The order object if found, otherwise undefined.
+*/
 const getOrderById = (id) => {
     return orders.find(order => order.id === id);
 };
 
-/**
- * Creates a new order, constructs the required JSON structure, and saves it to memory.
- * @param {Object} orderData - The data for the new order (customer, restaurant, orderedItems).
- * @returns {Object} The newly created order.
- */
+/*
+Creates a new order, constructs the required JSON structure, and saves it to memory
+orderData - The data for the new order (customer, restaurant, orderedItems)
+return the newly created order
+*/
 const createOrder = (orderData) => {
     const now = new Date();
     
@@ -45,8 +40,8 @@ const createOrder = (orderData) => {
             minute: now.getMinutes(),
             second: now.getSeconds()
         },
-        customer: orderData.customer,
-        resturant: orderData.resturant, // Note: spelling matches your design
+        customerId: orderData.customerId,
+        restaurantId: orderData.restaurantId, 
         orderedItems: orderData.orderedItems
     };
 
