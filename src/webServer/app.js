@@ -15,13 +15,12 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // import Routers
-// Import the orders router module
 const ordersRouter = require('./routes/orders');
-
+const usersRouter = require('./routes/users.route');
 
 // mount Routers
-// instruct Express to route any HTTP request starting with '/api/orders' to the ordersRouter
 app.use('/api/orders', ordersRouter);
+app.use('/api/users', usersRouter);
 
 
 // Fallback 404 Route
