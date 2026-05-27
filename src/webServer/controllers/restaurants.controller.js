@@ -16,7 +16,7 @@ const getRestaurantById = (req, res) => {
 }
 
 const createRestaurant = (req, res) => {
-    // validateCreateRestaurant middleware has already guaranteed that fields: name, category, adress, phone, email
+    // validateCreateRestaurant middleware has already guaranteed that fields: name, category, address, phone, email
     // are present and have the correct types.
     
     // Extract the actual restaurant fields from the request body
@@ -27,7 +27,7 @@ const createRestaurant = (req, res) => {
         authorizedUsers,
         phone,
         email,
-        adress,
+        address,
         products 
     } = req.body;
 
@@ -39,7 +39,7 @@ const createRestaurant = (req, res) => {
         authorizedUsers,
         phone,
         email,
-        adress,
+        address,
         products 
     };
 

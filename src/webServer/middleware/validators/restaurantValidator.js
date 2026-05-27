@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'adress', 'products'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'adress'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'adress', 'products'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
 
 const validateRestaurantUpdate = (req, res, next) => {
     const body = req.body;
@@ -38,7 +38,7 @@ const validateRestaurantUpdate = (req, res, next) => {
                 return res.status(400).json({ error: `${field} must be an array.` });
             }
             //authorized user must have at least one field
-            if (field === 'authorizedUsers' && body['authorizedUsers'].length() < 1){
+            if (field === 'authorizedUsers' && body['authorizedUsers'].length < 1){
                 return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
             }
             
@@ -51,11 +51,11 @@ const validateRestaurantUpdate = (req, res, next) => {
 
     
 
-    // Object validation (adress)
-    if (body.adress !== undefined) {
+    // Object validation (address)
+    if (body.address !== undefined) {
         // In JavaScript, arrays and null are technically objects, so we explicitly exclude them
-        if (typeof body.adress !== 'object' || Array.isArray(body.adress) || body.adress === null) {
-            return res.status(400).json({ error: 'adress must be a valid JSON object.' });
+        if (typeof body.address !== 'object' || Array.isArray(body.address) || body.address === null) {
+            return res.status(400).json({ error: 'address must be a valid JSON object.' });
         }
     }
 
@@ -104,7 +104,7 @@ const validateCreateRestaurant = (req, res, next) => {
                 return res.status(400).json({ error: `${field} must be an array.` });
             }
             //authorized user must have at least one field
-            if (field === 'authorizedUsers' && body['authorizedUsers'].length() < 1){
+            if (field === 'authorizedUsers' && body['authorizedUsers'].length < 1){
                 return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
             }
             if (!body[field].every(item => typeof item === 'string')) {
@@ -113,9 +113,9 @@ const validateCreateRestaurant = (req, res, next) => {
         }
     }
 
-    // 3. Object validation (adress)
-    if (typeof body.adress !== 'object' || Array.isArray(body.adress) || body.adress === null) {
-        return res.status(400).json({ error: 'adress must be a valid JSON object.' });
+    // 3. Object validation (address)
+    if (typeof body.address !== 'object' || Array.isArray(body.address) || body.address === null) {
+        return res.status(400).json({ error: 'address must be a valid JSON object.' });
     }
 
     // all checks passed

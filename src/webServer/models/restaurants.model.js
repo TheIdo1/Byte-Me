@@ -23,7 +23,7 @@ const getRestaurantById = (id) => {
 
 /*
 Creates a new restaurnt, constructs the required JSON structure, and saves it to memory
-restaurantData - The data for the new restaurant (name, category, authorized users[ids], phone, email, adress{}, products[ids])
+restaurantData - The data for the new restaurant (name, category, authorized users[ids], phone, email, address{}, products[ids])
 return the newly created restaurant
 */
 const createRestaurant = (restaurantData) => {
@@ -37,11 +37,11 @@ const createRestaurant = (restaurantData) => {
         authorizedUsers: restaurantData.authorizedUsers || [],
         phone: restaurantData.phone || '',
         email: restaurantData.email || '',
-        adress: {
-            city: restaurantData.adress.city || '',
-            street: restaurantData.adress.street || '',
-            houseNum: restaurantData.adress.houseNum || '',
-            floor: restaurantData.adress.floor || ''
+        address: {
+            city: restaurantData.address.city || '',
+            street: restaurantData.address.street || '',
+            houseNum: restaurantData.address.houseNum || '',
+            floor: restaurantData.address.floor || ''
         },
         products: restaurantData.products || [] // this field is optional, initiate to empty list if undefined.
     };
