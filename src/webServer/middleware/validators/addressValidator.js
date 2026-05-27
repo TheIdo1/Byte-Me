@@ -52,4 +52,14 @@ const validateAddressMiddleware = (req, res, next) => {
     next();
 };
 
-module.exports = { validateAddress, validateAddressMiddleware };
+// if address field does not exist, pass the test.
+// if exist, must be up to standart
+const validateAddressOptional = (req, res, next) => {
+    if (req.body.address === undefined)
+        return next();
+    const error = validateAddress(req.body.address);
+    if (error) return res.status(400).json({ error });
+    next();
+};
+
+module.exports = { validateAddress, validateAddressMiddleware, validateAddressOptional };

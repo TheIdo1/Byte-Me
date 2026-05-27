@@ -42,17 +42,19 @@ const validateRestaurantUpdate = (req, res, next) => {
             if (!Array.isArray(body[field])) {
                 return res.status(400).json({ error: `${field} must be an array.` });
             }
-            // Optional: Check if array contains only strings (UUIDs)
+            //authorized user must have at least one field
+            if (field === 'authorizedUsers' && body['authorizedUsers'].length() < 1){
+                return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
+            }
+            
+            // Check if array contains only strings 
             if (!body[field].every(item => typeof item === 'string')) {
                 return res.status(400).json({ error: `Every item in ${field} must be a string.` });
             }
         }
     }
 
-    //authorized user must have at least one field
-    if (body['authorizedUsers'].length() < 1){
-        return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
-    }
+    
 
     // Object validation (adress)
     if (body.adress !== undefined) {
@@ -105,6 +107,10 @@ const validateCreateRestaurant = (req, res, next) => {
         if (body[field] !== undefined) {
             if (!Array.isArray(body[field])) {
                 return res.status(400).json({ error: `${field} must be an array.` });
+            }
+            //authorized user must have at least one field
+            if (field === 'authorizedUsers' && body['authorizedUsers'].length() < 1){
+                return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
             }
             if (!body[field].every(item => typeof item === 'string')) {
                 return res.status(400).json({ error: `Every item in ${field} must be a string.` });
