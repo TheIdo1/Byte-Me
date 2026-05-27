@@ -31,17 +31,17 @@ const createRestaurant = (restaurantData) => {
     // Constructing the restaurant object exactly as agreed upon
     const newRestaurant = {
         id: uuidv4(),
-        name: restaurantData.restaurantName || '',
-        description: restaurantData.restaurantDescription || '',
-        category: restaurantData.restaurantCategory || '',
-        authorizedUsers: restaurantData.restaurantAuthorizedUsers || [],
-        phone: restaurantData.restaurantPhone || '',
-        email: restaurantData.restaurantEmail || '',
+        name: restaurantData.name || '',
+        description: restaurantData.description || '',
+        category: restaurantData.category || '',
+        authorizedUsers: restaurantData.authorizedUsers || [],
+        phone: restaurantData.phone || '',
+        email: restaurantData.email || '',
         adress: {
-            city: restaurantData.restaurantAdress.city || '',
-            street: restaurantData.restaurantAdress.street || '',
-            houseNum: restaurantData.restaurantAdress.houseNum || '',
-            floor: restaurantData.restaurantAdress.floor || ''
+            city: restaurantData.adress.city || '',
+            street: restaurantData.adress.street || '',
+            houseNum: restaurantData.adress.houseNum || '',
+            floor: restaurantData.adress.floor || ''
         },
         products: restaurantData.products || [] // this field is optional, initiate to empty list if undefined.
     };
