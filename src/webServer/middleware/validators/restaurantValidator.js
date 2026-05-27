@@ -2,11 +2,6 @@ const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUse
 const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'adress'];
 const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'adress', 'products'];
 
-
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'adress', 'products'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'adress'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'adress', 'products'];
-
 const validateRestaurantUpdate = (req, res, next) => {
     const body = req.body;
     const updates = Object.keys(body);

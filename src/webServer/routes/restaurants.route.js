@@ -8,8 +8,8 @@ const { validateCreateRestaurant, validateRestaurantUpdate } = require('../middl
 const { validateAddressMiddleware, validateAddressOptional }= require('../middleware/validators/addressValidator')
 
 router.route('/')
-    .get(restaurantsController.getAllOrders)
-    .post(validateCreateRestaurant, validateAddressMiddleware, ordersController.createOrder);
+    .get(restaurantsController.getAllRestaurants)
+    .post(validateCreateRestaurant, validateAddressMiddleware, restaurantsController.createRestaurant);
 
 
 router.route('/:id')
