@@ -24,7 +24,7 @@ const createOrder = (req, res) => {
     const cleanOrderData = { customerId, restaurantId, orderedItems };
 
     const newOrder = ordersModel.createOrder(cleanOrderData);
-    res.status(201).json(newOrder);
+    res.status(201).location(`/api/orders/${newOrder.id}`).json(newOrder);
 };
 
 /*
