@@ -5,9 +5,10 @@ const router = express.Router();
 
 const usersController = require('../controllers/users.controller');
 const { validateCreateUser } = require('../middleware/validators/userValidator');
+const { validateAddressMiddleware } = require('../middleware/validators/addressValidator');
 
 router.route('/')
-    .post(validateCreateUser, usersController.createUser);
+    .post(validateCreateUser, validateAddressMiddleware, usersController.createUser);
 
 router.route('/:id')
     .get(usersController.getUserById);

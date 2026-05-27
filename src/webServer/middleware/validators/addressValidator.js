@@ -1,6 +1,7 @@
 // middleware/validators/addressValidator.js
 // Reusable address validation logic.
-// Returns an error message string if invalid, or null if the address is valid.
+// validateAddress(address) – pure utility, returns an error string or null.
+// validateAddressMiddleware    – Express middleware, reads req.body.address.
 
 const ALLOWED_ADDRESS_FIELDS = ['city', 'street', 'houseNum', 'floor'];
 
@@ -29,7 +30,7 @@ const validateAddress = (address) => {
     if (address.floor    === undefined) {
         return 'address.floor is required.';
     }
-    
+
     // Type checks
     if (typeof address.city   !== 'string') return 'address.city must be a string.';
     if (typeof address.street !== 'string') return 'address.street must be a string.';
@@ -43,4 +44,12 @@ const validateAddress = (address) => {
     return null; // valid
 };
 
-module.exports = { validateAddress };
+// Express middleware wrapper — assumes a prior middleware already confirmed
+// that req.body.address exists.
+const validateAddressMiddleware = (req, res, next) => {
+    const error = validateAddress(req.body.address);
+    if (error) return res.status(400).json({ error });
+    next();
+};
+
+module.exports = { validateAddress, validateAddressMiddleware };

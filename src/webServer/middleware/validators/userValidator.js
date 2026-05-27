@@ -1,7 +1,6 @@
 // middleware/validators/userValidator.js
 // Validates incoming request data for user endpoints.
-
-const { validateAddress } = require('./addressValidator');
+// Address structure is validated by validateAddressMiddleware in the route chain.
 
 const ALLOWED_CREATE_FIELDS = ['username', 'password', 'firstName', 'lastName', 'email', 'address'];
 
@@ -37,13 +36,7 @@ const validateCreateUser = (req, res, next) => {
         return res.status(400).json({ error: 'email must be a valid email address.' });
     }
 
-    // Address validation (reusable)
-    const addressError = validateAddress(body.address);
-    if (addressError) {
-        return res.status(400).json({ error: addressError });
-    }
-
-    // All checks passed — move to the controller
+    // All checks passed — address structure is validated next in the chain
     next();
 };
 
