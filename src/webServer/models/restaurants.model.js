@@ -40,8 +40,8 @@ const createRestaurant = (restaurantData) => {
         address: {
             city: restaurantData.address.city || '',
             street: restaurantData.address.street || '',
-            houseNum: restaurantData.address.houseNum || '',
-            floor: restaurantData.address.floor || ''
+            houseNum: restaurantData.address.houseNum || 0,
+            floor: restaurantData.address.floor || 0
         },
         products: restaurantData.products || [] // this field is optional, initiate to empty list if undefined.
     };
