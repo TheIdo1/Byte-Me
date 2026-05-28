@@ -1,8 +1,8 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'price'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras'];
 
-const validateRestaurantUpdate = (req, res, next) => {
+const validateProductUpdate = (req, res, next) => {
     const body = req.body;
     const updates = Object.keys(body);
 
@@ -20,10 +20,11 @@ const validateRestaurantUpdate = (req, res, next) => {
         });
     }
 
+
     // --- Type Validation ---
     
     // String validations
-    const stringFields = ['name', 'description', 'category', 'phone', 'email'];
+    const stringFields = ['name', 'description', 'category', 'image'];
     for (const field of stringFields) {
         if (body[field] !== undefined && typeof body[field] !== 'string') {
             return res.status(400).json({ error: `${field} must be a string.` });
@@ -31,17 +32,12 @@ const validateRestaurantUpdate = (req, res, next) => {
     }
 
     // Array validations
-    const arrayFields = ['authorizedUsers', 'products'];
+    const arrayFields = ['extras'];
     for (const field of arrayFields) {
         if (body[field] !== undefined) {
             if (!Array.isArray(body[field])) {
                 return res.status(400).json({ error: `${field} must be an array.` });
             }
-            //authorized user must have at least one field
-            if (field === 'authorizedUsers' && body['authorizedUsers'].length < 1){
-                return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
-            }
-            
             // Check if array contains only strings 
             if (!body[field].every(item => typeof item === 'string')) {
                 return res.status(400).json({ error: `Every item in ${field} must be a string.` });
@@ -51,11 +47,13 @@ const validateRestaurantUpdate = (req, res, next) => {
 
     
 
-    // Object validation (address)
-    if (body.address !== undefined) {
-        // In JavaScript, arrays and null are technically objects, so we explicitly exclude them
-        if (typeof body.address !== 'object' || Array.isArray(body.address) || body.address === null) {
-            return res.status(400).json({ error: 'address must be a valid JSON object.' });
+    // price validataion
+    if (body.price !== undefined) {
+        // 1. Must be a number type
+        // 2. Must be a finite number (rejects NaN and Infinity)
+        // 3. Must be greater than or equal to 0
+        if (typeof body.price !== 'number' || !Number.isFinite(body.price) || body.price < 0) {
+            return res.status(400).json({ error: 'price must be a valid, positive number.' });
         }
     }
 
@@ -64,7 +62,7 @@ const validateRestaurantUpdate = (req, res, next) => {
 };
 
 
-const validateCreateRestaurant = (req, res, next) => {
+const validateCreateProduct = (req, res, next) => {
     const body = req.body;
     
     // Check if there are forbidden/unknown fields
@@ -85,27 +83,21 @@ const validateCreateRestaurant = (req, res, next) => {
     }
 
     // --- Type Validation ---
-    // (Since we already confirmed required fields exist, we don't need 'undefined' checks for them,
-    // but the loop structure handles optional fields nicely too).
 
-    // 1. String validations
-    const stringFields = ['name', 'description', 'category', 'phone', 'email'];
+    // 1. String validations (Updated for products)
+    const stringFields = ['name', 'description', 'category', 'image'];
     for (const field of stringFields) {
         if (body[field] !== undefined && typeof body[field] !== 'string') {
             return res.status(400).json({ error: `${field} must be a string.` });
         }
     }
 
-    // 2. Array validations
-    const arrayFields = ['authorizedUsers', 'products'];
+    // 2. Array validations (Updated for 'extras')
+    const arrayFields = ['extras'];
     for (const field of arrayFields) {
         if (body[field] !== undefined) {
             if (!Array.isArray(body[field])) {
                 return res.status(400).json({ error: `${field} must be an array.` });
-            }
-            //authorized user must have at least one field
-            if (field === 'authorizedUsers' && body['authorizedUsers'].length < 1){
-                return res.status(400).json({error: `authorizedUsers must contain at least one user id`})
             }
             if (!body[field].every(item => typeof item === 'string')) {
                 return res.status(400).json({ error: `Every item in ${field} must be a string.` });
@@ -113,14 +105,16 @@ const validateCreateRestaurant = (req, res, next) => {
         }
     }
 
-    // 3. Object validation (address)
-    if (typeof body.address !== 'object' || Array.isArray(body.address) || body.address === null) {
-        return res.status(400).json({ error: 'address must be a valid JSON object.' });
+    // 3. Price validation (Copied over from your update method)
+    if (body.price !== undefined) {
+        if (typeof body.price !== 'number' || !Number.isFinite(body.price) || body.price < 0) {
+            return res.status(400).json({ error: 'price must be a valid, positive number.' });
+        }
     }
 
-    // all checks passed
+    // All checks passed
     next();
 };
 
 
-module.exports = { validateCreateRestaurant, validateRestaurantUpdate };
+module.exports = { validateCreateProduct, validateProductUpdate };
