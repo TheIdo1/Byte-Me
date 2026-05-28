@@ -85,6 +85,9 @@ const deleteProduct = (req,res) => {
     if (!isDeleted) {
         return res.status(404).json({ error: 'Product not found' })
     }
+    
+    //Remove the product ID from the restaurant's array
+    restaurantsModel.removeProductFromRestaurant(restaurantId, productId);
     res.status(204).send()
 }
 

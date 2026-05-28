@@ -88,6 +88,12 @@ const deleteRestaurant = (id) => {
     return true;
 };
 
+/*
+Adds a product ID to a restaurant's products array.
+restaurantId - The ID of the restaurant.
+productId - The ID of the newly created product.
+returns True if successful, false if the restaurant was not found.
+*/
 const addProductToRestaurant = (restaurantId, productId) => {
     const restaurant = getRestaurantById(restaurantId);
     
@@ -100,6 +106,24 @@ const addProductToRestaurant = (restaurantId, productId) => {
     return true;
 };
 
+/*
+Removes a product ID from a restaurant's products array.
+restaurantId - The ID of the restaurant.
+productId - The ID of the product to remove.
+returns True if successful, false if the restaurant was not found.
+*/
+const removeProductFromRestaurant = (restaurantId, productId) => {
+    const restaurant = getRestaurantById(restaurantId);
+    
+    if (!restaurant) {
+        return false;
+    }
+
+    // Filter out the deleted product ID, keeping everything else
+    restaurant.products = restaurant.products.filter(id => id !== productId);
+    return true;
+};
+
 // Export the functions so the Controller can use them
 module.exports = {
     getAllRestaurants,
@@ -107,5 +131,6 @@ module.exports = {
     createRestaurant,
     updateRestaurant,
     deleteRestaurant,
-    addProductToRestaurant
+    addProductToRestaurant,
+    removeProductFromRestaurant
 };
