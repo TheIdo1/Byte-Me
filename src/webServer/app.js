@@ -16,11 +16,13 @@ app.use(express.json());
 
 // import Routers
 const ordersRouter = require('./routes/orders');
-const usersRouter = require('./routes/users.route');
+const usersRouter  = require('./routes/users.route');
+const tokensRouter = require('./routes/tokens.route');
 
 // mount Routers
 app.use('/api/orders', ordersRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/users',  usersRouter);
+app.use('/api/tokens', tokensRouter);
 
 
 // Fallback 404 Route
