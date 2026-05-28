@@ -1,4 +1,5 @@
 const productsModel = require('../models/products.model');
+const restaurantsModel = require('../models/restaurants.model')
 
 //Returns all products
 const getAllProducts = (req, res) => {
@@ -43,6 +44,9 @@ const createProduct = (req, res) => {
 
     // Pass it to the model
     const newProduct = productsModel.createProduct(cleanProductData);
+
+    // add it to the restaurants products list
+    restaurantsModel.addProductToRestaurant(restaurantId, newProduct.id);
     
     // Return 201 Created. 
     res.status(201).location(`/api/products/${newProduct.id}`).json(newProduct);

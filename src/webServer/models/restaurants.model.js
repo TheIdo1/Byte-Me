@@ -88,11 +88,24 @@ const deleteRestaurant = (id) => {
     return true;
 };
 
+const addProductToRestaurant = (restaurantId, productId) => {
+    const restaurant = getRestaurantById(restaurantId);
+    
+    if (!restaurant) {
+        return false;
+    }
+
+    // Push the new product ID into the array
+    restaurant.products.push(productId);
+    return true;
+};
+
 // Export the functions so the Controller can use them
 module.exports = {
     getAllRestaurants,
     getRestaurantById,
     createRestaurant,
     updateRestaurant,
-    deleteRestaurant
+    deleteRestaurant,
+    addProductToRestaurant
 };
