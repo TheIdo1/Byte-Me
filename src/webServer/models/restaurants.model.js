@@ -1,0 +1,98 @@
+// models/restaurants.js
+// currently manages the in-memory storage for restaurants and provides functions to interact with the data.
+
+const { v4: uuidv4 } = require('uuid');
+
+// In-memory array to store all restaurants. Resets when the server restarts.
+const restaurants = [];
+
+
+// Retrieves all restaurants from the memory.
+const getAllRestaurants = () => {
+    return restaurants;
+};
+
+/*
+Retrieves a specific restaurant by its ID.
+id - The ID of the restaurant to find.
+The restaurant object if found, otherwise undefined.
+*/
+const getRestaurantById = (id) => {
+    return restaurants.find(restaurant => restaurant.id === id);
+};
+
+/*
+Creates a new restaurnt, constructs the required JSON structure, and saves it to memory
+restaurantData - The data for the new restaurant (name, category, authorized users[ids], phone, email, address{}, products[ids])
+return the newly created restaurant
+*/
+const createRestaurant = (restaurantData) => {
+
+    // Constructing the restaurant object exactly as agreed upon
+    const newRestaurant = {
+        id: uuidv4(),
+        name: restaurantData.name || '',
+        description: restaurantData.description || '',
+        category: restaurantData.category || '',
+        authorizedUsers: restaurantData.authorizedUsers || [],
+        phone: restaurantData.phone || '',
+        email: restaurantData.email || '',
+        address: {
+            city: restaurantData.address.city || '',
+            street: restaurantData.address.street || '',
+            houseNum: restaurantData.address.houseNum || 0,
+            floor: restaurantData.address.floor || 0
+        },
+        products: restaurantData.products || [] // this field is optional, initiate to empty list if undefined.
+    };
+
+    // Save to in-memory array
+    restaurants.push(newRestaurant);
+    
+    return newRestaurant;
+};
+
+
+// Updates an existing restaurant by its ID.
+// id - The ID of the restaurant to update.
+// updateData - The new data to apply to the restaurant.
+// returns The updated restaurant object, or null if the restaurant was not found.
+const updateRestaurant = (id, updateData) => {
+    const restaurantIndex = restaurants.findIndex(restaurant => restaurant.id === id);
+    
+    if (restaurantIndex === -1) {
+        return null; // restaurant not found
+    }
+
+    // Merges existing restaurant properties with incoming updates
+    // any overlapping fields are overwritten by the new values.
+    restaurants[restaurantIndex] = { ...restaurants[restaurantIndex], ...updateData };
+    
+    return restaurants[restaurantIndex];
+};
+
+/*
+Deletes an restaurant from memory by its ID.
+id - The ID of the restaurant to delete.
+returns True if the restaurant was successfully deleted, false if not found.
+*/
+const deleteRestaurant = (id) => {
+    const restaurantIndex = restaurants.findIndex(restaurant => restaurant.id === id);
+    
+    if (restaurantIndex === -1) {
+        return false;
+    }
+
+    // Remove 1 element at the found index
+    restaurants.splice(restaurantIndex, 1);
+    return true;
+};
+
+// Export the functions so the Controller can use them
+module.exports = {
+    getAllRestaurants,
+    getRestaurantById,
+    createRestaurant,
+    updateRestaurant,
+    deleteRestaurant
+};
