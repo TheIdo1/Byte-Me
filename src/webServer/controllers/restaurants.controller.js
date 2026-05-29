@@ -7,7 +7,7 @@ const getAllRestaurants = (req, res) => {
 
 //Returns a single restaurant by ID. Returns 404 if not found.
 const getRestaurantById = (req, res) => {
-    const restaurantId = req.params.id;
+    const restaurantId = req.params.rId;
     const restaurant = restaurantsModel.getRestaurantById(restaurantId);
     if (!restaurant) {
         return res.status(404).json({ error: 'Restaurant not found' })
@@ -56,7 +56,7 @@ Assumes that the validation middleware has already sanitized req.body,
 ensuring it only contains allowed fields with proper data types.
 */
 const updateRestaurant = (req, res) => {
-    const restaurantId = req.params.id;
+    const restaurantId = req.params.rId;
     
     // Since the Validator already stripped out any illegal fields, 
     // req.body now contains ONLY clean, database-ready keys.
@@ -78,7 +78,7 @@ const updateRestaurant = (req, res) => {
 
 //Deletes an restaurant by ID, Returns 404 if not found
 const deleteRestaurant = (req,res) => {
-    const restaurantId = req.params.id;
+    const restaurantId = req.params.rId;
     const isDeleted = restaurantsModel.deleteRestaurant(restaurantId);
     if (!isDeleted) {
         return res.status(404).json({ error: 'Restaurant not found' })
