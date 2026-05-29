@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // import Routers
-const ordersRouter = require('./routes/orders');
+const ordersRouter = require('./routes/orders.route');
 const restaurantsRouter = require('./routes/restaurants.route');
 const usersRouter = require('./routes/users.route');
 const tokensRouter = require('./routes/tokens.route');
