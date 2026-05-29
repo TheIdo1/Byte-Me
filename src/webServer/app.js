@@ -19,12 +19,14 @@ const ordersRouter = require('./routes/orders.route');
 const restaurantsRouter = require('./routes/restaurants.route');
 const usersRouter = require('./routes/users.route');
 const tokensRouter = require('./routes/tokens.route');
+const searchRouter = require('./routes/search.route');
 
 // mount Routers
 app.use('/api/orders', ordersRouter);
 app.use('/api/restaurants', restaurantsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/tokens', tokensRouter);
+app.use('/api/search', searchRouter);
 
 
 
