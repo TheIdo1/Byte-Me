@@ -1,4 +1,4 @@
-const ordersModel = require('../models/orders');
+const ordersModel = require('../models/orders.model');
 
 //Returns all orders
 const getAllOrders = (req, res) => {
