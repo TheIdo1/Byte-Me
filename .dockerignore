@@ -1,1 +1,13 @@
+# Ignore Node.js dependencies
+node_modules
+src/webServer/node_modules
+npm-debug.log
+
+# Ignore local build directories to ensure a clean container build
 build/
+CMakeCache.txt
+CMakeFiles/
+
+# Ignore Git history
+.git/
+.gitignore
