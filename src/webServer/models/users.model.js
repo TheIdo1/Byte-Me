@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // In-memory array to store all users. Resets when the server restarts.
 const users = [];
+let nextCppId = 1;
 
 // Internal helper — strips password before returning a user to the outside world.
 const stripPassword = (user) => {
@@ -28,6 +29,7 @@ const createUser = (userData) => {
 
     const newUser = {
         id: uuidv4(),
+        cppId: nextCppId++,
         username: userData.username,
         password: userData.password, // plain text for now
         firstName: userData.firstName,
@@ -53,8 +55,19 @@ const getUserByCredentials = (username, password) => {
     return stripPassword(user);
 };
 
+// Returns the C++ integer ID for a given Node UUID, or null if not found.
+const getUserCppId = (nodeId) => {
+    const user = users.find(u => u.id === nodeId);
+    return user ? user.cppId : null;
+};
+
+// Returns the cppId of every registered user.
+const getAllUserCppIds = () => users.map(u => u.cppId);
+
 module.exports = {
     getUserById,
     createUser,
     getUserByCredentials,
+    getUserCppId,
+    getAllUserCppIds,
 };

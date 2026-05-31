@@ -1,5 +1,7 @@
 const productsModel = require('../models/products.model');
-const restaurantsModel = require('../models/restaurants.model')
+const restaurantsModel = require('../models/restaurants.model');
+const usersModel = require('../models/users.model');
+const { sendCommandToCpp } = require('../services/cppSocketService');
 
 //Returns all products
 const getAllProducts = (req, res) => {
@@ -78,17 +80,32 @@ const updateProduct = (req, res) => {
     res.status(200).json(updatedProduct);
 };
 
-//Deletes an product by ID, Returns 404 if not found
-const deleteProduct = (req,res) => {
+//Deletes a product by ID, Returns 404 if not found
+const deleteProduct = async (req, res) => {
     const productId = req.params.pId;
-    const isDeleted = productsModel.deleteProduct(productId);
-    if (!isDeleted) {
-        return res.status(404).json({ error: 'Product not found' })
+    const product = productsModel.getProductById(productId);
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
     }
-    
-    //Remove the product ID from the restaurant's array
-    restaurantsModel.removeProductFromRestaurant(restaurantId, productId);
-    res.status(204).send()
+
+    productsModel.deleteProduct(productId);
+    restaurantsModel.removeProductFromRestaurant(product.restaurantId, productId);
+
+    const productCppId = product.cppId;
+    const allUserCppIds = usersModel.getAllUserCppIds();
+    Promise.allSettled(
+        allUserCppIds.map(userCppId =>
+            sendCommandToCpp(`DELETE ${userCppId} ${productCppId}`)
+        )
+    ).then(results => {
+        results.forEach((result, i) => {
+            if (result.status === 'rejected') {
+                console.error(`C++ DELETE failed for userCppId ${allUserCppIds[i]}: ${result.reason?.message ?? result.reason}`);
+            }
+        });
+    });
+
+    res.status(204).send();
 }
 
 module.exports = {
