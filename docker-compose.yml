@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  cpp-server:
+    build:
+      context: . # Builds from the root using existing C++ Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    # volumes: # uncommment if want to save data locally
+    #   - ./data:/usr/src/app/data
+    restart: unless-stopped
+
+  web-server:
+    build:
+      context: ./src/webServer # Builds using the Node Dockerfile we will create
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      # We use the service name 'cpp-server' instead of an IP address!
+      - CPP_SERVER_IP=cpp-server
+      - CPP_SERVER_PORT=8080
+      - PORT=8081
+    depends_on:
+      - cpp-server # Ensures C++ boots up before Node.js
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true # Keeps the interactive terminal open for CLI
+    tty: true
+    depends_on:
+      - cpp-server
+      - web-server

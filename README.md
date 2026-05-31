@@ -114,93 +114,26 @@ Byte-Me/
 
 ## Building
 
-**Requirements:** CMake ≥ 3.14, a C++17-capable compiler (GCC/Clang).
+Using docker-compose we now need only 3 commands (!!!)
 
-```bash
-mkdir build && cd build
-cmake ..
-make
+Start servers:
+look in docker-compose.yml for commented lines in order to save data locally.
+
+```
+docker-compose up -d --build cpp-server web-server
 ```
 
-This produces two binaries inside `build/`:
-- `RunApp` — the interactive CLI application
-- `RunTests` — the test suite
+Start python client:
 
-## Running
-
-```bash
-./build/RunApp
+```
+docker-compose run --rm client
 ```
 
+Shutdown all:
 
-## Running the tests
-
-```bash
-./build/RunTests
 ```
-
-Or via CTest:
-
-```bash
-cd build && ctest --output-on-failure
+docker-compose down
 ```
-
-## Docker
-
-Build and run the test suite inside a container:
-
-```bash
-docker build -t byte-me .
-docker run --rm byte-me ./build/RunTests
-```
-
-To run Server
-```bash
-docker run --rm -p PORT:PORT byte-me ./build/RunServer PORT
-```
-
-And with local data
-For Linux / macOS / Git Bash:
-```bash
-docker run --rm -p PORT:PORT -v "$PWD/data:/usr/src/app/data" byte-me ./build/RunServer PORT
-```
-
-For Windows (PowerShell):
-```bash
-docker run --rm -p PORT:PORT -v "${PWD}/data:/usr/src/app/data" byte-me ./build/RunServer PORT
-```
-
-For Windows (Command Prompt / CMD):
-```bash
-docker run --rm -p PORT:PORT -v "%cd%/data:/usr/src/app/data" byte-me ./build/RunServer PORT
-```
-
-To run Client
-```bash
-docker run -it --rm byte-me python3 src/client/main.py IP PORT
-```
-for docker localhost
-```bash
-docker run -it --rm byte-me python3 src/client/main.py host.docker.internal PORT
-```
-To kill all docker containers (PS)
-```bash
-docker stop $(docker ps -q) 
-```
-## Data format
-
-Products file (`data/products.txt`):
-```
-id|name|price
-```
-
-Users file (`data/users.txt`):
-```
-id|name|productId1,productId2,...
-```
-
-Both files are read on startup and updated automatically as `add` commands are executed.
-
 
 ## Q n A
 - Q1: Did the fact that command names changed require you to modify code that should be "closed for modification but open for extension"?
