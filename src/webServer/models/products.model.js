@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // In-memory array to store all products. Resets when the server restarts.
 const products = [];
+let nextCppId = 1;
 
 
 // Retrieves all products from the memory.
@@ -31,6 +32,7 @@ const createProduct = (productData) => {
     // Constructing the product object exactly as agreed upon
     const newProduct = {
         id: uuidv4(),
+        cppId: nextCppId++,
         restaurantId: productData.restaurantId || '',
         name: productData.name || '',
         description: productData.description || '',
@@ -82,11 +84,18 @@ const deleteProduct = (id) => {
     return true;
 };
 
+// Returns the C++ integer ID for a given Node UUID, or null if not found.
+const getProductCppId = (nodeId) => {
+    const product = products.find(p => p.id === nodeId);
+    return product ? product.cppId : null;
+};
+
 // Export the functions so the Controller can use them
 module.exports = {
     getAllProducts,
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductCppId,
 };
