@@ -2,6 +2,8 @@
 // Validates incoming request data for user endpoints.
 // Address structure is validated by validateAddressMiddleware in the route chain.
 
+const usersModel = require('../../models/users.model');
+
 const ALLOWED_CREATE_FIELDS = ['username', 'password', 'firstName', 'lastName', 'email', 'address'];
 
 const validateCreateUser = (req, res, next) => {
@@ -40,4 +42,15 @@ const validateCreateUser = (req, res, next) => {
     next();
 };
 
-module.exports = { validateCreateUser };
+/*
+Resolves the ?id query param to a C++ integer user ID.
+Sets req.userId to the cppId if the user exists, or 0 if not provided/unknown.
+Used for routes where logged-in users trigger C++ updates.
+*/
+const isUserExists = (req, _res, next) => {
+    const token = req.query.id;
+    req.userId = token ? (usersModel.getUserCppId(token) ?? 0) : 0;
+    next();
+};
+
+module.exports = { validateCreateUser, isUserExists };
