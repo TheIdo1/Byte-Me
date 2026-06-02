@@ -11,28 +11,38 @@ Given a user and a product they are viewing, the recommendation engine uses a co
 **For Tragil2's questions scroll to the bottom of the page.
 
 ## System Architecture
-
+ 
 The project is divided into three main components:
-1. **Web Server (Node.js/Express):** Handles client HTTP requests, manages application logic (Orders, Restaurants, Users, Products, Search, Auth), and stores data using an in-memory MVC approach. 
-2. **Recommendation Engine (C++17):** A dedicated TCP server that manages user watch histories and calculates collaborative-filtering scores to provide real-time recommendations.
-3. **Internal CLI Client (Python):** A command-line interface for testing and interacting directly with the C++ recommendation engine via sockets.
-
+ 
+1. **Web Server (Node.js/Express):** Handles all client HTTP requests using an MVC pattern. Manages Restaurants, Products, Orders, Users, Authentication, and Search. Data is stored in-memory.
+2. **Recommendation Engine (C++17):** A dedicated TCP server that manages user watch histories and calculates collaborative-filtering scores to provide real-time product recommendations.
+3. **Internal CLI Client (Python):** A command-line interface for testing and interacting directly with the C++ recommendation engine over a TCP socket.
+---
+ 
 ## Features
-
-### RESTful API (Express MVC)
-- **Restaurants & Products:** Full CRUD operations for managing restaurants and their menus.
-- **Orders:** Place, update, and track user orders.
-- **Users & Authentication:** Register users and generate login tokens.
-- **Search:** Case-insensitive search across restaurants and products (by name or description).
-- *See `WebServerAPICalls.md` for full API documentation.*
-
-## Features of CPP Reccommendation Engine
-
-- **`post [userId] [productId1] [productId2] ...`** — Record that a user has viewed one or more products. valid only if user doesn't exists yet. Creates the user, and product automatically if it don't exist yet.
-- **`patch [userId] [productId1] [productId2] ...`** — Record that a user has viewed one or more products. valid only if user exists. Creates product automatically if it don't exist yet.
-- **`delete [userId] [productId1] [productId2] ...`** — delete a product from user viewed list, one or more products.
-- **`get [userId] [productId]`** — Output up to 10 recommended product IDs for a user, ranked by collaborative-filtering score, then by product ID ascending.
-- **`help`** — Print all available commands and their usage.
+ 
+### RESTful API (Node.js/Express)
+ 
+| Resource | Endpoint | Description |
+|---|---|---|
+| Restaurants | `/api/restaurants` | Full CRUD for restaurants |
+| Products | `/api/restaurants/:rId/products` | Full CRUD for products within a restaurant |
+| Orders | `/api/orders` | Place, update, and delete orders |
+| Users | `/api/users` | Register and retrieve users |
+| Tokens | `/api/tokens` | Login and generate auth tokens |
+| Search | `/api/search/:query` | Case-insensitive search across restaurants and products |
+ 
+> See `WebServerAPICalls.md` for full request/response documentation.
+ 
+### C++ Recommendation Engine
+ 
+| Command | Usage | Description |
+|---|---|---|
+| `POST` | `post [userId] [productId1] ...` | Create a new user with an initial watch list. Fails if the user already exists. Creates products automatically if they don't exist. |
+| `PATCH` | `patch [userId] [productId1] ...` | Add products to an existing user's watch list. Creates products automatically if they don't exist. |
+| `DELETE` | `delete [userId] [productId1] ...` | Remove one or more products from a user's watch list. |
+| `GET` | `get [userId] [productId]` | Return up to 10 recommended product IDs, ranked by score then by product ID ascending. |
+| `HELP` | `help` | Print all available commands and their usage. |
 
 ### Session Example
 ```bash
@@ -61,9 +71,9 @@ help
 4. Return the top 10 results sorted by score descending, then product ID ascending.
 
 ## Project Structure
-
-```text
-Byte-Me-main/
+ 
+```
+Byte-Me/
 ├── CMakeLists.txt
 ├── docker-compose.yml
 ├── Dockerfile
@@ -73,51 +83,52 @@ Byte-Me-main/
 │   ├── products.txt
 │   └── users.txt
 ├── resources/
-│   └── ... (Images & Logos)
+│   └── (images & logos)
 ├── src/
-│   ├── client/                  # Python CLI Client
+│   ├── client/                    # Python CLI Client
 │   │   ├── Dockerfile
 │   │   └── main.py
-│   ├── server/                  # C++ Recommendation Engine (TCP Server)
-│   │   ├── include/             # Header files (App, CommandManager, etc.)
+│   ├── server/                    # C++17 Recommendation Engine (TCP Server)
+│   │   ├── include/               # Header files
 │   │   ├── App.cpp
 │   │   ├── main.cpp
-│   │   └── ... (C++ Source Files)
-│   └── webServer/               # Node.js/Express API (MVC)
-│       ├── config/              # Environment variables
-│       ├── controllers/         # Request handling & logic (orders, products, users...)
-│       ├── middleware/          # Data validators & Authentication
-│       ├── models/              # In-memory data management
-│       ├── routes/              # Express API endpoints mapping
-│       ├── services/            # External services (e.g., C++ TCP Socket Service)
-│       ├── app.js               # Express entry point
+│   │   └── (other C++ source files)
+│   └── webServer/                 # Node.js/Express REST API (MVC)
+│       ├── config/                # Environment variables (.env)
+│       ├── controllers/           # Request handling logic
+│       ├── middleware/            # Validators & authentication
+│       ├── models/                # In-memory data management
+│       ├── routes/                # API endpoint definitions
+│       ├── services/              # C++ TCP socket service
+│       ├── app.js                 # Express entry point
 │       ├── package.json
 │       └── Dockerfile
-└── tests/                       # C++ Unit Tests (Google Test)
+└── tests/                         # C++ Unit Tests (Google Test)
 ```
-
-## Building
-
-Using docker-compose we now need only 3 commands (!!!)
-
-Start servers:
-look in docker-compose.yml for commented lines in order to save data locally.
-
-```
+ 
+---
+## Building & Running
+ 
+All three components are containerized and managed via Docker Compose.
+ 
+**Start the servers:**
+```bash
 docker-compose up -d --build cpp-server web-server
 ```
-
-Start python client:
-
-```
+ 
+**Start the Python CLI client:**
+```bash
 docker-compose run --rm client
 ```
-
-Shutdown all:
-
-```
+ 
+**Shut everything down:**
+```bash
 docker-compose down
 ```
+ 
+> To persist data between restarts, see the commented `volumes` section in `docker-compose.yml`.
+ 
+---
 
 ## Q n A
 - Q1: Did the fact that command names changed require you to modify code that should be "closed for modification but open for extension"?
