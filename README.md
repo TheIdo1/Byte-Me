@@ -33,6 +33,132 @@ The project is divided into three main components:
 | Search | `/api/search/:query` | Case-insensitive search across restaurants and products |
  
 > See `WebServerAPICalls.md` for full request/response documentation.
+
+### Web API Session Example (Node.js & Express)
+
+This section demonstrates a complete end-to-end user flow: authenticating, creating a restaurant and a product, searching the catalog, and triggering the C++ recommendation engine via TCP sockets.
+
+**1. Login & Get Token**
+Authenticate a user to receive an access token (the User ID) which will be used for protected routes.
+
+```http
+POST /api/tokens
+Content-Type: application/json
+
+{
+  "username": "user99",
+  "password": "mySecretPassword"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000"
+}
+```
+
+**2. Create a Restaurant**
+Create a new restaurant in the system. This is a protected route and requires the token in the Authorization header.
+
+```http
+POST /api/restaurants
+Authorization: 123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "name": "Pizza Planet",
+  "description": "Out of this world pizza and Italian food",
+  "category": "Italian",
+  "authorizedUsers": ["user99"],
+  "phone": "03-9876543",
+  "email": "hello@pizzaplanet.co.il",
+  "address": {
+    "city": "Ramat Gan",
+    "street": "Bialik",
+    "houseNum": 12,
+    "floor": 0
+  }
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": "4715ec83-c687-4aa6-b97b-8480ea8449ba",
+  "name": "Pizza Planet",
+  "description": "Out of this world pizza and Italian food",
+  "category": "Italian",
+  "authorizedUsers": ["user99"]
+}
+```
+
+**3. Add a Product to the Restaurant**
+Add a new menu item to the created restaurant.
+
+```http
+POST /api/restaurants/4715ec83-c687-4aa6-b97b-8480ea8449ba/products
+Authorization: 123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "name": "Pepperoni Pizza",
+  "description": "Crispy pepperoni with a special cheese blend",
+  "category": "Main Course",
+  "price": 55,
+  "image": "https://example.com/images/pepperoni.jpg",
+  "extras": ["Extra Cheese", "Olives"]
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": "34074f8b-02ee-442d-9c9a-5ffd497d5324",
+  "restaurantId": "4715ec83-c687-4aa6-b97b-8480ea8449ba",
+  "name": "Pepperoni Pizza",
+  "price": 55
+}
+```
+
+**4. Search for Products or Restaurants**
+Perform a global search across all restaurants and products (Public route).
+
+```http
+GET /api/search/pepperoni
+```
+
+**Response (200 OK):**
+```json
+{
+  "restaurants": [],
+  "products": [
+    {
+      "id": "34074f8b-02ee-442d-9c9a-5ffd497d5324",
+      "name": "Pepperoni Pizza",
+      "price": 55
+    }
+  ]
+}
+```
+
+**5. View Product (Updates C++ Recommendation Engine)**
+When an authenticated user views a product, the Node.js server seamlessly sends a TCP socket command (`POST <userCppId> <productCppId>`) to the C++ server in the background to update the recommendation engine.
+
+```http
+GET /api/restaurants/4715ec83-c687-4aa6-b97b-8480ea8449ba/products/34074f8b-02ee-442d-9c9a-5ffd497d5324
+Authorization: 123e4567-e89b-12d3-a456-426614174000
+```
+
+**Response (200 OK):**
+```json
+{
+  "id": "34074f8b-02ee-442d-9c9a-5ffd497d5324",
+  "name": "Pepperoni Pizza",
+  "description": "Crispy pepperoni with a special cheese blend",
+  "price": 55
+}
+```
  
 ### C++ Recommendation Engine
  
@@ -44,7 +170,7 @@ The project is divided into three main components:
 | `GET` | `get [userId] [productId]` | Return up to 10 recommended product IDs, ranked by score then by product ID ascending. |
 | `HELP` | `help` | Print all available commands and their usage. |
 
-### Session Example
+### Session Example Recommendation Engine 
 ```bash
 post 1 2 3 4 5
 201 Created
