@@ -13,9 +13,28 @@ const getProductById = (req, res) => {
     const productId = req.params.pId;
     const product = productsModel.getProductById(productId);
     if (!product) {
-        return res.status(404).json({ error: 'Product not found' })
+        return res.status(404).json({ error: 'Product not found' });
     }
-    res.status(200).json(product)
+    res.status(200).json(product);
+
+    // C++ connection: notify recommendation engine that user viewed this product
+    if (req.userId) {
+        const userCppId = usersModel.getUserCppId(req.userId);
+        const productCppId = product.cppId;
+        sendCommandToCpp(`POST ${userCppId} ${productCppId}`)
+            .then(response => {
+                if (!String(response).startsWith('2')) {
+                    console.error(`C++ POST failed for userCppId ${userCppId}: ${response}`);
+                    return sendCommandToCpp(`PATCH ${userCppId} ${productCppId}`)
+                        .then(patchResponse => {
+                            if (!String(patchResponse).startsWith('2')) {
+                                console.error(`C++ PATCH failed for userCppId ${userCppId}: ${patchResponse}`);
+                            }
+                        });
+                }
+            })
+            .catch(err => console.error(`C++ socket error for userCppId ${userCppId}: ${err.message ?? err}`));
+    }
 }
 
 const createProduct = (req, res) => {
