@@ -4,11 +4,10 @@
 const express = require('express');
 const router = express.Router();
 
-const auth = require('../middleware/auth');
 const tokensController = require('../controllers/tokens.controller');
 const { validateCreateToken } = require('../middleware/validators/tokenValidator');
 
 router.route('/')
-    .post(validateCreateToken, auth.login, tokensController.createToken);
+    .post(validateCreateToken, tokensController.createToken);
 
 module.exports = router;

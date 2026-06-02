@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true }); 
 
 const productsController = require('../controllers/products.controller');
-const { isUserExists } = require('../middleware/validators/userValidator');
+const { optionalAuth } = require('../middleware/auth');
 
 const { validateCreateProduct, validateProductUpdate } = require('../middleware/validators/productValidator');
 
@@ -16,7 +16,7 @@ router.route('/')
 
 // This resolves to: /api/restaurants/:rId/products/:pId
 router.route('/:pId')
-    .get(isUserExists, productsController.getProductById)
+    .get(optionalAuth, productsController.getProductById)
     .patch(validateProductUpdate, productsController.updateProduct)
     .delete(productsController.deleteProduct);
 

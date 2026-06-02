@@ -22,9 +22,18 @@ const getProductById = (req, res) => {
         const userCppId = usersModel.getUserCppId(req.userId);
         const productCppId = product.cppId;
         sendCommandToCpp(`POST ${userCppId} ${productCppId}`)
-            .catch(err => console.error(`C++ POST failed for userCppId ${userCppId}: ${err.message ?? err}`))
-            .then(() => sendCommandToCpp(`PATCH ${userCppId} ${productCppId}`))
-            .catch(err => console.error(`C++ PATCH failed for userCppId ${userCppId}: ${err.message ?? err}`));
+            .then(response => {
+                if (!String(response).startsWith('2')) {
+                    console.error(`C++ POST failed for userCppId ${userCppId}: ${response}`);
+                    return sendCommandToCpp(`PATCH ${userCppId} ${productCppId}`)
+                        .then(patchResponse => {
+                            if (!String(patchResponse).startsWith('2')) {
+                                console.error(`C++ PATCH failed for userCppId ${userCppId}: ${patchResponse}`);
+                            }
+                        });
+                }
+            })
+            .catch(err => console.error(`C++ socket error for userCppId ${userCppId}: ${err.message ?? err}`));
     }
 }
 
