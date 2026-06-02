@@ -94,6 +94,7 @@ Byte-Me-main/
 │       ├── package.json
 │       └── Dockerfile
 └── tests/                       # C++ Unit Tests (Google Test)
+```
 
 ## Building
 
