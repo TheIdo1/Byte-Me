@@ -73,7 +73,7 @@ const updateRestaurant = (req, res) => {
         return res.status(404).json({ error: 'Restaurant not found' });
     }
 
-    res.status(200).json(updatedRestaurant);
+    res.status(204).send();
 };
 
 //Deletes an restaurant by ID, Returns 404 if not found
