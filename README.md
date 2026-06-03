@@ -38,7 +38,48 @@ The project is divided into three main components:
 
 This section demonstrates a complete end-to-end user flow: authenticating, creating a restaurant and a product, searching the catalog, and triggering the C++ recommendation engine via TCP sockets.
 
-**1. Login & Get Token**
+**1. Register a New User**
+Create a user account. The returned `id` is used as the auth token for all subsequent protected requests.
+ 
+```http
+POST /api/users
+Content-Type: application/json
+ 
+{
+  "username": "user99",
+  "password": "mySecretPassword",
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane@example.com",
+  "address": {
+    "city": "Tel Aviv",
+    "street": "Rothschild",
+    "houseNum": 5,
+    "floor": 2
+  }
+}
+```
+ 
+**Response (201 Created):**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "username": "user99",
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane@example.com",
+  "address": {
+    "city": "Tel Aviv",
+    "street": "Rothschild",
+    "houseNum": 5,
+    "floor": 2
+  }
+}
+```
+ 
+> The `id` in the response is your auth token. Copy it — you'll pass it as the `Authorization` header in all protected requests below.
+
+**2. Login & Get Token**
 Authenticate a user to receive an access token (the User ID) which will be used for protected routes.
 
 ```http
@@ -58,7 +99,7 @@ Content-Type: application/json
 }
 ```
 
-**2. Create a Restaurant**
+**3. Create a Restaurant**
 Create a new restaurant in the system. This is a protected route and requires the token in the Authorization header.
 
 ```http
@@ -93,7 +134,7 @@ Content-Type: application/json
 }
 ```
 
-**3. Add a Product to the Restaurant**
+**4. Add a Product to the Restaurant**
 Add a new menu item to the created restaurant.
 
 ```http
@@ -121,7 +162,7 @@ Content-Type: application/json
 }
 ```
 
-**4. Search for Products or Restaurants**
+**5. Search for Products or Restaurants**
 Perform a global search across all restaurants and products (Public route).
 
 ```http
@@ -142,7 +183,7 @@ GET /api/search/pepperoni
 }
 ```
 
-**5. View Product (Updates C++ Recommendation Engine)**
+**6. View Product (Updates C++ Recommendation Engine)**
 When an authenticated user views a product, the Node.js server seamlessly sends a TCP socket command (`POST <userCppId> <productCppId>`) to the C++ server in the background to update the recommendation engine.
 
 ```http
