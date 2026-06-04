@@ -5,7 +5,7 @@ build/
 .env
 
 #node js
-src/webServer/node_modules/
+node_modules/
 
 #vscode
 .vscode/
