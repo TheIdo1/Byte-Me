@@ -1,5 +1,5 @@
-const ALLOWED_UPDATE_FIELDS = ['customerId', 'restaurantId', 'orderedItems'];
-const ALLOWED_CREATE_FIELDS = ['customerId', 'restaurantId', 'orderedItems'];
+const ALLOWED_UPDATE_FIELDS = ['restaurantId', 'orderedItems'];
+const ALLOWED_CREATE_FIELDS = ['restaurantId', 'orderedItems'];
 
 const validateOrderUpdate = (req, res, next) => {
     const body = req.body;
@@ -24,12 +24,7 @@ const validateOrderUpdate = (req, res, next) => {
     // Check type validation
     // Each check is guarded by !== undefined so that optional fields that
     // were not sent by the client are simply skipped.
-    const { customerId, restaurantId, orderedItems } = body;
-
-    // customerId must be a string (we use UUID which is a string format)
-    if (customerId !== undefined && typeof customerId !== 'string') {
-        return res.status(400).json({ error: 'customerId must be a string.' });
-    }
+    const { restaurantId, orderedItems } = body;
 
     // restaurantId must be a string (same UUID format)
     if (restaurantId !== undefined && typeof restaurantId !== 'string') {
@@ -73,10 +68,6 @@ const validateCreateOrder = (req, res, next) => {
         });
     }
 
-    // check if required fields must be present
-    if (!body.customerId) {
-        return res.status(400).json({ error: 'customerId is required.' });
-    }
     if (!body.restaurantId) {
         return res.status(400).json({ error: 'restaurantId is required.' });
     }
@@ -84,10 +75,6 @@ const validateCreateOrder = (req, res, next) => {
         return res.status(400).json({ error: 'orderedItems is required.' });
     }
 
-    // type validation
-    if (typeof body.customerId !== 'string') {
-        return res.status(400).json({ error: 'customerId must be a string.' });
-    }
     if (typeof body.restaurantId !== 'string') {
         return res.status(400).json({ error: 'restaurantId must be a string.' });
     }

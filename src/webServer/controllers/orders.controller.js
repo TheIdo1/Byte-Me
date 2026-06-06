@@ -16,8 +16,13 @@ const getOrderById = (req, res) => {
 }
 
 const createOrder = (req, res) => {
-    // validateCreateOrder middleware has already guaranteed that all fields are present and have the correct types.
-    const { customerId, restaurantId, orderedItems } = req.body;
+    //The middleware 'validateCreateOrder' guarantees that 
+    // restaurantId and orderedItems exist and are valid
+    const { restaurantId, orderedItems } = req.body;
+
+    // SECURITY: The customerId is derived from the JWT payload via the 'requireAuth' middleware
+    // We ignore any attempt by the client to specify a customerId in the body
+    const customerId = req.userId;
 
     // Build the clean data object to pass to the model.
     // The model will add the UUID and current date on its side.
