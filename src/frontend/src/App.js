@@ -1,10 +1,10 @@
-import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRouter from './router';
 
 export default function App() {
   return (
-    <div>
-      <h1>Byte Me</h1>
-      <p>Frontend is working!</p>
-    </div>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }

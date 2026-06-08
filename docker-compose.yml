@@ -35,6 +35,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - FAST_REFRESH=false
+      - REACT_APP_API_URL=http://web-server:8081
     depends_on:
       - web-server
     restart: unless-stopped
