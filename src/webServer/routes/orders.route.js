@@ -5,14 +5,17 @@ const router = express.Router();
 
 const ordersController = require('../controllers/orders.controller');
 const { validateCreateOrder, validateOrderUpdate } = require('../middleware/validators/orderValidator');
+const { requireAuth } = require('../middleware/auth'); // Import the authentication middleware
 
 router.route('/')
     .get(ordersController.getAllOrders)
-    .post(validateCreateOrder, ordersController.createOrder);
+    // requireAuth to the POST route to ensure only logged-in users can order
+    .post(requireAuth, validateCreateOrder, ordersController.createOrder);
 
 router.route('/:id')
     .get(ordersController.getOrderById)
-    .patch(validateOrderUpdate, ordersController.updateOrder)
-    .delete(ordersController.deleteOrder);
+    // Add protection to update/delete  ensure only logged-in users can perform them
+    .patch(requireAuth, validateOrderUpdate, ordersController.updateOrder)
+    .delete(requireAuth, ordersController.deleteOrder);
 
 module.exports = router;
