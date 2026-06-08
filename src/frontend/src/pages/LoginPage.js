@@ -30,6 +30,16 @@ export default function LoginPage() {
         // In standard HTML, submitting a form refreshes the entire page
         // We use preventDefault() to stop that, so React can handle it smoothly in the background
         e.preventDefault(); 
+
+        // CLIENT-SIDE VALIDATION (Edge Cases)
+        //  We use .trim() to remove whitespace from both ends of the string.
+        //  This prevents users from submitting forms containing only spaces
+        //  If the fields are empty after trimming, we stop the function and show an error
+        //  to avoid making an unnecessary request to the backend.
+        if (!username.trim() || !password.trim()) {
+            setError('Please enter both a valid username and password.');
+            return; // Stop execution here
+        }
         
         // Reset the error state and turn on the loading indicator
         setError('');
