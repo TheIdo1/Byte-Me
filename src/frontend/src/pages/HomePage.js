@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { searchQuery as search } from '../../api/searchApi';
+import { searchQuery as search } from '../api/searchApi';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');

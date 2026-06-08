@@ -1,6 +1,8 @@
+// Registration page. Collects all fields required by POST /api/users and
+// redirects to /login on success.
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { register } from '../../api/authApi';
+import { register } from '../api/authApi';
 import './RegisterPage.css';
 
 const INITIAL_FORM = {
@@ -14,6 +16,8 @@ const INITIAL_FORM = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Returns a map of field name → error message for every failing rule.
+// An empty object means the form is valid.
 function validate(form) {
   const errs = {};
   if (!form.firstName.trim())               errs.firstName = 'First name is required.';
@@ -26,6 +30,8 @@ function validate(form) {
   if (!form.address.city.trim())            errs.city      = 'City is required.';
   if (!form.address.street.trim())          errs.street    = 'Street is required.';
 
+  // houseNum / floor are kept as strings in state so empty string can be detected;
+  // they are parsed to integers before submission.
   const houseNum = parseInt(form.address.houseNum, 10);
   if (form.address.houseNum === '')         errs.houseNum  = 'House number is required.';
   else if (isNaN(houseNum) || houseNum < 1) errs.houseNum  = 'Must be a positive number.';
@@ -40,6 +46,8 @@ function validate(form) {
 export default function RegisterPage() {
   const [form, setForm]       = useState(INITIAL_FORM);
   const [errors, setErrors]   = useState({});
+  // touched tracks which fields the user has interacted with so errors are
+  // only shown after the user has visited a field, not on initial render.
   const [touched, setTouched] = useState({});
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,6 +60,7 @@ export default function RegisterPage() {
       ? { ...form, address: { ...form.address, [name]: value } }
       : { ...form, [name]: value };
     setForm(newForm);
+    // Re-validate live only for fields the user has already visited.
     if (touched[name]) setErrors(validate(newForm));
   }
 
@@ -65,6 +74,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setServerError('');
 
+    // Mark every field as touched so all errors become visible on submit.
     const allTouched = Object.fromEntries(
       ['firstName','lastName','email','username','password','city','street','houseNum','floor']
         .map((k) => [k, true])
@@ -93,6 +103,8 @@ export default function RegisterPage() {
     }
   }
 
+  // Builds the common props for each input: name, value (address fields are
+  // nested), change/blur handlers, and the error class when invalid.
   const f = (name) => ({
     name,
     value: ['city','street','houseNum','floor'].includes(name)

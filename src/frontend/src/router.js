@@ -1,5 +1,6 @@
+// Central route registry. Add all new pages here as <Route> entries.
 import { Routes, Route } from 'react-router-dom';
-import RegisterPage from './components/pages/RegisterPage';
+import RegisterPage from './pages/RegisterPage';
 
 export default function AppRouter() {
   return (
