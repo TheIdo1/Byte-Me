@@ -1,0 +1,135 @@
+
+
+/* MAIN CONTAINER 
+We use 'flexbox' to perfectly center the login box both vertically and horizontally.
+'min-height: 80vh' ensures the container takes up at least 80% of the screen height.
+ */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    /* Using system fonts makes the app look native, clean, and fast on any device */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #ffffff;
+}
+
+/* LOGIN BOX
+This is the actual white container holding the form elements.
+'max-width: 400px' ensures the form doesn't stretch too wide on large desktop screens. */
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* LOGO TEXT 
+Styling the "Byte Me" header to look a bit like a handwritten or stylized logo
+*/
+.logo-text {
+    font-family: 'Brush Script MT', 'Comic Sans MS', cursive; 
+    font-size: 48px;
+    font-weight: bold;
+    color: #202125; /* Dark gray, which is softer on the eyes than pure black */
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+/* SUBTITLE 
+The "Login to Byte-Me" text. */
+.subtitle-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: #202125;
+    margin-bottom: 40px;
+}
+
+/* THE FORM
+Using flexbox in a column direction to easily stack the inputs vertically.
+'text-align: left' ensures the labels ("Username", "Password") align to the left edge. */
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    text-align: left; 
+}
+
+/* Spacing between the different input sections */
+.input-group {
+    margin-bottom: 24px;
+}
+
+/* The text label sitting right above each input field */
+.input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #202125;
+    margin-bottom: 8px;
+}
+
+/* THE INPUT FIELDS (Wolt Style)
+'border-radius: 12px' creates the modern rounded corners.
+'box-sizing: border-box' ensures the internal padding doesn't break the 100% width.
+'transition' makes color changes (like focusing) smooth instead of instant.
+ */
+.wolt-input {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border: 2px solid #e4e4e5; /* Standard light gray border */
+    border-radius: 12px;
+    box-sizing: border-box; 
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* * INPUT FOCUS STATE
+ * This styling applies when the user clicks inside the input field to type.
+ * We change the border color to our primary brand color (blue) to show it's active.
+ */
+.wolt-input:focus {
+    border-color: #009de0; 
+}
+
+/* * THE SUBMIT BUTTON
+ */
+.wolt-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #009de0; /* Primary brand blue */
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    margin-top: 10px;
+}
+
+/* Hover effect: turns a slightly darker blue when the mouse hovers over the button */
+.wolt-button:hover {
+    background-color: #007fb6;
+}
+
+/* Disabled state: when the form is processing (loading), the button looks faded and unclickable */
+.wolt-button:disabled {
+    background-color: #a0d8ef;
+    cursor: not-allowed;
+}
+
+/* 
+ERROR MESSAGE BOX
+Displayed only if the login API request fails.
+*/
+.error-message {
+    color: #d32f2f; /* Deep red text for alerts */
+    background-color: #ffebee; /* Soft red background to make it stand out */
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
