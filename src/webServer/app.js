@@ -4,14 +4,14 @@
 require('dotenv').config({ path: './config/.env' });
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 // Define the port (defaults to 3000 if not set in the environment variables)
 const PORT = process.env.PORT || 3000;
 
 // Global Middlewares
-// this middleware parses incoming requests with JSON payloads.
-// Without it, req.body will be undefined in our controllers.
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 // import Routers
