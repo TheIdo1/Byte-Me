@@ -74,7 +74,7 @@ export default function LoginPage() {
 
     return (
         <div className="login-container">
-            <div className="page">
+            <div className="login-box">
                 {/* Custom styled branding headers */}
                 <h1 className="logo-text">Byte Me</h1>
                 <h2 className="subtitle-text">Login to Byte-Me</h2>
