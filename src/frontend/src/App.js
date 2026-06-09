@@ -1,10 +1,12 @@
-import React from 'react';
+// Root component. Wraps the app in a BrowserRouter so all child components
+// can use react-router-dom hooks (useNavigate, useParams, etc.).
+import { BrowserRouter } from 'react-router-dom';
+import AppRouter from './router';
 
 export default function App() {
   return (
-    <div>
-      <h1>Byte Me</h1>
-      <p>Frontend is working!</p>
-    </div>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }
