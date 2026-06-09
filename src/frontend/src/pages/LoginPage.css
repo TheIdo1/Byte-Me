@@ -1,37 +1,36 @@
-
-
 /* MAIN CONTAINER 
-We use 'flexbox' to perfectly center the login box both vertically and horizontally.
-'min-height: 80vh' ensures the container takes up at least 80% of the screen height.
- */
+Updated to match the Register page background color.
+*/
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    /* Using system fonts makes the app look native, clean, and fast on any device */
+    min-height: 100vh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #ffffff;
+    background-color: #b3d9f5; /* The soft blue background from the Register page */
+    padding: 32px 16px;
 }
 
-/* LOGIN BOX
-This is the actual white container holding the form elements.
-'max-width: 400px' ensures the form doesn't stretch too wide on large desktop screens. */
+/* LOGIN BOX (The Card)
+Updated to look like the floating card from the Register page.
+Added white background, rounded corners, and a subtle blue shadow. */
 .login-box {
     width: 100%;
-    max-width: 400px;
-    padding: 20px;
+    max-width: 450px;
+    background: #ffffff; /* White card background */
+    border-radius: 16px; /* Rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 157, 224, 0.12); /* Matching shadow */
+    padding: 40px 48px; /* Spacious internal padding */
     text-align: center;
 }
 
 /* LOGO TEXT 
-Styling the "Byte Me" header to look a bit like a handwritten or stylized logo
-*/
+Styling the "Byte Me" header to look a bit like a handwritten or stylized logo. */
 .logo-text {
     font-family: 'Brush Script MT', 'Comic Sans MS', cursive; 
     font-size: 48px;
     font-weight: bold;
-    color: #202125; /* Dark gray, which is softer on the eyes than pure black */
+    color: #202125; 
     margin-bottom: 10px;
     margin-top: 0;
 }
@@ -45,10 +44,7 @@ The "Login to Byte-Me" text. */
     margin-bottom: 40px;
 }
 
-/* THE FORM
-Using flexbox in a column direction to easily stack the inputs vertically.
-'text-align: left' ensures the labels ("Username", "Password") align to the left edge. */
-
+/*THE FORM*/
 .login-form {
     display: flex;
     flex-direction: column;
@@ -67,34 +63,28 @@ Using flexbox in a column direction to easily stack the inputs vertically.
     font-weight: 600;
     color: #202125;
     margin-bottom: 8px;
+    text-align: left;
 }
 
-/* THE INPUT FIELDS (Wolt Style)
-'border-radius: 12px' creates the modern rounded corners.
-'box-sizing: border-box' ensures the internal padding doesn't break the 100% width.
-'transition' makes color changes (like focusing) smooth instead of instant.
+/* * THE INPUT FIELDS (Wolt Style)
  */
 .wolt-input {
     width: 100%;
     padding: 16px;
     font-size: 16px;
-    border: 2px solid #e4e4e5; /* Standard light gray border */
+    border: 2px solid #e4e4e5; 
     border-radius: 12px;
     box-sizing: border-box; 
     outline: none;
     transition: border-color 0.2s ease-in-out;
 }
 
-/* * INPUT FOCUS STATE
- * This styling applies when the user clicks inside the input field to type.
- * We change the border color to our primary brand color (blue) to show it's active.
- */
+/* INPUT FOCUS STATE*/
 .wolt-input:focus {
     border-color: #009de0; 
 }
 
-/* * THE SUBMIT BUTTON
- */
+/*THE SUBMIT BUTTON*/
 .wolt-button {
     width: 100%;
     padding: 16px;
@@ -105,28 +95,32 @@ Using flexbox in a column direction to easily stack the inputs vertically.
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, transform 0.1s; /* Added transform for click effect */
     margin-top: 10px;
 }
 
-/* Hover effect: turns a slightly darker blue when the mouse hovers over the button */
-.wolt-button:hover {
-    background-color: #007fb6;
+/* Hover effect */
+.wolt-button:hover:not(:disabled) {
+    background-color: #0089c4;
+    transform: translateY(-1px); /* Slight lift on hover, matching Register page */
 }
 
-/* Disabled state: when the form is processing (loading), the button looks faded and unclickable */
+/* Active effect (when clicked) */
+.wolt-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Disabled state */
 .wolt-button:disabled {
     background-color: #a0d8ef;
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
-/* 
-ERROR MESSAGE BOX
-Displayed only if the login API request fails.
-*/
+/*ERROR MESSAGE BOX */
 .error-message {
-    color: #d32f2f; /* Deep red text for alerts */
-    background-color: #ffebee; /* Soft red background to make it stand out */
+    color: #d32f2f; 
+    background-color: #ffebee; 
     padding: 10px;
     border-radius: 8px;
     font-size: 14px;
