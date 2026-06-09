@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 
 // We import the tokenAPI function
@@ -7,7 +7,7 @@ import { login } from '../api/authApi';
 // the style for our page
 import './LoginPage.css';
 
-//TODO- THINK ABOUT A WAY TO REDIRECT A ALREADY LOGGED IN USER SO HE WONT SEE THIS SCREEN
+
 
 // LoginPage Component
 // This component renders the login screen. It collects the user's credentials
@@ -22,6 +22,20 @@ export default function LoginPage() {
     // useNavigate is a tool provided by React Router
     // It allows us to change the URL (redirect the user) via code without reloading the page
     const navigate = useNavigate();
+
+    
+    // AUTHENTICATION CHECK (useEffect)
+    // This runs exactly once when the component is first rendered.
+    // We check the browser's localStorage for an existing session token.
+    // If a token is found, it means the user is already logged in,
+    // so we instantly redirect them to the home page ('/') to prevent 
+    // them from seeing the login screen again.
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     
     // handleSubmit
