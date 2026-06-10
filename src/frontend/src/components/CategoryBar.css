@@ -1,0 +1,20 @@
+/* The outer container holding the category bar */
+.category-bar-container {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #ffffff;
+}
+
+/* The inner scrollable area */
+.category-bar-scroll {
+    display: flex;
+    gap: 16px;
+    padding: 0 20px;
+    overflow-x: auto; /* Enables horizontal scrolling if there are too many categories */
+    scrollbar-width: none; /* Firefox: Hides the scrollbar for a cleaner look */
+}
+
+/* WebKit (Chrome, Safari): Hides the scrollbar but keeps functionality */
+.category-bar-scroll::-webkit-scrollbar {
+    display: none; 
+}
