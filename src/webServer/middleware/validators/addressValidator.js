@@ -3,7 +3,7 @@
 // validateAddress(address) – pure utility, returns an error string or null.
 // validateAddressMiddleware    – Express middleware, reads req.body.address.
 
-const ALLOWED_ADDRESS_FIELDS = ['city', 'street', 'houseNum', 'floor'];
+const ALLOWED_ADDRESS_FIELDS = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'];
 
 const validateAddress = (address) => {
     if (typeof address !== 'object' || Array.isArray(address)) {
@@ -30,6 +30,12 @@ const validateAddress = (address) => {
     if (address.floor    === undefined) {
         return 'address.floor is required.';
     }
+    if (address.lat    === undefined) {
+        return 'address.lat is required.';
+    }
+    if (address.long    === undefined) {
+        return 'address.long is required.';
+    }
 
     // Type checks
     if (typeof address.city   !== 'string') return 'address.city must be a string.';
@@ -39,6 +45,14 @@ const validateAddress = (address) => {
     }
     if (typeof address.floor !== 'number' || !Number.isInteger(address.floor) || address.floor < 0) {
         return 'address.floor must be a non-negative integer (0 = ground floor).';
+    }
+
+    // cordinates
+    const numberFields = ['long', 'lat'];
+    for (const field of numberFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'number') {
+            return res.status(400).json({ error: `${field} must be a number.` });
+        }
     }
 
     return null; // valid

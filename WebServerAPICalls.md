@@ -36,9 +36,14 @@
                 "city": "Ramat Gan",
                 "street": "Bialik",
                 "houseNum": 12,
-                "floor": 0
+                "floor": 0,
+                "lat": 32.071169922988354,
+                "long": 34.84453170435457
             },
-            "products": ["5ac89d68-585d-4b2c-9761-da50151156ad", "cc464551-c0b2-413a-9899-7801a08ad54c"]
+            "products": ["5ac89d68-585d-4b2c-9761-da50151156ad", "cc464551-c0b2-413a-9899-7801a08ad54c"],
+            "rating": 5,
+            "isSponsored": false,
+            "promotionalMessage": "0 NIS Deliverys"
         }
     ]
     ```
@@ -48,7 +53,7 @@
 * **Endpoint:** `/`
 * **Request Body:** `application/json`
   * **Required:** `name`, `category`, `authorizedUsers`, `phone`, `email`, `address`
-  * **Optional:** `description`, `products`
+  * **Optional:** `description`, `products`, `rating`, `isSponsored`
   ```json
   {
     "name": "Pizza Planet",
@@ -61,9 +66,14 @@
       "city": "Ramat Gan",
       "street": "Bialik",
       "houseNum": 12,
-      "floor": 0
+      "floor": 0,
+      "lat": 32.071169922988354,
+      "long": 34.84453170435457
     },
-    "products": ["5ac89d68-585d-4b2c-9761-da50151156ad", "cc464551-c0b2-413a-9899-7801a08ad54c"]
+    "products": ["5ac89d68-585d-4b2c-9761-da50151156ad", "cc464551-c0b2-413a-9899-7801a08ad54c"],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "0 NIS Deliverys"
   }
 
 
@@ -419,7 +429,9 @@
           "city": "Tel Aviv",
           "street": "Rothschild",
           "houseNum": 5,
-          "floor": 2
+          "floor": 2,
+          "lat": 32.071169922988354,
+          "long": 34.84453170435457
       }
   }
   ```
@@ -436,7 +448,9 @@
             "city": "Tel Aviv",
             "street": "Rothschild",
             "houseNum": 5,
-            "floor": 2
+            "floor": 2,
+            "lat": 32.071169922988354,
+            "long": 34.84453170435457
         }
     }
     ```
@@ -467,7 +481,10 @@
             "city": "Tel Aviv",
             "street": "Rothschild",
             "houseNum": 5,
-            "floor": 2
+            "floor": 2,
+            "lat": 32.071169922988354,
+            "long": 34.84453170435457
+            
         }
     }
     ```

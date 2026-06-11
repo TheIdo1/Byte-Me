@@ -41,9 +41,14 @@ const createRestaurant = (restaurantData) => {
             city: restaurantData.address.city || '',
             street: restaurantData.address.street || '',
             houseNum: restaurantData.address.houseNum || 0,
-            floor: restaurantData.address.floor || 0
+            floor: restaurantData.address.floor || 0,
+            lat: restaurantData.lat || 32.071169922988354,
+            long: restaurantData.long || 34.84453170435457
         },
-        products: restaurantData.products || [] // this field is optional, initiate to empty list if undefined.
+        products: restaurantData.products || [], // this field is optional, initiate to empty list if undefined.
+        rating: restaurantData.rating || 1,
+        isSponsored: restaurantData.isSponsored ?? false,
+        promotionalMessage : restaurantData.promotionalMessage || "Try Us"
     };
 
     // Save to in-memory array
