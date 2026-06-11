@@ -5,7 +5,6 @@ import './RestaurantsCarousel.css';
 import { ReactComponent as LeftArrowIcon } from '../assets/left_arrow.svg';
 import { ReactComponent as RightArrowIcon } from '../assets/right_arrow.svg';
 
-// Added seeMoreLink as an optional parameter
 const RestaurantsCarousel = ({ title, subtitle, restaurants, seeMoreLink }) => {
   const trackRef = useRef(null);
 
@@ -13,14 +12,13 @@ const RestaurantsCarousel = ({ title, subtitle, restaurants, seeMoreLink }) => {
   if (!restaurants || restaurants.length === 0) return null;
 
   const scroll = (direction) => {
-    if (trackRef.current) {
-      // Dynamically get the visible width of the scrolling container.
-      // Since our CSS forces exactly 4 cards per view, scrolling by this 
-      // width will perfectly scroll 4 cards at a time.
-      const scrollAmount = trackRef.current.clientWidth; 
+    if (trackRef.current && trackRef.current.children.length > 0) {
+      // Dynamically calculate the width of exactly one card + the 16px CSS gap
+      const cardWidth = trackRef.current.children[0].offsetWidth + 16; 
       
-      // The browser natively prevents scrolling past the maximum width,
-      // so if there are fewer than 4 cards left, it will simply scroll to the end.
+      // Scroll by exactly 4 cards to maintain a clean snap layout
+      const scrollAmount = cardWidth * 4; 
+      
       trackRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -40,7 +38,6 @@ const RestaurantsCarousel = ({ title, subtitle, restaurants, seeMoreLink }) => {
         
         {/* Navigation Controls */}
         <div className="carousel-controls">
-          {/* Render an anchor tag if the link is provided, otherwise a button */}
           {seeMoreLink ? (
             <a href={seeMoreLink} className="see-all-btn">See all</a>
           ) : (

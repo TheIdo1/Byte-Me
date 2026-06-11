@@ -106,17 +106,20 @@
   font-weight: 400;
 }
 
-/* Updated Time Badge (Now in the white area) */
+/* Updated Time Badge */
 .delivery-time-badge {
-  background-color: #e1f4fc; /* Wolt light blue */
-  color: #007a99; /* Wolt dark blue text */
+  background-color: #e1f4fc; 
+  color: #007a99; 
   padding: 8px 12px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 45px;
+  
+  /* Forces the badge to expand based on content instead of wrapping */
+  min-width: max-content; 
+  white-space: nowrap; 
   margin-left: 12px;
 }
 
@@ -124,6 +127,8 @@
   font-weight: 600;
   font-size: 15px;
   line-height: 1.2;
+  /* Prevents the numbers from splitting across lines */
+  white-space: nowrap; 
 }
 
 .time-unit {

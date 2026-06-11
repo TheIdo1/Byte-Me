@@ -63,25 +63,27 @@
 /* --- Scrolling Track --- */
 .carousel-track {
   display: flex;
-  /* Set a specific gap to match Wolt's spacing between cards */
   gap: 16px; 
-  
-  /* Enable horizontal scrolling */
   overflow-x: auto; 
   
-  /* Padding top/bottom is crucial so the box-shadows on the cards aren't clipped */
-  padding: 8px 16px 24px 16px; 
+  /* Increased left padding to 40px to create room for the left peek.
+    Top: 8px, Right: 16px, Bottom: 24px, Left: 40px 
+  */
+  padding: 8px 16px 24px 24px; 
   
-  /* Smooth scrolling experience */
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory; 
   
-  /* Hide scrollbar for Firefox and IE */
+  /* Forces the snap point 40px inward. 
+    When scrolling right, the "active" card will stop 40px away from the edge,
+    leaving exactly 40px of the previous card visible as a left teaser.
+  */
+  scroll-padding-left: 60px;
+  
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-/* Hide scrollbar for Webkit browsers (Chrome, Safari, Edge) */
 .carousel-track::-webkit-scrollbar {
   display: none;
 }
@@ -95,8 +97,7 @@
     Divide the remaining space by 4 to get the exact width per card.
     This guarantees exactly 4 cards will fit no matter the screen size.
   */
-  width: calc((100% - 48px) / 4); 
-  
+  width: calc((100% - 16px) / 4.3);  
   scroll-snap-align: start; 
 }
 
