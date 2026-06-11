@@ -1,6 +1,4 @@
 .restaurant-card {
-  width: calc((100% / 4));
-  max-width: 420px;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
