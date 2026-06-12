@@ -40,6 +40,8 @@ const createUser = (userData) => {
             street:   userData.address.street,
             houseNum: userData.address.houseNum,
             floor:    userData.address.floor,
+            lat: userData.lat,
+            long: userData.long
         },
     };
 

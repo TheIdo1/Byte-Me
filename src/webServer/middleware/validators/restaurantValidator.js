@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'long', 'lat'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
 
 const validateRestaurantUpdate = (req, res, next) => {
     const body = req.body;
@@ -23,7 +23,7 @@ const validateRestaurantUpdate = (req, res, next) => {
     // --- Type Validation ---
     
     // String validations
-    const stringFields = ['name', 'description', 'category', 'phone', 'email'];
+    const stringFields = ['name', 'description', 'category', 'phone', 'email', 'promotionalMessage'];
     for (const field of stringFields) {
         if (body[field] !== undefined && typeof body[field] !== 'string') {
             return res.status(400).json({ error: `${field} must be a string.` });
@@ -49,7 +49,22 @@ const validateRestaurantUpdate = (req, res, next) => {
         }
     }
 
-    
+
+    // Number validations
+    const numberFields = ['rating'];
+    for (const field of numberFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'number') {
+            return res.status(400).json({ error: `${field} must be a number.` });
+        }
+    }
+
+    // Boolean validations
+    const booleanFields = ['isSponsored'];
+    for (const field of booleanFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'boolean') {
+            return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
+        }
+    }
 
     // Object validation (address)
     if (body.address !== undefined) {
@@ -89,7 +104,7 @@ const validateCreateRestaurant = (req, res, next) => {
     // but the loop structure handles optional fields nicely too).
 
     // 1. String validations
-    const stringFields = ['name', 'description', 'category', 'phone', 'email'];
+    const stringFields = ['name', 'description', 'category', 'phone', 'email', 'promotionalMessage'];
     for (const field of stringFields) {
         if (body[field] !== undefined && typeof body[field] !== 'string') {
             return res.status(400).json({ error: `${field} must be a string.` });
@@ -116,6 +131,22 @@ const validateCreateRestaurant = (req, res, next) => {
     // 3. Object validation (address)
     if (typeof body.address !== 'object' || Array.isArray(body.address) || body.address === null) {
         return res.status(400).json({ error: 'address must be a valid JSON object.' });
+    }
+
+    // Number validations
+    const numberFields = ['rating'];
+    for (const field of numberFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'number') {
+            return res.status(400).json({ error: `${field} must be a number.` });
+        }
+    }
+
+    // Boolean validations
+    const booleanFields = ['isSponsored'];
+    for (const field of booleanFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'boolean') {
+            return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
+        }
     }
 
     // all checks passed

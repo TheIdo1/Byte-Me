@@ -1,0 +1,144 @@
+.restaurants-carousel-container {
+  /* Add top margin, remove bottom margin to let the track handle padding */
+  margin: 24px 0 0 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Optional: Set a max-width and center it if your main app container doesn't already */
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Header Area --- */
+.carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.carousel-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #202125;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.carousel-subtitle {
+  font-size: 15px;
+  color: #7b7d85;
+  margin: 4px 0 0 0;
+}
+
+/* --- Navigation Controls (Header Right Side) --- */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.see-all-btn {
+  background-color: transparent;
+  color: #007a99;
+  border: none;
+  padding: 8px 0;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none; /* Removes underline if it's an <a> tag */
+  display: inline-block; /* Ensures proper alignment for <a> tags */
+  font-family: inherit;
+}
+
+.see-all-btn:hover {
+  text-decoration: underline;
+}
+
+/* --- Scrolling Track --- */
+.carousel-track {
+  display: flex;
+  gap: 16px; 
+  overflow-x: auto; 
+  
+  /* Increased left padding to 40px to create room for the left peek.
+    Top: 8px, Right: 16px, Bottom: 24px, Left: 40px 
+  */
+  padding: 8px 16px 24px 24px; 
+  
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory; 
+  
+  /* Forces the snap point 40px inward. 
+    When scrolling right, the "active" card will stop 40px away from the edge,
+    leaving exactly 40px of the previous card visible as a left teaser.
+  */
+  scroll-padding-left: 60px;
+  
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Individual Item Wrapper --- */
+.carousel-item {
+  flex: 0 0 auto; 
+  
+  /* DYNAMIC WIDTH CALCULATION:
+    100% of the container width, minus the 3 gaps between the 4 cards (16px * 3 = 48px).
+    Divide the remaining space by 4 to get the exact width per card.
+    This guarantees exactly 4 cards will fit no matter the screen size.
+  */
+  width: calc((100% - 16px) / 4.3);  
+  scroll-snap-align: start; 
+}
+
+/* Reset margin on the inner card since the track handles spacing via gap */
+.carousel-item .restaurant-card {
+  margin: 0;
+  max-width: 100%; 
+}
+
+/* --- Navigation Controls (Header Right Side) --- */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Space between 'See all' and the arrow buttons */
+}
+
+/* ... existing see-all-btn styles ... */
+
+.scroll-buttons {
+  display: flex;
+  gap: 8px; /* Space between the two arrows */
+}
+
+.icon-btn {
+  background-color: #e1f4fc; /* Wolt light blue background */
+  color: #007a99; /* Wolt dark blue icon color */
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Makes the button a perfect circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+  background-color: #d0effb; /* Slightly darker on hover */
+}
+
+.icon-btn:active {
+  transform: scale(0.95); /* Slight click effect */
+}
