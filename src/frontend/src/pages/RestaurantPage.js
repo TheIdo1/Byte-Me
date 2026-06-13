@@ -1,9 +1,17 @@
+// React
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router-dom';
+// APIs
 import { getRestaurantById } from '../api/restaurantsApi';
 import { getRestaurantProducts } from '../api/productsApi';
-import { Outlet } from 'react-router-dom';
+
+//import css
+import './RestaurantPage.css';
+
+// Componnets
 import ProductCard from '../components/product/ProductCard';
+import RestaurantHeader from '../components/restaurantPage/RestaurantHeader';
+import CategoryNav from '../components/restaurantPage/CategoryNav';
 
 
 const RestaurantPage = () => {
@@ -63,27 +71,51 @@ const RestaurantPage = () => {
     return <div style={{ padding: '40px' }}>404 - Restaurant not found</div>;
   }
 
+  // prep stuff for the page and then render it .
+  const popularProducts = products.filter(p => p.isPopular);
+
+  const activeCategories = restaurant.subcategories.filter(cat => cat !== 'extras' && products.some(p => p.category === cat))
+
   // Render the actual page once data is successfully loaded
   return (
-    <div style={{ padding: '40px', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
-      <h1>{restaurant.name}</h1>
-      <p>Currently viewing details for Restaurant ID: <strong>{restaurantId}</strong></p>
+    <div className="restaurant-page-root">
+      
+      <RestaurantHeader restaurant={restaurant} />
+      <CategoryNav categories={activeCategories} hasPopular={popularProducts.length > 0} />
 
-      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
-        <p><strong>Category:</strong> {restaurant.category}</p>
-        <p><strong>Rating:</strong> {restaurant.rating} ★</p>
-        <p><strong>Delivery Fee:</strong> ₪{restaurant.deliveryFee}</p>
-      </div>
+      {/* pad all the section */}
+      <div className="restaurant-menu-container">
+        
+        {/* Popular Section */}
+        {popularProducts.length > 0 && (
+          <section id="category-popular" className="menu-section">
+            <h2 className="section-title">Most ordered</h2>
+            <div className="products-grid">
+              {popularProducts.map(product => (
+                <ProductCard key={product.id || product._id} product={product} />
+              ))}
+            </div>
+          </section>
+        )}
 
-      {/* list all prodcts */}
-      <h2>Menu</h2>
-      <div className="products-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-        {products.map(product => (
-          <ProductCard key={product.id || product._id} product={product} />
-        ))}
-      </div>
+        {/* Categories Section */}
+        {activeCategories.map(category => {
+          const categoryProducts = products.filter(p => p.category === category);
+          return (
+            <section id={`category-${category.replace(/\s+/g, '-')}`} key={category} className="menu-section">
+              <h2 className="section-title">{category}</h2>
+              <div className="products-grid">
+                {categoryProducts.map(product => (
+                  <ProductCard key={product.id || product._id} product={product} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
+        
+      </div> {/* CLOSING MENU CONTAINER */}
 
-      {/* render Modal (pop-up), pass products argument so it has context*/}
+      {/* Render Modal */}
       <Outlet context={products} />
     </div>
   );
