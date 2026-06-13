@@ -114,7 +114,8 @@
             "price": 55.00,
             "image": "[https://example.com/images/pepperoni.jpg](https://example.com/images/pepperoni.jpg)",
             "extras": ["ext_9999"],
-            "isExtra": false
+            "isExtra": false,
+            "isPopular": false
         }
     ]
     ```
@@ -124,7 +125,7 @@
 * **Endpoint:** `/`
 * **Request Body:** `application/json`
   * **Required:** `name`, `category`, `price`,`isExtra`
-  * **Optional:** `description`, `image`, `extras`
+  * **Optional:** `description`, `image`, `extras`, `isPopular`
   ```json
   {
       "name": "Pepperoni Pizza",
@@ -133,7 +134,8 @@
       "price": 55.00,
       "image": "[https://example.com/images/pepperoni.jpg](https://example.com/images/pepperoni.jpg)",
       "extras": ["ext_9999"],
-      "isExtra": false
+      "isExtra": false,
+      "isPopular": false
   }
 
 # Orders API Documentation

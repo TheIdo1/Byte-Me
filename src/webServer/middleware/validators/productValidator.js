@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra', 'isPopular'];
 const REQUIRED_CREATE_FIELDS = ['name', 'category', 'price', 'isExtra'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra', 'isPopular'];
 
 const validateProductUpdate = (req, res, next) => {
     const body = req.body;
@@ -58,7 +58,7 @@ const validateProductUpdate = (req, res, next) => {
     }
 
     // boolean validation
-    const booleanFields = ['isExtra'];
+    const booleanFields = ['isExtra', 'isPopular'];
     for (const field of booleanFields) {
         if (body[field] !== undefined && typeof body[field] !== 'boolean') {
             return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
@@ -117,6 +117,14 @@ const validateCreateProduct = (req, res, next) => {
     if (body.price !== undefined) {
         if (typeof body.price !== 'number' || !Number.isFinite(body.price) || body.price < 0) {
             return res.status(400).json({ error: 'price must be a valid, positive number.' });
+        }
+    }
+
+    // boolean validation
+    const booleanFields = ['isExtra', 'isPopular'];
+    for (const field of booleanFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'boolean') {
+            return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
         }
     }
 

@@ -47,7 +47,9 @@ const createProduct = (req, res) => {
         category, 
         price,
         image,
-        extras 
+        extras,
+        isExtra,
+        isPopular
     } = req.body;
 
     const restaurantId = req.params.rId
@@ -60,7 +62,9 @@ const createProduct = (req, res) => {
         category, 
         price,
         image,
-        extras  
+        extras,
+        isExtra,
+        isPopular
     };
 
     // Pass it to the model

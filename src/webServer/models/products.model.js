@@ -40,7 +40,8 @@ const createProduct = (productData) => {
         price: productData.price || 0,
         image: productData.image || '',
         extras: productData.extras || [], // this field is optional, initiate to empty list if undefined.
-        isExtra: productData.isExtra || false
+        isExtra: productData.isExtra || false,
+        isPopular: productData.isPopular || false
     };
 
     // Save to in-memory array
