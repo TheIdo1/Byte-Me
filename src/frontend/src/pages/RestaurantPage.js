@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getRestaurantById } from '../api/restaurantsApi';
 import { getRestaurantProducts } from '../api/productsApi';
 import { Outlet } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../components/product/ProductCard';
 
 
 const RestaurantPage = () => {

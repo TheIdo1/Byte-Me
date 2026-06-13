@@ -1,0 +1,240 @@
+/* ProductModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-container {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  height: 85vh; /* Takes up most of the screen like a mobile app */
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #202125;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s;
+}
+
+.close-modal-btn:hover {
+  transform: scale(1.05);
+}
+
+.modal-scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  /* Hide scrollbar for cleaner look */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+.modal-scrollable-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-hero-image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.modal-header-info {
+  padding: 24px 20px;
+}
+
+.modal-product-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #202125;
+  margin: 0 0 12px 0;
+}
+
+.modal-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-price {
+  font-size: 18px;
+  font-weight: 500;
+  color: #202125;
+}
+
+.popular-badge {
+  background-color: #e5f6fd;
+  color: #008cc0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.modal-description {
+  font-size: 15px;
+  color: #7a7d82;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-divider {
+  height: 8px;
+  background-color: #f8f8f8;
+  width: 100%;
+}
+
+.modal-section {
+  padding: 24px 20px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #202125;
+  margin: 0 0 16px 0;
+}
+
+.extras-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.extra-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #202125;
+  user-select: none;
+}
+
+.extra-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px; /* Use margin-left for RTL */
+  accent-color: #00c2e8; /* Wolt cyan color for checkboxes */
+  cursor: pointer;
+}
+
+.extra-name {
+  flex: 1;
+}
+
+.extra-price-tag {
+  color: #7a7d82;
+  font-size: 14px;
+}
+
+/* Sticky Footer */
+.modal-sticky-footer {
+  padding: 16px 20px;
+  background-color: #ffffff;
+  border-top: 1px solid #f3f3f3;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding: 4px 8px;
+}
+
+.qty-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #008cc0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.qty-btn:hover {
+  background-color: #eaeaec;
+  border-radius: 50%;
+}
+
+.qty-number {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+}
+
+.add-to-order-btn {
+  flex: 1;
+  background-color: #00c2e8; /* Wolt primary cyan */
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-to-order-btn:hover {
+  background-color: #00acd0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Media Query for Mobile - Make it full screen */
+@media (max-width: 600px) {
+  .modal-container {
+    height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
