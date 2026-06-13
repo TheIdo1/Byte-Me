@@ -32,6 +32,7 @@
             "authorizedUsers": ["user99"],
             "phone": "03-9876543",
             "email": "hello@pizzaplanet.co.il",
+            "image": "https://pazaz-shoham.co.il/wp-content/uploads/sites/111/2023/12/logo-01.png",
             "subcategories": ["Pizzas", "extras"],
             "address": {
                 "city": "Ramat Gan",
@@ -63,6 +64,7 @@
     "authorizedUsers": ["user99"],
     "phone": "03-9876543",
     "email": "hello@pizzaplanet.co.il",
+    "image": "https://pazaz-shoham.co.il/wp-content/uploads/sites/111/2023/12/logo-01.png",
     "subcategories": ["Pizzas", "extras"],
     "address": {
       "city": "Ramat Gan",
