@@ -39,7 +39,8 @@ const createProduct = (productData) => {
         category: productData.category || '',
         price: productData.price || 0,
         image: productData.image || '',
-        extras: productData.extras || [] // this field is optional, initiate to empty list if undefined.
+        extras: productData.extras || [], // this field is optional, initiate to empty list if undefined.
+        isExtra: productData.isExtra || false
     };
 
     // Save to in-memory array

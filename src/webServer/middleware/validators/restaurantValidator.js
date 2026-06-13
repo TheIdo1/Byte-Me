@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'long', 'lat'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage', 'subcategories'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'long', 'lat', 'subcategories'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage', 'subcategories'];
 
 const validateRestaurantUpdate = (req, res, next) => {
     const body = req.body;
@@ -31,7 +31,7 @@ const validateRestaurantUpdate = (req, res, next) => {
     }
 
     // Array validations
-    const arrayFields = ['authorizedUsers', 'products'];
+    const arrayFields = ['authorizedUsers', 'products', 'subcategories'];
     for (const field of arrayFields) {
         if (body[field] !== undefined) {
             if (!Array.isArray(body[field])) {
