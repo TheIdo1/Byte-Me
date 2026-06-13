@@ -68,6 +68,7 @@ const RestaurantsCarousel = ({ title, subtitle, restaurants, seeMoreLink }) => {
         {restaurants.map((restaurant, index) => (
           <div className="carousel-item" key={restaurant.id || index}>
             <RestaurantCard 
+              id={restaurant.id}
               name={restaurant.name}
               imageUrl={restaurant.imageUrl}
               deliveryTime={restaurant.deliveryTime}
