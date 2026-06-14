@@ -54,7 +54,7 @@
 * **Method:** `POST`
 * **Endpoint:** `/`
 * **Request Body:** `application/json`
-  * **Required:** `name`, `category`, `authorizedUsers`, `phone`, `email`, `address`, `subcategories`
+  * **Required:** `name`, `category`, `authorizedUsers`, `phone`, `email`, `address`, `subcategories`, 'image'
   * **Optional:** `description`, `products`, `rating`, `isSponsored`
   ```json
   {
