@@ -127,3 +127,20 @@ The "Login to Byte-Me" text. */
     margin-bottom: 20px;
     font-weight: bold;
 }
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: #72727a;
+}
+
+.login-footer a {
+  color: #009de0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
