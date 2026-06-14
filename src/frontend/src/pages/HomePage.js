@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { search, searchQuery } from '../api';
+import { searchQuery } from '../api/searchApi';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
@@ -14,7 +14,7 @@ export default function HomePage() {
     setLoading(true);
     setError('');
     try {
-      const data = await search(query.trim());
+      const data = await searchQuery(query.trim());
       setResults(data);
     } catch (err) {
       setError(err.message);
