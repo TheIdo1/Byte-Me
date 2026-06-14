@@ -1,0 +1,276 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+}
+
+/* Logo */
+.site-header__logo {
+  font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
+  font-size: 28px;
+  font-weight: bold;
+  color: #009de0;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.site-header__logo:hover {
+  color: #0089c4;
+}
+
+/* Address */
+.site-header__address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #202125;
+  flex-shrink: 0;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+}
+
+.site-header__address-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* Address wrapper — needed for popover positioning */
+.site-header__address-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Clickable address button (logged-out state) */
+.site-header__address--clickable {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.site-header__address--clickable:hover .site-header__address-text {
+  text-decoration: underline;
+  color: #009de0;
+}
+
+/* "Register to set address" popover */
+.site-header__address-hint {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 14px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 200;
+}
+
+.site-header__address-hint-text {
+  font-size: 13px;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* Search */
+.site-header__search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 24px;
+  padding: 0 14px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+  min-width: 0;
+}
+
+.site-header__search:focus-within {
+  border-color: #009de0;
+  background: #ffffff;
+}
+
+.site-header__search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 6px;
+  font-size: 14px;
+  outline: none;
+  color: #202125;
+  min-width: 0;
+}
+
+.site-header__search-input::placeholder {
+  color: #9e9e9e;
+}
+
+.site-header__search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Auth action buttons */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.site-header__btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+}
+
+.site-header__btn--outline {
+  color: #009de0;
+  border: 1.5px solid #009de0;
+  background: transparent;
+}
+
+.site-header__btn--outline:hover {
+  background: #e5f6fd;
+}
+
+.site-header__btn--primary {
+  color: #ffffff;
+  background: #009de0;
+  border: 1.5px solid #009de0;
+}
+
+.site-header__btn--primary:hover {
+  background: #0089c4;
+  transform: translateY(-1px);
+}
+
+/* Add Restaurant button (restaurant owners only) */
+.site-header__add-restaurant {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1.5px solid #86efac;
+  white-space: nowrap;
+  transition: background 0.2s;
+  display: inline-block;
+}
+
+.site-header__add-restaurant:hover {
+  background: #dcfce7;
+}
+
+/* Avatar */
+.site-header__avatar-wrapper {
+  position: relative;
+}
+
+.site-header__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #009de0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.site-header__avatar:hover {
+  background: #0089c4;
+}
+
+/* Full-screen transparent overlay — sits behind the menu, closes it on click */
+.site-header__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+}
+
+/* Dropdown user menu */
+.site-header__user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 200;
+}
+
+.site-header__user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #202125;
+  padding: 4px 8px;
+  display: block;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.site-header__logout {
+  padding: 8px 10px;
+  border: none;
+  background: #fff5f5;
+  color: #c53030;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.site-header__logout:hover {
+  background: #fed7d7;
+}
