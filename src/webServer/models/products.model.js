@@ -13,6 +13,11 @@ const getAllProducts = () => {
     return products;
 };
 
+// Retirive all products from spesific restaurant
+const getAllRestaurantProducts = (id) => {
+    return products.filter(p => p.restaurantId === id)
+};
+
 /*
 Retrieves a specific product by its ID.
 id - The ID of the product to find.
@@ -39,7 +44,9 @@ const createProduct = (productData) => {
         category: productData.category || '',
         price: productData.price || 0,
         image: productData.image || '',
-        extras: productData.extras || [] // this field is optional, initiate to empty list if undefined.
+        extras: productData.extras || [], // this field is optional, initiate to empty list if undefined.
+        isExtra: productData.isExtra || false,
+        isPopular: productData.isPopular || false
     };
 
     // Save to in-memory array
@@ -98,4 +105,5 @@ module.exports = {
     updateProduct,
     deleteProduct,
     getProductCppId,
+    getAllRestaurantProducts
 };

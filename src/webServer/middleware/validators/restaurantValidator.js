@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'long', 'lat'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage', 'subcategories', 'image'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'subcategories', 'image'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'authorizedUsers', 'phone', 'email', 'address', 'products', 'rating', 'isSponsored', 'promotionalMessage', 'subcategories', 'image'];
 
 const validateRestaurantUpdate = (req, res, next) => {
     const body = req.body;
@@ -23,7 +23,7 @@ const validateRestaurantUpdate = (req, res, next) => {
     // --- Type Validation ---
     
     // String validations
-    const stringFields = ['name', 'description', 'category', 'phone', 'email', 'promotionalMessage'];
+    const stringFields = ['name', 'description', 'category', 'phone', 'email', 'promotionalMessage', 'image'];
     for (const field of stringFields) {
         if (body[field] !== undefined && typeof body[field] !== 'string') {
             return res.status(400).json({ error: `${field} must be a string.` });
@@ -31,7 +31,7 @@ const validateRestaurantUpdate = (req, res, next) => {
     }
 
     // Array validations
-    const arrayFields = ['authorizedUsers', 'products'];
+    const arrayFields = ['authorizedUsers', 'products', 'subcategories'];
     for (const field of arrayFields) {
         if (body[field] !== undefined) {
             if (!Array.isArray(body[field])) {

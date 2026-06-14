@@ -4,9 +4,9 @@ import { ReactComponent as SmileyIcon } from '../assets/smiley_face.svg';
 import { ReactComponent as MotorcycleIcon } from '../assets/motorcycle.svg';
 import { ReactComponent as LightbulbIcon } from '../assets/lightbulb.svg'
 
-const RestaurantCard = ({ name, imageUrl, deliveryTime, rating, deliveryFee, tags, isSponsored, promotion }) => {
+const RestaurantCard = ({ id, name, imageUrl, deliveryTime, rating, deliveryFee, tags, isSponsored, promotion }) => {
   return (
-    <div className="restaurant-card">
+    <Link to={`/restaurants/${id}`} className="restaurant-card"style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="image-wrapper">
         <img src={imageUrl} alt={name} className="restaurant-image" />
         {/* Conditional rendering for the promotion badge */}
@@ -63,7 +63,7 @@ const RestaurantCard = ({ name, imageUrl, deliveryTime, rating, deliveryFee, tag
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -50,7 +50,7 @@ const validateAddress = (address) => {
     // cordinates
     const numberFields = ['long', 'lat'];
     for (const field of numberFields) {
-        if (body[field] !== undefined && typeof body[field] !== 'number') {
+        if (address[field] !== undefined && typeof address[field] !== 'number') {
             return res.status(400).json({ error: `${field} must be a number.` });
         }
     }

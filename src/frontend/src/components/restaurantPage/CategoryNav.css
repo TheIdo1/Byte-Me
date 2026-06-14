@@ -1,0 +1,50 @@
+/* Makes the scrolling smooth when clicking a link */
+html {
+  scroll-behavior: smooth;
+}
+
+.category-nav-container {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 100; /* Stays below the modal (1000) but above content */
+  border-bottom: 1px solid #f3f3f3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.category-nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.category-nav-content::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.category-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 24px;
+}
+
+.category-link {
+  display: block;
+  padding: 16px 0;
+  text-decoration: none;
+  color: #7a7d82;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.category-link:hover, .category-link:active {
+  color: #00c2e8; /* Wolt cyan */
+  border-bottom: 2px solid #00c2e8;
+}

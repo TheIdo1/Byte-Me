@@ -1,6 +1,6 @@
-const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras'];
-const REQUIRED_CREATE_FIELDS = ['name', 'category', 'price'];
-const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras'];
+const ALLOWED_CREATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra', 'isPopular'];
+const REQUIRED_CREATE_FIELDS = ['name', 'category', 'price', 'isExtra'];
+const ALLOWED_UPDATE_FIELDS = ['name', 'description', 'category', 'price', 'image', 'extras', 'isExtra', 'isPopular'];
 
 const validateProductUpdate = (req, res, next) => {
     const body = req.body;
@@ -16,13 +16,13 @@ const validateProductUpdate = (req, res, next) => {
     if (invalidFields.length > 0) {
         return res.status(400).json({
             error: `Invalid fields: ${invalidFields.join(', ')}. ` +
-                   `Allowed fields are: ${ALLOWED_UPDATE_FIELDS.join(', ')}.`
+                `Allowed fields are: ${ALLOWED_UPDATE_FIELDS.join(', ')}.`
         });
     }
 
 
     // --- Type Validation ---
-    
+
     // String validations
     const stringFields = ['name', 'description', 'category', 'image'];
     for (const field of stringFields) {
@@ -45,7 +45,7 @@ const validateProductUpdate = (req, res, next) => {
         }
     }
 
-    
+
 
     // price validataion
     if (body.price !== undefined) {
@@ -57,6 +57,14 @@ const validateProductUpdate = (req, res, next) => {
         }
     }
 
+    // boolean validation
+    const booleanFields = ['isExtra', 'isPopular'];
+    for (const field of booleanFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'boolean') {
+            return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
+        }
+    }
+
     // all checks passed
     next();
 };
@@ -64,21 +72,21 @@ const validateProductUpdate = (req, res, next) => {
 
 const validateCreateProduct = (req, res, next) => {
     const body = req.body;
-    
+
     // Check if there are forbidden/unknown fields
     const invalidFields = Object.keys(body).filter(f => !ALLOWED_CREATE_FIELDS.includes(f));
     if (invalidFields.length > 0) {
         return res.status(400).json({
             error: `Invalid fields: ${invalidFields.join(', ')}. ` +
-                   `Allowed fields are: ${ALLOWED_CREATE_FIELDS.join(', ')}.`
+                `Allowed fields are: ${ALLOWED_CREATE_FIELDS.join(', ')}.`
         });
     }
 
     // Check if all required fields are present
     const missingFields = REQUIRED_CREATE_FIELDS.filter(field => body[field] === undefined);
     if (missingFields.length > 0) {
-        return res.status(400).json({ 
-            error: `Missing required fields: ${missingFields.join(', ')}.` 
+        return res.status(400).json({
+            error: `Missing required fields: ${missingFields.join(', ')}.`
         });
     }
 
@@ -109,6 +117,14 @@ const validateCreateProduct = (req, res, next) => {
     if (body.price !== undefined) {
         if (typeof body.price !== 'number' || !Number.isFinite(body.price) || body.price < 0) {
             return res.status(400).json({ error: 'price must be a valid, positive number.' });
+        }
+    }
+
+    // boolean validation
+    const booleanFields = ['isExtra', 'isPopular'];
+    for (const field of booleanFields) {
+        if (body[field] !== undefined && typeof body[field] !== 'boolean') {
+            return res.status(400).json({ error: `${field} must be a boolean (true or false).` });
         }
     }
 

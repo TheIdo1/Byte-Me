@@ -32,6 +32,8 @@
             "authorizedUsers": ["user99"],
             "phone": "03-9876543",
             "email": "hello@pizzaplanet.co.il",
+            "image": "https://pazaz-shoham.co.il/wp-content/uploads/sites/111/2023/12/logo-01.png",
+            "subcategories": ["Pizzas", "extras"],
             "address": {
                 "city": "Ramat Gan",
                 "street": "Bialik",
@@ -52,7 +54,7 @@
 * **Method:** `POST`
 * **Endpoint:** `/`
 * **Request Body:** `application/json`
-  * **Required:** `name`, `category`, `authorizedUsers`, `phone`, `email`, `address`
+  * **Required:** `name`, `category`, `authorizedUsers`, `phone`, `email`, `address`, `subcategories`, 'image'
   * **Optional:** `description`, `products`, `rating`, `isSponsored`
   ```json
   {
@@ -62,6 +64,8 @@
     "authorizedUsers": ["user99"],
     "phone": "03-9876543",
     "email": "hello@pizzaplanet.co.il",
+    "image": "https://pazaz-shoham.co.il/wp-content/uploads/sites/111/2023/12/logo-01.png",
+    "subcategories": ["Pizzas", "extras"],
     "address": {
       "city": "Ramat Gan",
       "street": "Bialik",
@@ -109,7 +113,9 @@
             "category": "Main Course",
             "price": 55.00,
             "image": "[https://example.com/images/pepperoni.jpg](https://example.com/images/pepperoni.jpg)",
-            "extras": ["ext_9999"]
+            "extras": ["ext_9999"],
+            "isExtra": false,
+            "isPopular": false
         }
     ]
     ```
@@ -118,8 +124,8 @@
 * **Method:** `POST`
 * **Endpoint:** `/`
 * **Request Body:** `application/json`
-  * **Required:** `name`, `category`, `price`
-  * **Optional:** `description`, `image`, `extras`
+  * **Required:** `name`, `category`, `price`,`isExtra`
+  * **Optional:** `description`, `image`, `extras`, `isPopular`
   ```json
   {
       "name": "Pepperoni Pizza",
@@ -127,7 +133,9 @@
       "category": "Main Course",
       "price": 55.00,
       "image": "[https://example.com/images/pepperoni.jpg](https://example.com/images/pepperoni.jpg)",
-      "extras": ["ext_9999"]
+      "extras": ["ext_9999"],
+      "isExtra": false,
+      "isPopular": false
   }
 
 # Orders API Documentation

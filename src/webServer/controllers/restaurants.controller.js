@@ -27,8 +27,14 @@ const createRestaurant = (req, res) => {
         authorizedUsers,
         phone,
         email,
+        image,
+        subcategories,
         address,
-        products 
+        products,
+        rating,
+        isSponsored,
+        promotionalMessage
+
     } = req.body;
 
     // Build the clean data object exactly as the model expects it
@@ -39,8 +45,13 @@ const createRestaurant = (req, res) => {
         authorizedUsers,
         phone,
         email,
+        image,
+        subcategories,
         address,
-        products 
+        products,
+        rating,
+        isSponsored,
+        promotionalMessage
     };
 
     // Pass it to the model

@@ -11,7 +11,7 @@ const { validateCreateProduct, validateProductUpdate } = require('../middleware/
 
 // This resolves to: /api/restaurants/:rId/products/
 router.route('/')
-    .get(productsController.getAllProducts)
+    .get(productsController.getAllRestaurantProducts)
     // POST is protected because it creates new products
     .post(requireAuth,validateCreateProduct, productsController.createProduct);
 

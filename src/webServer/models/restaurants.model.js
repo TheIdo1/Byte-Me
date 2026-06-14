@@ -37,6 +37,8 @@ const createRestaurant = (restaurantData) => {
         authorizedUsers: restaurantData.authorizedUsers || [],
         phone: restaurantData.phone || '',
         email: restaurantData.email || '',
+        image: restaurantData.image || '',
+        subcategories: restaurantData.subcategories || [],
         address: {
             city: restaurantData.address.city || '',
             street: restaurantData.address.street || '',

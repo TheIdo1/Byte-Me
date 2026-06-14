@@ -8,6 +8,16 @@ const getAllProducts = (req, res) => {
     res.json(productsModel.getAllProducts());
 }
 
+// returns all restaurant's products
+const getAllRestaurantProducts = (req, res) => {
+    const restId = req.params.rId
+    const products = productsModel.getAllRestaurantProducts(restId);
+    if (!products) {
+        return res.status(404).json({ error: 'No products found' });
+    }
+    return res.status(200).json(products);
+}
+
 //Returns a single product by ID. Returns 404 if not found.
 const getProductById = (req, res) => {
     const productId = req.params.pId;
@@ -47,7 +57,9 @@ const createProduct = (req, res) => {
         category, 
         price,
         image,
-        extras 
+        extras,
+        isExtra,
+        isPopular
     } = req.body;
 
     const restaurantId = req.params.rId
@@ -60,7 +72,9 @@ const createProduct = (req, res) => {
         category, 
         price,
         image,
-        extras  
+        extras,
+        isExtra,
+        isPopular
     };
 
     // Pass it to the model
@@ -132,5 +146,6 @@ module.exports = {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllRestaurantProducts
 };
