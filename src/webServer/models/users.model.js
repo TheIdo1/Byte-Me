@@ -21,28 +21,33 @@ const getUserById = (id) => {
 };
 
 // Creates a new user and saves it to memory.
-// Returns the new user (without password), or null if the username is already taken.
+// Returns the new user (without password), or { conflict: <field> } on duplicate.
 const createUser = (userData) => {
-    if (users.find(user => user.username === userData.username)) {
-        return null;
-    }
+    if (users.find(u => u.username === userData.username))
+        return { conflict: 'username' };
+    if (users.find(u => u.email === userData.email))
+        return { conflict: 'email' };
+    if (userData.phone && users.find(u => u.phone === userData.phone))
+        return { conflict: 'phone' };
 
     const newUser = {
         id: uuidv4(),
         cppId: nextCppId++,
         username: userData.username,
-        password: userData.password, // plain text for now
+        password: userData.password,
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
+        phone: userData.phone || null,
         address: {
             city:     userData.address.city,
             street:   userData.address.street,
             houseNum: userData.address.houseNum,
             floor:    userData.address.floor,
-            lat: userData.lat,
-            long: userData.long
+            lat:      userData.address.lat,
+            long:     userData.address.long,
         },
+        isRestaurantOwner: userData.isRestaurantOwner || false,
     };
 
     users.push(newUser);

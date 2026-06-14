@@ -164,6 +164,29 @@ body {
   cursor: not-allowed;
 }
 
+.restaurant-owner-toggle {
+  margin-top: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #202125;
+  user-select: none;
+}
+
+.checkbox-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #009de0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .register-footer {
   text-align: center;
   margin-top: 20px;
