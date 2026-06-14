@@ -13,6 +13,11 @@ const getAllProducts = () => {
     return products;
 };
 
+// Retirive all products from spesific restaurant
+const getAllRestaurantProducts = (id) => {
+    return products.filter(p => p.restaurantId === id)
+};
+
 /*
 Retrieves a specific product by its ID.
 id - The ID of the product to find.
@@ -100,4 +105,5 @@ module.exports = {
     updateProduct,
     deleteProduct,
     getProductCppId,
+    getAllRestaurantProducts
 };
