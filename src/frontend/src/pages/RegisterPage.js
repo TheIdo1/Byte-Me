@@ -1,8 +1,14 @@
+// RegisterPage.js
+// Registration form for new users. Collects personal info, account credentials,
+// delivery address (including coordinates), and restaurant-owner status.
+// On success, redirects to /login. Duplicate username/email/phone errors are
+// shown inline next to the offending field.
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../api/authApi';
 import './RegisterPage.css';
 
+// Default empty state for every controlled input.
 const INITIAL_FORM = {
   username: '',
   password: '',
@@ -17,6 +23,8 @@ const INITIAL_FORM = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s\-]{7,15}$/;
 
+// Returns a map of field name → error message for every failing rule.
+// An empty object means the form is valid and ready to submit.
 function validate(form) {
   const errs = {};
   if (!form.firstName.trim())               errs.firstName = 'First name is required.';
@@ -55,6 +63,8 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Updates form state on every keystroke. Re-validates only fields the user
+  // has already visited so errors don't flash on untouched inputs.
   function handleChange(e) {
     const { name, value, checked } = e.target;
     const isAddress = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'].includes(name);
@@ -70,12 +80,16 @@ export default function RegisterPage() {
     if (touched[name]) setErrors(validate(newForm));
   }
 
+  // Marks a field as touched when the user leaves it, then runs full validation.
   function handleBlur(e) {
     const { name } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
     setErrors(validate(form));
   }
 
+  // Validates all fields, then POSTs to the API. Numeric address fields are
+  // parsed before sending. Server-side duplicate errors (409) are routed back
+  // to the specific input field rather than shown in a generic banner.
   async function handleSubmit(e) {
     e.preventDefault();
     setServerError('');
@@ -112,6 +126,9 @@ export default function RegisterPage() {
     }
   }
 
+  // Builds the common props for a controlled input: name, value (address fields
+  // are read from the nested address object), change/blur handlers, and the
+  // error class when the field has been touched and has a validation error.
   const f = (name) => ({
     name,
     value: ['city','street','houseNum','floor','lat','long'].includes(name)
