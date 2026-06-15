@@ -1,37 +1,44 @@
-// Registration page. Collects all fields required by POST /api/users and
-// redirects to /login on success.
+// RegisterPage.js
+// Registration form for new users. Collects personal info, account credentials,
+// delivery address (including coordinates), and restaurant-owner status.
+// On success, redirects to /login. Duplicate username/email/phone errors are
+// shown inline next to the offending field.
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../api/authApi';
 import './RegisterPage.css';
 
+// Default empty state for every controlled input.
 const INITIAL_FORM = {
   username: '',
   password: '',
   firstName: '',
   lastName: '',
   email: '',
-  address: { city: '', street: '', houseNum: '', floor: '' },
+  phone: '',
+  isRestaurantOwner: false,
+  address: { city: '', street: '', houseNum: '', floor: '', lat: '', long: '' },
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\+?[\d\s\-]{7,15}$/;
 
 // Returns a map of field name → error message for every failing rule.
-// An empty object means the form is valid.
+// An empty object means the form is valid and ready to submit.
 function validate(form) {
   const errs = {};
   if (!form.firstName.trim())               errs.firstName = 'First name is required.';
   if (!form.lastName.trim())                errs.lastName  = 'Last name is required.';
   if (!form.email.trim())                   errs.email     = 'Email is required.';
   else if (!EMAIL_RE.test(form.email))      errs.email     = 'Enter a valid email address.';
+  if (!form.phone.trim())                   errs.phone     = 'Phone number is required.';
+  else if (!PHONE_RE.test(form.phone.trim())) errs.phone   = 'Enter a valid phone number.';
   if (!form.username.trim())                errs.username  = 'Username is required.';
   if (!form.password)                       errs.password  = 'Password is required.';
   else if (form.password.length < 6)        errs.password  = 'Password must be at least 6 characters.';
   if (!form.address.city.trim())            errs.city      = 'City is required.';
   if (!form.address.street.trim())          errs.street    = 'Street is required.';
 
-  // houseNum / floor are kept as strings in state so empty string can be detected;
-  // they are parsed to integers before submission.
   const houseNum = parseInt(form.address.houseNum, 10);
   if (form.address.houseNum === '')         errs.houseNum  = 'House number is required.';
   else if (isNaN(houseNum) || houseNum < 1) errs.houseNum  = 'Must be a positive number.';
@@ -40,46 +47,55 @@ function validate(form) {
   if (form.address.floor === '')            errs.floor     = 'Floor is required.';
   else if (isNaN(floor) || floor < 0)       errs.floor     = 'Must be 0 or higher.';
 
+  if (form.address.lat === '')              errs.lat  = 'Latitude is required.';
+  else { const v = parseFloat(form.address.lat);  if (isNaN(v) || v < -90  || v > 90)  errs.lat  = 'Must be between -90 and 90.'; }
+  if (form.address.long === '')             errs.long = 'Longitude is required.';
+  else { const v = parseFloat(form.address.long); if (isNaN(v) || v < -180 || v > 180) errs.long = 'Must be between -180 and 180.'; }
+
   return errs;
 }
 
 export default function RegisterPage() {
   const [form, setForm]       = useState(INITIAL_FORM);
   const [errors, setErrors]   = useState({});
-  // touched tracks which fields the user has interacted with so errors are
-  // only shown after the user has visited a field, not on initial render.
   const [touched, setTouched] = useState({});
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Updates form state on every keystroke. Re-validates only fields the user
+  // has already visited so errors don't flash on untouched inputs.
   function handleChange(e) {
-    const { name, value } = e.target;
-    const isAddress = ['city', 'street', 'houseNum', 'floor'].includes(name);
-    const newForm = isAddress
-      ? { ...form, address: { ...form.address, [name]: value } }
-      : { ...form, [name]: value };
+    const { name, value, checked } = e.target;
+    const isAddress = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'].includes(name);
+    let newForm;
+    if (name === 'isRestaurantOwner') {
+      newForm = { ...form, isRestaurantOwner: checked };
+    } else if (isAddress) {
+      newForm = { ...form, address: { ...form.address, [name]: value } };
+    } else {
+      newForm = { ...form, [name]: value };
+    }
     setForm(newForm);
-    // Re-validate live only for fields the user has already visited.
     if (touched[name]) setErrors(validate(newForm));
   }
 
+  // Marks a field as touched when the user leaves it, then runs full validation.
   function handleBlur(e) {
     const { name } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
     setErrors(validate(form));
   }
 
+  // Validates all fields, then POSTs to the API. Numeric address fields are
+  // parsed before sending. Server-side duplicate errors (409) are routed back
+  // to the specific input field rather than shown in a generic banner.
   async function handleSubmit(e) {
     e.preventDefault();
     setServerError('');
 
-    // Mark every field as touched so all errors become visible on submit.
-    const allTouched = Object.fromEntries(
-      ['firstName','lastName','email','username','password','city','street','houseNum','floor']
-        .map((k) => [k, true])
-    );
-    setTouched(allTouched);
+    const allFields = ['firstName','lastName','email','phone','username','password','city','street','houseNum','floor','lat','long'];
+    setTouched(Object.fromEntries(allFields.map((k) => [k, true])));
 
     const errs = validate(form);
     setErrors(errs);
@@ -93,21 +109,29 @@ export default function RegisterPage() {
           ...form.address,
           houseNum: parseInt(form.address.houseNum, 10),
           floor:    parseInt(form.address.floor, 10),
+          lat:      parseFloat(form.address.lat),
+          long:     parseFloat(form.address.long),
         },
       });
       navigate('/login');
     } catch (err) {
-      setServerError(err.message);
+      if (err.field) {
+        setErrors((prev) => ({ ...prev, [err.field]: err.message }));
+        setTouched((prev) => ({ ...prev, [err.field]: true }));
+      } else {
+        setServerError(err.message);
+      }
     } finally {
       setLoading(false);
     }
   }
 
-  // Builds the common props for each input: name, value (address fields are
-  // nested), change/blur handlers, and the error class when invalid.
+  // Builds the common props for a controlled input: name, value (address fields
+  // are read from the nested address object), change/blur handlers, and the
+  // error class when the field has been touched and has a validation error.
   const f = (name) => ({
     name,
-    value: ['city','street','houseNum','floor'].includes(name)
+    value: ['city','street','houseNum','floor','lat','long'].includes(name)
       ? form.address[name]
       : form[name],
     onChange: handleChange,
@@ -143,6 +167,11 @@ export default function RegisterPage() {
               <label>Email <span className="required">*</span></label>
               <input type="email" {...f('email')} placeholder="john@example.com" />
               {touched.email && errors.email && <span className="field-error">{errors.email}</span>}
+            </div>
+            <div className="field">
+              <label>Phone number <span className="required">*</span></label>
+              <input type="tel" {...f('phone')} placeholder="+972 50 000 0000" />
+              {touched.phone && errors.phone && <span className="field-error">{errors.phone}</span>}
             </div>
           </div>
 
@@ -190,6 +219,32 @@ export default function RegisterPage() {
                 {touched.floor && errors.floor && <span className="field-error">{errors.floor}</span>}
               </div>
             </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Latitude <span className="required">*</span></label>
+                <input type="number" {...f('lat')} placeholder="31.7683" step="any" />
+                {touched.lat && errors.lat && <span className="field-error">{errors.lat}</span>}
+              </div>
+              <div className="field">
+                <label>Longitude <span className="required">*</span></label>
+                <input type="number" {...f('long')} placeholder="35.2137" step="any" />
+                {touched.long && errors.long && <span className="field-error">{errors.long}</span>}
+              </div>
+            </div>
+          </div>
+
+          <div className="divider" />
+
+          <div className="restaurant-owner-toggle">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                name="isRestaurantOwner"
+                checked={form.isRestaurantOwner}
+                onChange={handleChange}
+              />
+              <span>I am a restaurant owner</span>
+            </label>
           </div>
 
           <button className="submit-btn" type="submit" disabled={loading}>
