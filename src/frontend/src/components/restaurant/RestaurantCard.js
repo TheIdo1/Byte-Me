@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './RestaurantCard.css';
-import { ReactComponent as SmileyIcon } from '../assets/smiley_face.svg';
-import { ReactComponent as MotorcycleIcon } from '../assets/motorcycle.svg';
-import { ReactComponent as LightbulbIcon } from '../assets/lightbulb.svg'
+import { ReactComponent as SmileyIcon } from '../../assets/smiley_face.svg';
+import { ReactComponent as MotorcycleIcon } from '../../assets/motorcycle.svg';
+import { ReactComponent as LightbulbIcon } from '../../assets/lightbulb.svg';
 
 const RestaurantCard = ({ id, name, imageUrl, deliveryTime, rating, deliveryFee, tags, isSponsored, promotion }) => {
   return (
@@ -26,17 +27,19 @@ const RestaurantCard = ({ id, name, imageUrl, deliveryTime, rating, deliveryFee,
           <div className="info-column">
             <h3 className="restaurant-name">{name}</h3>
             <div className="tags-row">
-              <span className="restaurant-tags">{tags.join(' | ')}</span>
+              <span className="restaurant-tags">{(tags || []).join(' | ')}</span>
               {isSponsored && (
                 <span className="sponsored-badge">Sponsored</span>
               )}
             </div>
           </div>
 
-          <div className="delivery-time-badge">
-            <span className="time-value">{deliveryTime}</span>
-            <span className="time-unit">min</span>
-          </div>
+          {deliveryTime != null && (
+            <div className="delivery-time-badge">
+              <span className="time-value">{deliveryTime}</span>
+              <span className="time-unit">min</span>
+            </div>
+          )}
         </div>
 
         {/* Dashed Divider */}
