@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import RestaurantCard from './RestaurantCard';
 import './RestaurantsCarousel.css';
 
-import { ReactComponent as LeftArrowIcon } from '../assets/left_arrow.svg';
-import { ReactComponent as RightArrowIcon } from '../assets/right_arrow.svg';
+import { ReactComponent as LeftArrowIcon } from '../../assets/left_arrow.svg';
+import { ReactComponent as RightArrowIcon } from '../../assets/right_arrow.svg';
 
 const RestaurantsCarousel = ({ title, subtitle, restaurants, seeMoreLink }) => {
   const trackRef = useRef(null);
