@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { searchQuery as searchApi } from '../api/searchApi';
 import { getAllRestaurants } from '../api/restaurantsApi';
 import RestaurantsCarousel from '../components/restaurant/RestaurantsCarousel';
+import ProductsCarousel from '../components/product/ProductsCarousel';
+import EmptyState from '../components/EmptyState';
+import './HomePage.css';
 
 function haversineDistance(lat1, lon1, lat2, lon2) {
   if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) return Infinity;
@@ -83,47 +86,41 @@ export default function HomePage({ user }) {
   const categories = [...new Set(sortedRestaurants.map(r => r.category).filter(Boolean))];
 
   if (q) {
+    const hasRestaurants = (searchResults?.restaurants.length ?? 0) > 0;
+    const hasProducts = (searchResults?.products.length ?? 0) > 0;
+    const noResults = searchResults && !hasRestaurants && !hasProducts;
+
     return (
       <div className="page">
-        <h2>Results for &ldquo;{q}&rdquo;</h2>
-        {searchLoading && <p>Searching…</p>}
+        {searchLoading && <p className="muted">Searching…</p>}
         {searchError && <p className="error">{searchError}</p>}
-        {searchResults && (
+        {noResults && (
+          <EmptyState
+            icon="🔍"
+            title={`No matches for "${q}"`}
+            subtitle="Try a different search term or check the spelling."
+          />
+        )}
+        {searchResults && !noResults && (
           <div className="search-results">
-            <section>
-              <h2>Restaurants ({searchResults.restaurants.length})</h2>
-              {searchResults.restaurants.length === 0 ? (
-                <p className="muted">No restaurants matched.</p>
-              ) : (
-                <div className="card-grid">
-                  {searchResults.restaurants.map(r => (
-                    <Link key={r.id} to={`/restaurants/${r.id}`} className="card">
-                      <h3>{r.name}</h3>
-                      <span className="badge">{r.category}</span>
-                      {r.description && <p>{r.description}</p>}
-                      <p className="muted">{r.address.city}, {r.address.street} {r.address.houseNum}</p>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </section>
-            <section>
-              <h2>Products ({searchResults.products.length})</h2>
-              {searchResults.products.length === 0 ? (
-                <p className="muted">No products matched.</p>
-              ) : (
-                <div className="card-grid">
-                  {searchResults.products.map(p => (
-                    <Link key={p.id} to={`/restaurants/${p.restaurantId}`} className="card">
-                      <h3>{p.name}</h3>
-                      <span className="badge">{p.category}</span>
-                      {p.description && <p>{p.description}</p>}
-                      <p className="price">₪{p.price.toFixed(2)}</p>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </section>
+            {hasRestaurants ? (
+              <RestaurantsCarousel
+                title="Restaurants"
+                subtitle={`${searchResults.restaurants.length} found`}
+                restaurants={searchResults.restaurants.map(toCardProps)}
+              />
+            ) : (
+              <EmptyState icon="🏠" title="No restaurants matched" subtitle="We couldn't find a restaurant for this search." />
+            )}
+            {hasProducts ? (
+              <ProductsCarousel
+                title="Products"
+                subtitle={`${searchResults.products.length} found`}
+                products={searchResults.products}
+              />
+            ) : (
+              <EmptyState icon="🍽️" title="No products matched" subtitle="We couldn't find a dish for this search." />
+            )}
           </div>
         )}
       </div>
@@ -149,7 +146,11 @@ export default function HomePage({ user }) {
         />
       ))}
       {restaurants.length === 0 && (
-        <p className="muted" style={{ padding: '2rem' }}>No restaurants available yet.</p>
+        <EmptyState
+          icon="🍔"
+          title="No restaurants available yet"
+          subtitle="Check back soon — new restaurants are added regularly."
+        />
       )}
     </div>
   );

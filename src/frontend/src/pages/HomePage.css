@@ -1,0 +1,13 @@
+.muted {
+  color: #7b7d85;
+}
+
+.error {
+  color: #c43228;
+  font-weight: 500;
+  padding: 8px 0;
+}
+
+.search-results > * + * {
+  margin-top: 8px;
+}
