@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './router';
 import { getUserById } from './api/authApi';
-import { getAllRestaurants } from './api/restaurantsApi';
 
 // Decodes the middle (payload) segment of a JWT without verifying the signature.
 // Signature verification is the server's responsibility; we only need the user ID.
@@ -39,7 +38,8 @@ export default function App() {
     };
   }, []);
 
-  // Whenever the token changes, fetch the user's profile and check restaurant ownership.
+  // Whenever the token changes, fetch the user's profile and read their
+  // restaurant-owner flag straight off it (set at registration).
   // If the token is invalid or expired the server will reject the request, at which point
   // we clear the session so the UI returns to the logged-out state.
   useEffect(() => {
@@ -52,19 +52,10 @@ export default function App() {
     const decoded = decodeJwt(token);
     if (!decoded?.id) return;
 
-    Promise.all([
-      getUserById(decoded.id),
-      getAllRestaurants(),
-    ])
-      .then(([userData, restaurants]) => {
+    getUserById(decoded.id)
+      .then((userData) => {
         setUser(userData);
-        // A user is considered a restaurant owner if their ID appears in any
-        // restaurant's authorizedUsers array.
-        setIsOwner(
-          restaurants.some(
-            r => Array.isArray(r.authorizedUsers) && r.authorizedUsers.includes(decoded.id)
-          )
-        );
+        setIsOwner(!!userData.isRestaurantOwner);
       })
       .catch(() => {
         // Token is expired or invalid — clear the session.

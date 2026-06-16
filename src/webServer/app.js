@@ -12,7 +12,9 @@ const PORT = process.env.PORT || 3000;
 // Global Middlewares
 // this middleware parses incoming requests with JSON payloads.
 // Without it, req.body will be undefined in our controllers.
-app.use(express.json());
+// Limit raised above the 100kb default so restaurant images uploaded as
+// base64 data URLs (see restaurant image upload) aren't rejected.
+app.use(express.json({ limit: '5mb' }));
 
 // import Routers
 const ordersRouter = require('./routes/orders.route');

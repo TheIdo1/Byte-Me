@@ -1,0 +1,233 @@
+.add-restaurant-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: #b3d9f5;
+}
+
+.add-restaurant-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 157, 224, 0.12);
+  padding: 40px 48px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.add-restaurant-card--guard {
+  text-align: center;
+}
+
+.add-restaurant-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #202125;
+  margin-bottom: 4px;
+}
+
+.add-restaurant-card .subtitle {
+  font-size: 0.9rem;
+  color: #72727a;
+  margin-bottom: 32px;
+}
+
+.add-restaurant-error {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  color: #c53030;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+}
+
+.add-restaurant-form .section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #009de0;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.add-restaurant-form .section-title:first-child {
+  margin-top: 0;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #202125;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 10px 14px;
+  border: 1.5px solid #cce9f7;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #202125;
+  background: #f0f9ff;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #a8d4ed;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #009de0;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 157, 224, 0.15);
+}
+
+.field input.input-error,
+.field select.input-error,
+.field textarea.input-error {
+  border-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.field input.input-error:focus,
+.field select.input-error:focus,
+.field textarea.input-error:focus {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #e53e3e;
+  margin-top: 2px;
+}
+
+.required {
+  color: #009de0;
+  margin-left: 2px;
+}
+
+.divider {
+  height: 1px;
+  background: #e0f2fb;
+  margin: 24px 0 20px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 28px;
+  background: #009de0;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #0089c4;
+  transform: translateY(-1px);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submit-btn--link {
+  display: inline-block;
+  width: auto;
+  margin-top: 0;
+  text-decoration: none;
+  padding: 12px 24px;
+}
+
+.guard-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.guard-secondary-link {
+  color: #009de0;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.guard-secondary-link:hover {
+  text-decoration: underline;
+}
+
+.image-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.image-mode-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1.5px solid #cce9f7;
+  border-radius: 8px;
+  background: #f0f9ff;
+  color: #72727a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.image-mode-btn--active {
+  background: #009de0;
+  border-color: #009de0;
+  color: #ffffff;
+}
+
+.image-preview {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid #cce9f7;
+}
