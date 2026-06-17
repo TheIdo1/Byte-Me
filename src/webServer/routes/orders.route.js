@@ -7,6 +7,9 @@ const ordersController = require('../controllers/orders.controller');
 const { validateCreateOrder, validateOrderUpdate } = require('../middleware/validators/orderValidator');
 const { requireAuth } = require('../middleware/auth'); // Import the authentication middleware
 
+// Must be defined before /:id so Express doesn't treat "my" as an id
+router.get('/my', requireAuth, ordersController.getMyOrders);
+
 router.route('/')
     .get(ordersController.getAllOrders)
     // requireAuth to the POST route to ensure only logged-in users can order

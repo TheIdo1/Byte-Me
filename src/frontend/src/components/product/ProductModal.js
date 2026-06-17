@@ -5,7 +5,7 @@ import './ProductModal.css';
 const ProductModal = () => {
     const navigate = useNavigate();
     const { productId } = useParams(); // get ID from url
-    const products = useOutletContext(); // get products array from restaurant page
+    const { products, addToCart } = useOutletContext(); // get products and cart handler from restaurant page
 
     const [quantity, setQuantity] = useState(1);
 
@@ -115,7 +115,10 @@ const ProductModal = () => {
                         <button onClick={increaseQuantity} className="qty-btn">+</button>
                     </div>
 
-                    <button className="add-to-order-btn">
+                    <button className="add-to-order-btn" onClick={() => {
+                        addToCart(product, quantity, selectedExtras);
+                        navigate(-1);
+                    }}>
                         Add to order ₪{(finalPrice).toFixed(2)}
                     </button>
                 </div>

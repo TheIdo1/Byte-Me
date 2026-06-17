@@ -1,5 +1,5 @@
 // React
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 // APIs
 import { getRestaurantById } from '../api/restaurantsApi';
@@ -12,9 +12,10 @@ import './RestaurantPage.css';
 import ProductCard from '../components/product/ProductCard';
 import RestaurantHeader from '../components/restaurantPage/RestaurantHeader';
 import CategoryNav from '../components/restaurantPage/CategoryNav';
+import CartSidebar from '../components/restaurantPage/CartSidebar';
 
 
-const RestaurantPage = () => {
+const RestaurantPage = ({ token }) => {
   // Extract the restaurantId from the URL parameters
   const { restaurantId } = useParams();
 
@@ -23,6 +24,19 @@ const RestaurantPage = () => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(null)
   const [error, setError] = useState(null)
+  const [cartItems, setCartItems] = useState([])
+
+  const addToCart = useCallback((product, quantity, selectedExtras) => {
+    setCartItems(prev => [...prev, { product, quantity, selectedExtras }]);
+  }, []);
+
+  const handleRemoveItem = useCallback((index) => {
+    setCartItems(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const handleClearCart = useCallback(() => {
+    setCartItems([]);
+  }, []);
 
   useEffect(() => {
     // check if restaurant exists, if no, return 404
@@ -79,44 +93,56 @@ const RestaurantPage = () => {
   // Render the actual page once data is successfully loaded
   return (
     <div className="restaurant-page-root">
-      
+
       <RestaurantHeader restaurant={restaurant} />
       <CategoryNav categories={activeCategories} hasPopular={popularProducts.length > 0} />
 
-      {/* pad all the section */}
-      <div className="restaurant-menu-container">
-        
-        {/* Popular Section */}
-        {popularProducts.length > 0 && (
-          <section id="category-popular" className="menu-section">
-            <h2 className="section-title">Most ordered</h2>
-            <div className="products-grid">
-              {popularProducts.map(product => (
-                <ProductCard key={product.id || product._id} product={product} />
-              ))}
-            </div>
-          </section>
-        )}
+      <div className="restaurant-body">
+        <div className="restaurant-menu-container">
 
-        {/* Categories Section */}
-        {activeCategories.map(category => {
-          const categoryProducts = products.filter(p => p.category === category);
-          return (
-            <section id={`category-${category.replace(/\s+/g, '-')}`} key={category} className="menu-section">
-              <h2 className="section-title">{category}</h2>
+          {/* Popular Section */}
+          {popularProducts.length > 0 && (
+            <section id="category-popular" className="menu-section">
+              <h2 className="section-title">Most ordered</h2>
               <div className="products-grid">
-                {categoryProducts.map(product => (
+                {popularProducts.map(product => (
                   <ProductCard key={product.id || product._id} product={product} />
                 ))}
               </div>
             </section>
-          );
-        })}
-        
-      </div> {/* CLOSING MENU CONTAINER */}
+          )}
+
+          {/* Categories Section */}
+          {activeCategories.map(category => {
+            const categoryProducts = products.filter(p => p.category === category);
+            return (
+              <section id={`category-${category.replace(/\s+/g, '-')}`} key={category} className="menu-section">
+                <h2 className="section-title">{category}</h2>
+                <div className="products-grid">
+                  {categoryProducts.map(product => (
+                    <ProductCard key={product.id || product._id} product={product} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+
+        </div>
+
+        <div className="restaurant-sidebar-column">
+          <CartSidebar
+            cartItems={cartItems}
+            restaurantId={restaurantId}
+            onRemoveItem={handleRemoveItem}
+            onClearCart={handleClearCart}
+            products={products}
+            isLoggedIn={!!token}
+          />
+        </div>
+      </div>
 
       {/* Render Modal */}
-      <Outlet context={products} />
+      <Outlet context={{ products, addToCart }} />
     </div>
   );
 };
