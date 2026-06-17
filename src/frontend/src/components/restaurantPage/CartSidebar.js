@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../../api/ordersApi';
 import './CartSidebar.css';
 
 const CartSidebar = ({ cartItems, restaurantId, onRemoveItem, onClearCart, products, isLoggedIn }) => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [error, setError] = useState(null);
@@ -16,6 +18,15 @@ const CartSidebar = ({ cartItems, restaurantId, onRemoveItem, onClearCart, produ
   };
 
   const totalPrice = cartItems.reduce((sum, item) => sum + getItemTotal(item), 0);
+
+  function handleLoginRedirect() {
+    sessionStorage.setItem('pendingCart', JSON.stringify({
+      restaurantId,
+      cartItems,
+      returnUrl: `/restaurants/${restaurantId}`,
+    }));
+    navigate('/login');
+  }
 
   const handleConfirmOrder = async () => {
     if (cartItems.length === 0) return;
@@ -114,9 +125,9 @@ const CartSidebar = ({ cartItems, restaurantId, onRemoveItem, onClearCart, produ
                 {isSubmitting ? 'Placing order...' : `Confirm Order · ₪${totalPrice.toFixed(2)}`}
               </button>
             ) : (
-              <a href="/login" className="cart-login-prompt">
+              <button className="cart-login-prompt" onClick={handleLoginRedirect}>
                 Log in to place your order
-              </a>
+              </button>
             )}
           </div>
         </>

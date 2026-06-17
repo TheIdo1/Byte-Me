@@ -24,7 +24,16 @@ const RestaurantPage = ({ token }) => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(null)
   const [error, setError] = useState(null)
-  const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('pendingCart'));
+      if (saved?.restaurantId === restaurantId && saved.cartItems?.length > 0) {
+        sessionStorage.removeItem('pendingCart');
+        return saved.cartItems;
+      }
+    } catch {}
+    return [];
+  })
 
   const addToCart = useCallback((product, quantity, selectedExtras) => {
     setCartItems(prev => [...prev, { product, quantity, selectedExtras }]);
