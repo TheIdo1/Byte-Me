@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import RestaurantPage from './pages/RestaurantPage';
+import AddRestaurantPage from './pages/AddRestaurantPage';
 import ProductModal from './components/product/ProductModal';
 
 export default function AppRouter({ token, user, isOwner, signOut }) {
@@ -25,6 +26,9 @@ export default function AppRouter({ token, user, isOwner, signOut }) {
         <Routes>
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login"    element={<LoginPage />} />
+
+          {/* Restaurant owners only — guarded inside the page itself */}
+          <Route path="/restaurants/new" element={<AddRestaurantPage token={token} user={user} isOwner={isOwner} />} />
 
           {/* Dynamic route for individual restaurant pages */}
           <Route path="/restaurants/:restaurantId" element={<RestaurantPage />}>

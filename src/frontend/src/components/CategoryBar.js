@@ -6,7 +6,7 @@ import './CategoryBar.css';
 // STATIC DATA
 // Using an object with an 'id' is an industry standard because React requires 
 // a unique 'key' prop when rendering lists to optimize performance.
-const CATEGORIES_DATA = [
+export const CATEGORIES_DATA = [
     { id: 'cat-1', name: 'Israeli', emoji: '🧆' },
     { id: 'cat-2', name: 'Italian', emoji: '🍕' },
     { id: 'cat-3', name: 'Asian', emoji: '🍜' },

@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  // Extract restaurant ID from the current URL
+  // Extract restaurant ID from the current URL, falling back to the product's
+  // own restaurantId when the card is rendered outside a restaurant page (e.g. search results)
   const { restaurantId } = useParams();
+  const targetRestaurantId = restaurantId || product.restaurantId;
 
   return (
     // Link to the specific product URL
-    <Link to={`/restaurants/${restaurantId}/products/${product.id}`} className="product-card-link">
+    <Link to={`/restaurants/${targetRestaurantId}/products/${product.id}`} className="product-card-link">
       <div className="product-card">
         <div className="product-info">
           <h4 className="product-name">{product.name}</h4>
