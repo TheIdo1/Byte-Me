@@ -1,0 +1,33 @@
+/* index.css */
+
+/* 1. Default (Light Mode) Variables */
+:root {
+  --bg-page: #f7fafc;      /* App background */
+  --bg-card: #ffffff;      /* White cards/forms */
+  --text-main: #202125;    /* Dark gray text */
+  --text-muted: #72727a;   /* Subtitles */
+  --primary: #009de0;      /* brand blue */
+  --primary-hover: #0089c4;
+  --border-color: #cce9f7;
+  --input-bg: #f0f9ff;
+}
+
+/* 2. Dark Mode Variables */
+/* When the body has the class 'dark-mode', these values overwrite the ones above */
+body.dark-mode {
+  --bg-page: #121212;
+  --bg-card: #1e1e1e;
+  --text-main: #f1f1f1;
+  --text-muted: #a0a0a0;
+  --primary: #009de0;      /* Blue usually looks good in dark mode too */
+  --primary-hover: #33b5e5;
+  --border-color: #333333;
+  --input-bg: #2a2a2a;
+}
+
+/* 3. Apply the variables to global elements */
+body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth fade effect */
+}

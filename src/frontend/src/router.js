@@ -12,7 +12,7 @@ import AddRestaurantPage from './pages/AddRestaurantPage';
 import OrdersPage from './pages/OrdersPage';
 import ProductModal from './components/product/ProductModal';
 
-export default function AppRouter({ token, user, isOwner, signOut }) {
+export default function AppRouter({ token, user, isOwner, signOut, toggleTheme, isDarkMode }) {
   return (
     <>
       {/* Header is rendered outside <Routes> so it appears on every page */}
@@ -21,6 +21,8 @@ export default function AppRouter({ token, user, isOwner, signOut }) {
         user={user}
         isOwner={isOwner}
         signOut={signOut}
+        toggleTheme={toggleTheme} 
+        isDarkMode={isDarkMode}
       />
 
       <main>

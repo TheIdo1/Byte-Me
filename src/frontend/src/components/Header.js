@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
-export default function Header({ token, user, isOwner, signOut }) {
+export default function Header({ token, user, isOwner, signOut, toggleTheme, isDarkMode }) {
   const navigate = useNavigate();
 
   // Controlled value for the search input
@@ -59,6 +59,11 @@ export default function Header({ token, user, isOwner, signOut }) {
 
         {/* Logo  */}
         <Link to="/" className="site-header__logo">Byte Me</Link>
+        {/* Dark Mode Button */}
+
+        <button onClick={toggleTheme} className="theme-toggle-btn">
+          {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
 
         {/*  Delivery address  */}
         {token ? (
@@ -171,7 +176,7 @@ export default function Header({ token, user, isOwner, signOut }) {
             </>
           ) : (
             <>
-              <Link to="/login"    className="site-header__btn site-header__btn--outline">Login</Link>
+              <Link to="/login" className="site-header__btn site-header__btn--outline">Login</Link>
               <Link to="/register" className="site-header__btn site-header__btn--primary">Register</Link>
             </>
           )}
