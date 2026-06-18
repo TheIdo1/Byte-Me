@@ -316,6 +316,9 @@ docker compuse build --no-cache
 docker compose up --force-recreate
 ```
 > This will also populate the app with restaurants through http calls using bruno, this action can take a minute.
+> Those are dumb restaurants to mainly show the location based-feature. 
+> You can create more complex restaurants (including products and extras to them) in the restaurant mannagment page.
+
 
 > The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
 
