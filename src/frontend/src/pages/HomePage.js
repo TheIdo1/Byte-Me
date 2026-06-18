@@ -21,17 +21,28 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 function toCardProps(r, userLat, userLon) {
-  let deliveryTime = '30-40 min'; // Default fallback
-
-  // Calculate distance if coordinates are available
+  // Calculate distance
   const dist = haversineDistance(userLat, userLon, r.address?.lat, r.address?.long);
 
-  if (dist !== Infinity) {
-    // Base prep time (15 mins) + travel time (~4 mins per km)
-    const minTime = Math.round(15 + (dist * 4));
-    const maxTime = minTime + 10; // 10-minute buffer
+  let deliveryTime;
+  let deliveryFee;
+
+  if (dist === Infinity || dist > 25) {
+    // if distance is long or unknown show default state
+    deliveryTime = '45-60 min';
+    deliveryFee = 25;
+  } else {
+    // dynamic calculation
+    const minTime = Math.max(20, Math.round(15 + (dist * 4)));
+    const maxTime = minTime + 10;
     deliveryTime = `${minTime}-${maxTime} min`;
+    const baseFee = 10;
+    const distanceFee = Math.round(dist * 2);
+    deliveryFee = baseFee + distanceFee;
+
   }
+
+
 
   return {
     id: r.id,
@@ -42,7 +53,7 @@ function toCardProps(r, userLat, userLon) {
     promotion: r.promotionalMessage,
     tags: r.subcategories?.length ? r.subcategories : [r.category].filter(Boolean),
     deliveryTime: deliveryTime,
-    deliveryFee: 0,
+    deliveryFee: deliveryFee,
   };
 }
 
@@ -79,8 +90,9 @@ export default function HomePage({ user }) {
       .finally(() => setSearchLoading(false));
   }, [q]);
 
-  const userLat = user?.address?.lat;
-  const userLon = user?.address?.long;
+  // Fallback to 507 Building if user address is missing 32.071297203893124, 34.84464972069747
+  const userLat = user?.address?.lat ?? 32.071297203893124;
+  const userLon = user?.address?.long ?? 34.84464972069747;
 
   const sortedRestaurants = useMemo(() => {
     return [...restaurants].sort((a, b) => {
@@ -109,9 +121,9 @@ export default function HomePage({ user }) {
         {searchError && <p className="error">{searchError}</p>}
         {noResults && (
           <EmptyState
-          icon="🔍"
-          title={`No matches for "${q}"`}
-          subtitle="Try a different search term or check the spelling."
+            icon="🔍"
+            title={`No matches for "${q}"`}
+            subtitle="Try a different search term or check the spelling."
           />
         )}
         {searchResults && !noResults && (
@@ -142,7 +154,7 @@ export default function HomePage({ user }) {
 
   return (
     <div className="page">
-      <CategoryBar/>
+      <CategoryBar />
       {sponsoredRestaurants.length > 0 && (
         <RestaurantsCarousel
           title="Sponsored"
