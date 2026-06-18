@@ -3,13 +3,7 @@ import { request } from './index.js';
 export const getRestaurantProducts = (restaurantId) =>
   request('GET', `/restaurants/${restaurantId}/products`);
 
-// --- New Admin Functions ---
 
-/**
- * Creates a new product for a specific restaurant.
- * @param {string} restaurantId - The restaurant UUID.
- * @param {Object} data - The new product data.
- */
 export const createProduct = (restaurantId, data) =>
   request('POST', `/restaurants/${restaurantId}/products`, data);
 
