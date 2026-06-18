@@ -1,7 +1,7 @@
 /* RestaurantPage.css */
 
 .restaurant-page-root {
-  background-color: #f8f8f8;
+  background-color: var(--bg-page);
   min-height: 100vh;
   /* Apply a clean, modern system font to the entire page */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -36,7 +36,7 @@
 .section-title {
   font-size: 24px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   margin: 0 0 20px 0;
   letter-spacing: -0.5px; /* Gives it a slightly more modern, tight feel */
 }
@@ -56,11 +56,11 @@
   text-align: center;
   font-size: 18px;
   font-weight: 500;
-  color: #7a7d82;
+  color: var(--text-muted);
 }
 
 .error-message {
-  color: #c43228;
+  color: var(--danger);
 }
 
 /* Mobile adjustments */

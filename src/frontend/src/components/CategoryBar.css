@@ -2,7 +2,7 @@
 .category-bar-container {
     width: 100%;
     padding: 20px 0;
-    background-color: #ffffff;
+    background-color: var(--bg-card);
 }
 
 /* The inner scrollable area */

@@ -3,15 +3,16 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 10px 10px 20px 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06); /* Added a subtle shadow to frame the white card */
-  border: 1px solid #f3f3f5;
+  box-shadow: 0 4px 12px var(--shadow-color); /* Added a subtle shadow to frame the white card */
+  border: 1px solid var(--border-light);
 }
 
 .restaurant-card:hover {
   transform: translateY(-4px);
+  background-color: var(--primary-hover);
 }
 
 .image-wrapper {
@@ -31,8 +32,8 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background-color: #4bc8f0; /* Wolt vibrant cyan/blue */
-  color: #0b4a66; /* Dark blue text for contrast */
+  background-color: var(--primary); /* Wolt vibrant cyan/blue */
+  color: var(--text-main); /* Dark blue text for contrast */
   padding: 6px 12px;
   border-radius: 16px; /* Pill shape */
   font-size: 14px;
@@ -40,7 +41,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Soft shadow to detach from image background */
+  box-shadow: 0 2px 8px var(--shadow-color-hover); /* Soft shadow to detach from image background */
 }
 
 .promotion-icon {
@@ -78,7 +79,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -93,13 +94,13 @@
 
 .restaurant-tags {
   font-size: 15px;
-  color: #7b7d85;
+  color: var(--text-muted);
 }
 
 /* Updated Sponsored Badge */
 .sponsored-badge {
-  background-color: #f3f3f5;
-  color: #202125;
+  background-color: var(--border-light);
+  color: var(--text-main);
   padding: 3px 8px;
   border-radius: 12px;
   font-size: 13px;
@@ -108,8 +109,8 @@
 
 /* Updated Time Badge */
 .delivery-time-badge {
-  background-color: #e1f4fc; 
-  color: #007a99; 
+  background-color: var(--icon-bg); 
+  color: var(--icon-color); 
   padding: 8px 12px;
   border-radius: 12px;
   display: flex;
@@ -138,7 +139,7 @@
 
 /* Divider */
 .divider {
-  border-top: 1px dashed #e4e4e5;
+  border-top: 1px dashed var(--border-light);
   margin: 16px 0 12px 0;
 }
 
@@ -148,7 +149,7 @@
   align-items: center;
   gap: 6px;
   font-size: 14px;
-  color: #7b7d85;
+  color: var(--text-muted);
 }
 
 .bottom-item {
@@ -165,11 +166,11 @@
 
 
 .active-price {
-  color: #7b7d85;
+  color: var(--text-muted);
 }
 
 .inactive-price {
-  color: #d1d2d5;
+  color: var(--text-light);
 }
 
 .dot-separator {
@@ -180,7 +181,7 @@
 .rating-icon {
   width: 18px;
   height: 18px;
-  color: #7b7d85;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
 }

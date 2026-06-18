@@ -6,10 +6,10 @@ html {
 .category-nav-container {
   position: sticky;
   top: 0;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   z-index: 100; /* Stays below the modal (1000) but above content */
-  border-bottom: 1px solid #f3f3f3;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .category-nav-content {
@@ -36,7 +36,7 @@ html {
   display: block;
   padding: 16px 0;
   text-decoration: none;
-  color: #7a7d82;
+  color: var(--text-muted);
   font-weight: 600;
   font-size: 15px;
   white-space: nowrap;
@@ -45,6 +45,6 @@ html {
 }
 
 .category-link:hover, .category-link:active {
-  color: #00c2e8; /* Wolt cyan */
-  border-bottom: 2px solid #00c2e8;
+  color: var(--primary); /* Wolt cyan */
+  border-bottom: 2px solid var(--primary);
 }
