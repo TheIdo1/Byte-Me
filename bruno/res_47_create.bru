@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 47 (Urban Kosher Express 5)
+  type: http
+  seq: 284
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Kosher Express 5",
+    "description": "Best Kosher in Haifa",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-4535680",
+    "email": "contact47@urbankosherexpress5.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 22,
+      "floor": 0,
+      "lat": 32.79933021628166,
+      "long": 35.006822115729605
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Simply the best"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

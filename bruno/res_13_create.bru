@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 13 (Spicy Italian Express 6)
+  type: http
+  seq: 148
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Italian Express 6",
+    "description": "Best Italian in Beer Sheva",
+    "category": "Italian",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6569659",
+    "email": "contact13@spicyitalianexpress6.co.il",
+    "subcategories": ["Italian", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 44,
+      "floor": 0,
+      "lat": 31.225668404944972,
+      "long": 34.825572771842886
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Tastyyyyy"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 32 (The Mediterranean Crave 4)
+  type: http
+  seq: 224
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Mediterranean Crave 4",
+    "description": "Best Mediterranean in Netanya",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-8555681",
+    "email": "contact32@themediterraneancrave4.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 72,
+      "floor": 0,
+      "lat": 32.340279555447474,
+      "long": 34.83913159986316
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "Simply the best"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

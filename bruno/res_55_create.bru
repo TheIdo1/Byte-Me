@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 55 (Rustic Mexican Spot 6)
+  type: http
+  seq: 316
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Mexican Spot 6",
+    "description": "Best Mexican in Jerusalem",
+    "category": "Mexican",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6553845",
+    "email": "contact55@rusticmexicanspot6.co.il",
+    "subcategories": ["Mexican", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 1,
+      "floor": 0,
+      "lat": 31.750790705630425,
+      "long": 35.21802985480999
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "We are the best!"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

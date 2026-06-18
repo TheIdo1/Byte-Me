@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 58 (Happy Seafood Bistro 2)
+  type: http
+  seq: 328
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Seafood Bistro 2",
+    "description": "Best Seafood in Beer Sheva",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-3942090",
+    "email": "contact58@happyseafoodbistro2.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 49,
+      "floor": 0,
+      "lat": 31.259224710268967,
+      "long": 34.76006116436253
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false,
+    "promotionalMessage": "Simply the best"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

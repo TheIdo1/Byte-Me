@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 37 (Spicy Cafe Bite 2)
+  type: http
+  seq: 244
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Cafe Bite 2",
+    "description": "Best Cafe in Jerusalem",
+    "category": "Cafe",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1655744",
+    "email": "contact37@spicycafebite2.co.il",
+    "subcategories": ["Cafe", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 87,
+      "floor": 0,
+      "lat": 31.78620094356834,
+      "long": 35.21029722590012
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "We are the best!"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

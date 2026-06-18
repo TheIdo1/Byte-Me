@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 43 (Local Kosher Eats 1)
+  type: http
+  seq: 268
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Kosher Eats 1",
+    "description": "Best Kosher in Tiberias",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1914357",
+    "email": "contact43@localkoshereats1.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 72,
+      "floor": 0,
+      "lat": 32.763398006549245,
+      "long": 35.49642570880098
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "0 NIS Deliverys"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

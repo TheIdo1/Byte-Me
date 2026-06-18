@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 31 (The Mediterranean Diner 3)
+  type: http
+  seq: 220
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Mediterranean Diner 3",
+    "description": "Best Mediterranean in Beer Sheva",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1950229",
+    "email": "contact31@themediterraneandiner3.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 67,
+      "floor": 0,
+      "lat": 31.29387188324735,
+      "long": 34.82563432487329
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true,
+    "promotionalMessage": "No regreats"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

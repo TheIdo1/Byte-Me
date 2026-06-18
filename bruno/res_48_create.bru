@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 48 (Spicy Kosher Taste 6)
+  type: http
+  seq: 288
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Kosher Taste 6",
+    "description": "Best Kosher in Eilat",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-4022033",
+    "email": "contact48@spicykoshertaste6.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Eilat",
+      "street": "HaTmarim",
+      "houseNum": 91,
+      "floor": 0,
+      "lat": 29.511118615350732,
+      "long": 34.984370498839205
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "0 NIS Deliverys"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

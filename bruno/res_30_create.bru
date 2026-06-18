@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 30 (Crispy Mediterranean Bite 2)
+  type: http
+  seq: 216
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Mediterranean Bite 2",
+    "description": "Best Mediterranean in Eilat",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6836239",
+    "email": "contact30@crispymediterraneanbite2.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Eilat",
+      "street": "HaTmarim",
+      "houseNum": 42,
+      "floor": 0,
+      "lat": 29.529726471365123,
+      "long": 34.93684864840901
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Very tasty"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

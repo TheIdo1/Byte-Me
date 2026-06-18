@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 40 (Local Cafe Eats 5)
+  type: http
+  seq: 256
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Cafe Eats 5",
+    "description": "Best Cafe in Beer Sheva",
+    "category": "Cafe",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-7571006",
+    "email": "contact40@localcafeeats5.co.il",
+    "subcategories": ["Cafe", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 55,
+      "floor": 0,
+      "lat": 31.22254886657022,
+      "long": 34.80572591522107
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

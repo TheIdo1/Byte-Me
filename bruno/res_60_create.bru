@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 60 (Rustic Seafood Express 4)
+  type: http
+  seq: 336
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Seafood Express 4",
+    "description": "Best Seafood in Ashdod",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-4921612",
+    "email": "contact60@rusticseafoodexpress4.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Ashdod",
+      "street": "Menachem Begin",
+      "houseNum": 36,
+      "floor": 0,
+      "lat": 31.763865529398043,
+      "long": 34.67073237061911
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Tastyyyyy"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

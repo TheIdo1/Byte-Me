@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 26 (Prime Burgers Taste 5)
+  type: http
+  seq: 200
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Prime Burgers Taste 5",
+    "description": "Best Burgers in Rishon LeZion",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-9565181",
+    "email": "contact26@primeburgerstaste5.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 26,
+      "floor": 0,
+      "lat": 32.02103535531911,
+      "long": 34.79247930490722
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false,
+    "promotionalMessage": "Very tasty"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 74 (Happy Desserts Spot 4)
+  type: http
+  seq: 392
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Desserts Spot 4",
+    "description": "Best Desserts in Haifa",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-5470506",
+    "email": "contact74@happydessertsspot4.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 28,
+      "floor": 0,
+      "lat": 32.81237930291912,
+      "long": 35.016395956019466
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": true,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

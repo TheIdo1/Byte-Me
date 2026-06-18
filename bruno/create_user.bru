@@ -1,0 +1,37 @@
+meta {
+  name: Create user
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://web-server:8081/api/users/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "ido",
+    "password": "idoido",
+    "firstName": "Ido",
+    "lastName": "itzhak",
+    "email": "idoitzhak01@gmail.com",
+    "address": {
+      "city": "Givat Shmuel",
+      "street": "Zabi",
+      "houseNum": 514,
+      "floor": 1,
+      "lat": 32.07118810598395,
+      "long": 34.84470336487187
+    },
+    "isRestaurantOwner": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  if (responseData && responseData.id) {
+    bru.setVar("myUserId", responseData.id);
+  }
+}

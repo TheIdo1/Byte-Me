@@ -22,22 +22,22 @@
     justify-content: center;
     width: 64px;
     height: 64px;
-    background-color: #f0f9ff; /* Soft blue background */
+    background-color: var(--input-bg-light); /* Soft blue background */
     border-radius: 50%; /* Makes it a perfect circle */
     font-size: 32px;
-    box-shadow: 0 4px 12px rgba(0, 157, 224, 0.08);
+    box-shadow: 0 4px 12px var(--shadow-color-hover);
     transition: background-color 0.2s;
 }
 
 .category-item:hover .category-emoji {
-    background-color: #e0f2fb;
+    background-color: var(--primary-light);
 }
 
 /* The text below the emoji */
 .category-name {
     font-size: 13px;
     font-weight: 600;
-    color: #202125;
+    color: var(--text-main);
     text-align: center;
     white-space: nowrap; /* Prevents long names like "Street Food" from breaking into two lines */
 }

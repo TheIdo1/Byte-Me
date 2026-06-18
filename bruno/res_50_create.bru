@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 50 (Local Mexican Eats 1)
+  type: http
+  seq: 296
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Mexican Eats 1",
+    "description": "Best Mexican in Netanya",
+    "category": "Mexican",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6316807",
+    "email": "contact50@localmexicaneats1.co.il",
+    "subcategories": ["Mexican", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 3,
+      "floor": 0,
+      "lat": 32.3303145827284,
+      "long": 34.866452103106425
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 17 (Rustic Asian Grill 3)
+  type: http
+  seq: 164
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Asian Grill 3",
+    "description": "Best Asian in Rishon LeZion",
+    "category": "Asian",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-5454343",
+    "email": "contact17@rusticasiangrill3.co.il",
+    "subcategories": ["Asian", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 11,
+      "floor": 0,
+      "lat": 31.9780479704348,
+      "long": 34.80590043024256
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false,
+    "promotionalMessage": "Tastyyyyy"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

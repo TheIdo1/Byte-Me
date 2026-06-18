@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 27 (Golden Burgers Grill 6)
+  type: http
+  seq: 204
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Golden Burgers Grill 6",
+    "description": "Best Burgers in Tel Aviv",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1518775",
+    "email": "contact27@goldenburgersgrill6.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 34,
+      "floor": 0,
+      "lat": 32.102311239451666,
+      "long": 34.7504077157281
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

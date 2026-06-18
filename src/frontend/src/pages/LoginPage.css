@@ -7,7 +7,7 @@ Updated to match the Register page background color.
     align-items: center;
     min-height: 100vh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #b3d9f5; /* The soft blue background from the Register page */
+    background-color: var(--primary-light); /* The soft blue background from the Register page */
     padding: 32px 16px;
 }
 
@@ -17,9 +17,9 @@ Added white background, rounded corners, and a subtle blue shadow. */
 .login-box {
     width: 100%;
     max-width: 450px;
-    background: #ffffff; /* White card background */
+    background: var(--bg-card); /* White card background */
     border-radius: 16px; /* Rounded corners */
-    box-shadow: 0 8px 32px rgba(0, 157, 224, 0.12); /* Matching shadow */
+    box-shadow: 0 8px 32px var(--shadow-color-hover); /* Matching shadow */
     padding: 40px 48px; /* Spacious internal padding */
     text-align: center;
 }
@@ -30,7 +30,7 @@ Styling the "Byte Me" header to look a bit like a handwritten or stylized logo. 
     font-family: 'Brush Script MT', 'Comic Sans MS', cursive; 
     font-size: 48px;
     font-weight: bold;
-    color: #202125; 
+    color: var(--text-main); 
     margin-bottom: 10px;
     margin-top: 0;
 }
@@ -40,7 +40,7 @@ The "Login to Byte-Me" text. */
 .subtitle-text {
     font-size: 22px;
     font-weight: 800;
-    color: #202125;
+    color: var(--text-main);
     margin-bottom: 40px;
 }
 
@@ -61,7 +61,7 @@ The "Login to Byte-Me" text. */
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #202125;
+    color: var(--text-main);
     margin-bottom: 8px;
     text-align: left;
 }
@@ -72,7 +72,7 @@ The "Login to Byte-Me" text. */
     width: 100%;
     padding: 16px;
     font-size: 16px;
-    border: 2px solid #e4e4e5; 
+    border: 2px solid var(--border-light); 
     border-radius: 12px;
     box-sizing: border-box; 
     outline: none;
@@ -81,7 +81,7 @@ The "Login to Byte-Me" text. */
 
 /* INPUT FOCUS STATE*/
 .wolt-input:focus {
-    border-color: #009de0; 
+    border-color: var(--primary); 
 }
 
 /*THE SUBMIT BUTTON*/
@@ -90,8 +90,8 @@ The "Login to Byte-Me" text. */
     padding: 16px;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff;
-    background-color: #009de0; /* Primary brand blue */
+    color: var(--bg-card);
+    background-color: var(--primary); /* Primary brand blue */
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -101,7 +101,7 @@ The "Login to Byte-Me" text. */
 
 /* Hover effect */
 .wolt-button:hover:not(:disabled) {
-    background-color: #0089c4;
+    background-color: var(--primary-hover);
     transform: translateY(-1px); /* Slight lift on hover, matching Register page */
 }
 
@@ -112,15 +112,15 @@ The "Login to Byte-Me" text. */
 
 /* Disabled state */
 .wolt-button:disabled {
-    background-color: #a0d8ef;
+    background-color: var(--primary-light);
     cursor: not-allowed;
     opacity: 0.6;
 }
 
 /*ERROR MESSAGE BOX */
 .error-message {
-    color: #d32f2f; 
-    background-color: #ffebee; 
+    color: var(--danger); 
+    background-color: var(--danger-light); 
     padding: 10px;
     border-radius: 8px;
     font-size: 14px;
@@ -132,11 +132,11 @@ The "Login to Byte-Me" text. */
   text-align: center;
   margin-top: 20px;
   font-size: 0.85rem;
-  color: #72727a;
+  color: var(--text-muted);
 }
 
 .login-footer a {
-  color: #009de0;
+  color: var(--primary);
   font-weight: 600;
   text-decoration: none;
 }

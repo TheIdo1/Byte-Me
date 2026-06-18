@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 25 (Spicy Burgers Taste 4)
+  type: http
+  seq: 196
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Burgers Taste 4",
+    "description": "Best Burgers in Tiberias",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-2285150",
+    "email": "contact25@spicyburgerstaste4.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 20,
+      "floor": 0,
+      "lat": 32.819175397873614,
+      "long": 35.57000452787081
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false,
+    "promotionalMessage": "No regreats"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

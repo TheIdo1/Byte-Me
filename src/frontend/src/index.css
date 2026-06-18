@@ -1,0 +1,67 @@
+/* index.css */
+
+/* 1. Default (Light Mode) Variables */
+:root {
+  --bg-page: #f7fafc;      /* App background */
+  --bg-card: #ffffff;      /* White cards/forms */
+  --text-main: #202125;    /* Dark gray text */
+  --text-muted: #7a7d82;   /* Subtitles */
+  --text-light: #aaa;
+  --primary: #009de0;      /* brand blue */
+  --primary-hover: #0089c4;
+  --primary-light: #e5f6fd;
+  --primary-dark: #008cc0;
+  --border-color: #f0f0f0;
+  --border-light: #f3f3f3;
+  --border-accent: #cce9f7;
+  --input-bg: #f5f5f5;
+  --input-bg-light: #f0f9ff;
+  --danger: #c43228;
+  --danger-light: #fff5f5;
+  --danger-border: #fed7d7;
+  --success: #16a34a;
+  --success-light: #f0fdf4;
+  --success-border: #86efac;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+  --shadow-color-hover: rgba(0, 0, 0, 0.12);
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+  --icon-bg: #e1f4fc;
+  --icon-color: #007a99;
+}
+
+/* 2. Dark Mode Variables */
+/* When the body has the class 'dark-mode', these values overwrite the ones above */
+body.dark-mode {
+  --bg-page: #121212;
+  --bg-card: #1e1e1e;
+  --text-main: #f1f1f1;
+  --text-muted: #a0a0a0;
+  --text-light: #666;
+  --primary: #009de0;      /* Blue usually looks good in dark mode too */
+  --primary-hover: #33b5e5;
+  --primary-light: #003d5c;
+  --primary-dark: #33b5e5;
+  --border-color: #333333;
+  --border-light: #2a2a2a;
+  --border-accent: #004b6b;
+  --input-bg: #2a2a2a;
+  --input-bg-light: #1f2937;
+  --danger: #ff6b6b;
+  --danger-light: #4a1515;
+  --danger-border: #8b0000;
+  --success: #4ade80;
+  --success-light: #143320;
+  --success-border: #064e3b;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-color-hover: rgba(0, 0, 0, 0.6);
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --icon-bg: #003d5c;
+  --icon-color: #33b5e5;
+}
+
+/* 3. Apply the variables to global elements */
+body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth fade effect */
+}

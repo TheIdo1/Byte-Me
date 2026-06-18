@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 44 (Golden Kosher House 2)
+  type: http
+  seq: 272
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Golden Kosher House 2",
+    "description": "Best Kosher in Rishon LeZion",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-4455341",
+    "email": "contact44@goldenkosherhouse2.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 20,
+      "floor": 0,
+      "lat": 31.96615036669418,
+      "long": 34.80958557619269
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

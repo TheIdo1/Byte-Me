@@ -1,0 +1,27 @@
+meta {
+  name: Create Prod 2 for Res 48
+  type: http
+  seq: 290
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/{{resId}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Product 2 - Kosher Style",
+    "description": "Delicious Kosher dish",
+    "category": "Kosher",
+    "price": 28.00,
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80",
+    "extras": [],
+    "isExtra": false
+  }
+}

@@ -306,21 +306,26 @@ Byte-Me/
  
 All four components are containerized and managed via Docker Compose.
  
-**Start the backend servers:**
+**Build Docker:**
 ```bash
-docker-compose up -d --build cpp-server web-server
+docker compose build --no-cache
 ```
 
-**Start the React frontend:**
+**Start all app:**
 ```bash
-docker-compose up -d --build frontend
+docker compose up --force-recreate
 ```
+> This will also populate the app with restaurants through http calls using bruno, this action can take a minute.
+> Those are dumb restaurants to mainly show the location based-feature. 
+> You can create more complex restaurants (including products and extras to them) in the restaurant mannagment page.
+> The restaurant's sub-category 'extras' is hidden sub-category that it's item won't show on the restaurant's page.
+
+> Credential for the user that created all restaurants are ido:idoido
+
+
+
 > The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
- 
-**Start the Python CLI client:**
-```bash
-docker-compose run --rm client
-```
+
  
 **Shut everything down:**
 ```bash

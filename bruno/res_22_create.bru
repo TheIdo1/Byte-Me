@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 22 (Rustic Burgers Grill 1)
+  type: http
+  seq: 184
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Burgers Grill 1",
+    "description": "Best Burgers in Beer Sheva",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-4602224",
+    "email": "contact22@rusticburgersgrill1.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 9,
+      "floor": 0,
+      "lat": 31.28592763963995,
+      "long": 34.757998048743474
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Tastyyyyy"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

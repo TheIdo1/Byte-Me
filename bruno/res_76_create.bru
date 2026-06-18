@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 76 (Prime Desserts Express 6)
+  type: http
+  seq: 400
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Prime Desserts Express 6",
+    "description": "Best Desserts in Beer Sheva",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-3234537",
+    "email": "contact76@primedessertsexpress6.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 29,
+      "floor": 0,
+      "lat": 31.29179033353376,
+      "long": 34.83177340332866
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "Simply the best"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

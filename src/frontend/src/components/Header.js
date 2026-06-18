@@ -6,7 +6,7 @@
 //   Logo | Address | Search bar | [Auth controls]
 //
 // Auth controls — logged out: Login + Register buttons
-// Auth controls — logged in:  "+ Add Restaurant" (owners only) + avatar with initials
+// Auth controls — logged in:  "Manage Restaurants" (owners only) + avatar with initials
 //   Clicking the avatar opens a dropdown with the user's name and a logout button.
 //   A full-screen transparent overlay sits behind the dropdown so clicking anywhere
 //   outside it closes the menu (no useRef needed).
@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
-export default function Header({ token, user, isOwner, signOut }) {
+export default function Header({ token, user, isOwner, signOut, toggleTheme, isDarkMode }) {
   const navigate = useNavigate();
 
   // Controlled value for the search input
@@ -59,8 +59,13 @@ export default function Header({ token, user, isOwner, signOut }) {
 
         {/* Logo  */}
         <Link to="/" className="site-header__logo">Byte Me</Link>
+        {/* Dark Mode Button */}
 
-        {/*  Delivery address  */}
+        <button onClick={toggleTheme} className="theme-toggle-btn">
+          {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
+
+        {/* Delivery address  */}
         {token ? (
           <div className="site-header__address">
             <span>📍</span>
@@ -100,7 +105,7 @@ export default function Header({ token, user, isOwner, signOut }) {
           </div>
         )}
 
-        {/*  Search bar */}
+        {/* Search bar */}
         <form className="site-header__search" onSubmit={handleSearch}>
           <input
             type="text"
@@ -120,10 +125,10 @@ export default function Header({ token, user, isOwner, signOut }) {
 
           {token ? (
             <>
-              {/* Only restaurant owners see the "Add Restaurant" shortcut */}
+              {/* UPDATED: Only restaurant owners see the "Manage Restaurants" shortcut */}
               {isOwner && (
-                <Link to="/restaurants/new" className="site-header__add-restaurant">
-                  + Add Restaurant
+                <Link to="/manage/restaurants" className="site-header__add-restaurant">
+                  Manage Restaurants
                 </Link>
               )}
 
@@ -171,7 +176,7 @@ export default function Header({ token, user, isOwner, signOut }) {
             </>
           ) : (
             <>
-              <Link to="/login"    className="site-header__btn site-header__btn--outline">Login</Link>
+              <Link to="/login" className="site-header__btn site-header__btn--outline">Login</Link>
               <Link to="/register" className="site-header__btn site-header__btn--primary">Register</Link>
             </>
           )}

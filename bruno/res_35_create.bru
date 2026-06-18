@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 35 (Prime Mediterranean Eats 7)
+  type: http
+  seq: 236
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Prime Mediterranean Eats 7",
+    "description": "Best Mediterranean in Rishon LeZion",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6258578",
+    "email": "contact35@primemediterraneaneats7.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 27,
+      "floor": 0,
+      "lat": 31.94694795371022,
+      "long": 34.76025242517768
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "We are the best!"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

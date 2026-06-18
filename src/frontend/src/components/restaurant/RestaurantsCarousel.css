@@ -25,14 +25,14 @@
 .carousel-title {
   font-size: 24px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   margin: 0;
   letter-spacing: -0.5px;
 }
 
 .carousel-subtitle {
   font-size: 15px;
-  color: #7b7d85;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
@@ -45,7 +45,7 @@
 
 .see-all-btn {
   background-color: transparent;
-  color: #007a99;
+  color: var(--icon-color);
   border: none;
   padding: 8px 0;
   font-weight: 600;
@@ -122,8 +122,8 @@
 }
 
 .icon-btn {
-  background-color: #e1f4fc; /* Wolt light blue background */
-  color: #007a99; /* Wolt dark blue icon color */
+  background-color: var(--icon-bg); /* Wolt light blue background */
+  color: var(--icon-color); /* Wolt dark blue icon color */
   border: none;
   width: 40px;
   height: 40px;
@@ -136,7 +136,7 @@
 }
 
 .icon-btn:hover {
-  background-color: #d0effb; /* Slightly darker on hover */
+  background-color: var(--icon-bg); /* Slightly darker on hover */
 }
 
 .icon-btn:active {

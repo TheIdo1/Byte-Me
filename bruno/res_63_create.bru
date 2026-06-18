@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 63 (Prime Seafood Express 7)
+  type: http
+  seq: 348
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Prime Seafood Express 7",
+    "description": "Best Seafood in Tel Aviv",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6887704",
+    "email": "contact63@primeseafoodexpress7.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 2,
+      "floor": 0,
+      "lat": 32.05643248069766,
+      "long": 34.78195090515957
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "Very tasty"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

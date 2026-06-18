@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 4 (Rustic Israeli Diner 4)
+  type: http
+  seq: 112
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Israeli Diner 4",
+    "description": "Best Israeli in Beer Sheva",
+    "category": "Israeli",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1917356",
+    "email": "contact4@rusticisraelidiner4.co.il",
+    "subcategories": ["Israeli", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 31,
+      "floor": 0,
+      "lat": 31.215354007675813,
+      "long": 34.82801146818449
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true,
+    "promotionalMessage": "Try Us"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

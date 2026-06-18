@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 59 (Local Seafood House 3)
+  type: http
+  seq: 332
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Seafood House 3",
+    "description": "Best Seafood in Netanya",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-1695198",
+    "email": "contact59@localseafoodhouse3.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 24,
+      "floor": 0,
+      "lat": 32.3477621482443,
+      "long": 34.85111882508282
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

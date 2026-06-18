@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 23 (The Burgers Diner 2)
+  type: http
+  seq: 188
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Burgers Diner 2",
+    "description": "Best Burgers in Netanya",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-6474029",
+    "email": "contact23@theburgersdiner2.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 17,
+      "floor": 0,
+      "lat": 32.3512750686416,
+      "long": 34.81056657481784
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false,
+    "promotionalMessage": "GOOD."
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

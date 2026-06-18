@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 24 (Secret Burgers Taste 3)
+  type: http
+  seq: 192
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Secret Burgers Taste 3",
+    "description": "Best Burgers in Ashdod",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-9981979",
+    "email": "contact24@secretburgerstaste3.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Ashdod",
+      "street": "Menachem Begin",
+      "houseNum": 25,
+      "floor": 0,
+      "lat": 31.804364600364632,
+      "long": 34.60903571218281
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true,
+    "promotionalMessage": "Try Us"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

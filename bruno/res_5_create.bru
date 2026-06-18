@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 5 (Happy Israeli House 5)
+  type: http
+  seq: 116
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Israeli House 5",
+    "description": "Best Israeli in Netanya",
+    "category": "Israeli",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-2133291",
+    "email": "contact5@happyisraelihouse5.co.il",
+    "subcategories": ["Israeli", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 31,
+      "floor": 0,
+      "lat": 32.36048473767338,
+      "long": 34.87932223234114
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "No regreats"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

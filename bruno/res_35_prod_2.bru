@@ -1,0 +1,27 @@
+meta {
+  name: Create Prod 2 for Res 35
+  type: http
+  seq: 238
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/{{resId}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Product 2 - Mediterranean Style",
+    "description": "Delicious Mediterranean dish",
+    "category": "Mediterranean",
+    "price": 50.00,
+    "image": "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=400&q=80",
+    "extras": [],
+    "isExtra": false
+  }
+}

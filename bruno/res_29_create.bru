@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 29 (The Mediterranean Eats 1)
+  type: http
+  seq: 212
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Mediterranean Eats 1",
+    "description": "Best Mediterranean in Haifa",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-5476349",
+    "email": "contact29@themediterraneaneats1.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 36,
+      "floor": 0,
+      "lat": 32.84031702954376,
+      "long": 34.99753892256666
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true,
+    "promotionalMessage": "Very tasty"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 77 (Happy Desserts Bistro 7)
+  type: http
+  seq: 404
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Desserts Bistro 7",
+    "description": "Best Desserts in Netanya",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-5317535",
+    "email": "contact77@happydessertsbistro7.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 60,
+      "floor": 0,
+      "lat": 32.3324227735353,
+      "long": 34.8409325367864
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true,
+    "promotionalMessage": "Very tasty"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Create Prod 3 for Res 54
+  type: http
+  seq: 315
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/{{resId}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Product 3 - Mexican Style",
+    "description": "Delicious Mexican dish",
+    "category": "Mexican",
+    "price": 45.00,
+    "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80",
+    "extras": [],
+    "isExtra": false
+  }
+}

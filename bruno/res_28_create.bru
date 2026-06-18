@@ -1,0 +1,45 @@
+meta {
+  name: Create Res 28 (Crispy Burgers Diner 7)
+  type: http
+  seq: 208
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Burgers Diner 7",
+    "description": "Best Burgers in Jerusalem",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["{{myUserId}}"],
+    "phone": "03-8428946",
+    "email": "contact28@crispyburgersdiner7.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 18,
+      "floor": 0,
+      "lat": 31.817122241277282,
+      "long": 35.223197692023554
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false,
+    "promotionalMessage": "We are the best!"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}
