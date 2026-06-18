@@ -308,19 +308,12 @@ All four components are containerized and managed via Docker Compose.
  
 **Start the backend servers:**
 ```bash
-docker-compose up -d --build cpp-server web-server
+docker-compose up 
 ```
+> This will also populate the app with restaurants through http calls using bruno
 
-**Start the React frontend:**
-```bash
-docker-compose up -d --build frontend
-```
 > The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
- 
-**Start the Python CLI client:**
-```bash
-docker-compose run --rm client
-```
+
  
 **Shut everything down:**
 ```bash
