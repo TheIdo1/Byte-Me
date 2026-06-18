@@ -308,7 +308,7 @@ All four components are containerized and managed via Docker Compose.
  
 **Build Docker:**
 ```bash
-docker compuse build --no-cache
+docker compose build --no-cache
 ```
 
 **Start all app:**
