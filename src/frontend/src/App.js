@@ -70,6 +70,20 @@ export default function App() {
     setToken(null);
   }
 
+  // Session Initialization Guard 
+  // If a token exists but the profile is still being fetched from the server,
+  // we block navigation and show a clean layout using an early return statement.
+  const isAuthenticating = token && !user;
+
+  if (isAuthenticating) {
+    return (
+      <div className="app-initializing-container">
+        <h3>Initializing session...</h3>
+      </div>
+    );
+  }
+
+  // Once completely loaded (or if no token exists), we safely proceed to the main return
   return (
     <BrowserRouter>
       <AppRouter
