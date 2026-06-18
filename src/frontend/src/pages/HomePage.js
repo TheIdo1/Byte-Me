@@ -114,7 +114,6 @@ export default function HomePage({ user }) {
           subtitle="Try a different search term or check the spelling."
           />
         )}
-        <CategoryBar/>
         {searchResults && !noResults && (
           <div className="search-results">
             {hasRestaurants ? (
@@ -143,6 +142,7 @@ export default function HomePage({ user }) {
 
   return (
     <div className="page">
+      <CategoryBar/>
       {sponsoredRestaurants.length > 0 && (
         <RestaurantsCarousel
           title="Sponsored"
