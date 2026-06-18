@@ -155,6 +155,13 @@ export default function Header({ token, user, isOwner, signOut }) {
                     <span className="site-header__user-name">
                       {user?.firstName} {user?.lastName}
                     </span>
+                    <Link
+                      to="/orders"
+                      className="site-header__menu-link"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      My Orders
+                    </Link>
                     <button className="site-header__logout" onClick={handleLogout}>
                       Log out
                     </button>

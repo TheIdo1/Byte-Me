@@ -7,11 +7,24 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Container for the menu sections to keep them centered and bounded */
-.restaurant-menu-container {
-  max-width: 1200px;
+/* Body wrapper: menu content + cart sidebar side by side */
+.restaurant-body {
+  display: flex;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 32px 40px 60px 40px;
+  padding: 0 40px;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.restaurant-menu-container {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 0 60px 0;
+}
+
+.restaurant-sidebar-column {
+  flex-shrink: 0;
 }
 
 .menu-section {
@@ -51,13 +64,23 @@
 }
 
 /* Mobile adjustments */
-@media (max-width: 768px) {
-  .restaurant-menu-container {
-    padding: 24px 16px;
+@media (max-width: 900px) {
+  .restaurant-body {
+    flex-direction: column-reverse;
+    padding: 0 16px;
+    gap: 0;
   }
-  
+
+  .restaurant-sidebar-column {
+    width: 100%;
+  }
+
+  .restaurant-menu-container {
+    padding: 24px 0 60px 0;
+  }
+
   .products-grid {
-    grid-template-columns: 1fr; /* Stack cards in 1 column on small screens */
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 }

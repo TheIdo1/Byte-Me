@@ -66,11 +66,19 @@ export default function LoginPage() {
 
             // check f the server successfully returns a token
             if (data && data.token) {
-                // if theres a token we save it in the browser's localStorage. 
+                // if theres a token we save it in the browser's localStorage.
                 // This acts as our "session pass" for future API requests.
                 localStorage.setItem('token', data.token);
 
-                // Redirect the user to the home page ('/')
+                // If the user came from a cart flow, return them to the restaurant
+                // page so their saved cart can be restored. Otherwise go home.
+                try {
+                    const pending = JSON.parse(sessionStorage.getItem('pendingCart'));
+                    if (pending?.returnUrl) {
+                        navigate(pending.returnUrl);
+                        return;
+                    }
+                } catch {}
                 navigate('/');
             } else {
                 setError('Login succeeded but no token was returned from the server.');

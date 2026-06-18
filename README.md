@@ -2,7 +2,7 @@
 
 ![byte me wide picture](resources/byteme_wide_picture.png)
 
-Byte-Me is a robust backend system for a food delivery application. It features a modern **Node.js/Express RESTful API** built with an **MVC architecture**, seamlessly integrated with a high-performance **C++17 Recommendation Engine** via TCP sockets. 
+Byte-Me is a full-stack food delivery application. It features a **React 18 SPA** frontend, a **Node.js/Express RESTful API** built with an **MVC architecture**, and a high-performance **C++17 Recommendation Engine** integrated via TCP sockets.
 
 Given a user and a product they are viewing, the recommendation engine uses a collaborative filtering algorithm based on shared watch history with similar users to recommend up to 10 other products they might like.
 
@@ -12,11 +12,12 @@ Given a user and a product they are viewing, the recommendation engine uses a co
 
 ## System Architecture
  
-The project is divided into three main components:
+The project is divided into four main components:
  
-1. **Web Server (Node.js/Express):** Handles all client HTTP requests using an MVC pattern. Manages Restaurants, Products, Orders, Users, Authentication, and Search. Data is stored in-memory.
-2. **Recommendation Engine (C++17):** A dedicated TCP server that manages user watch histories and calculates collaborative-filtering scores to provide real-time product recommendations.
-3. **Internal CLI Client (Python):** A command-line interface for testing and interacting directly with the C++ recommendation engine over a TCP socket.
+1. **Frontend (React 18):** A single-page application with JWT-based auth, restaurant browsing sorted by proximity, global search, a cart sidebar, an orders history page, and a restaurant-owner form to list new restaurants.
+2. **Web Server (Node.js/Express):** Handles all client HTTP requests using an MVC pattern. Manages Restaurants, Products, Orders, Users, Authentication, and Search. Data is stored in-memory.
+3. **Recommendation Engine (C++17):** A dedicated TCP server that manages user watch histories and calculates collaborative-filtering scores to provide real-time product recommendations.
+4. **Internal CLI Client (Python):** A command-line interface for testing and interacting directly with the C++ recommendation engine over a TCP socket.
 ---
  
 ## Features
@@ -33,6 +34,17 @@ The project is divided into three main components:
 | Search | `/api/search/:query` | Case-insensitive search across restaurants and products |
  
 > See `WebServerAPICalls.md` for full request/response documentation.
+
+### React Frontend
+
+| Page / Component | Route | Description |
+|---|---|---|
+| Home | `/` | Browses all restaurants sorted by sponsored status then distance (Haversine). Displays per-category carousels and search results. |
+| Restaurant | `/restaurants/:id` | Shows the menu with a cart sidebar. Clicking a product opens a modal and updates the C++ recommendation engine. |
+| Add Restaurant | `/restaurants/new` | Form for restaurant owners to list a new restaurant (guarded by `isRestaurantOwner` flag). |
+| Orders | `/orders` | Lists the logged-in user's order history with restaurant name, date, and item breakdown. |
+| Login | `/login` | Authenticates and stores a JWT in `localStorage`. |
+| Register | `/register` | Creates a new user account. Accepts an `isRestaurantOwner` flag to unlock the owner flow. |
 
 ### Web API Session Example (Node.js & Express)
 
@@ -255,6 +267,22 @@ Byte-Me/
 │   ├── client/                    # Python CLI Client
 │   │   ├── Dockerfile
 │   │   └── main.py
+│   ├── frontend/                  # React 18 SPA
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   └── src/
+│   │       ├── App.js             # Auth state root
+│   │       ├── router.js          # Route definitions
+│   │       ├── api/               # Axios wrappers per resource
+│   │       ├── components/        # Reusable UI components
+│   │       │   ├── Header.js
+│   │       │   ├── CategoryBar.js
+│   │       │   ├── EmptyState.js
+│   │       │   ├── product/       # ProductCard, ProductModal, ProductsCarousel
+│   │       │   ├── restaurant/    # RestaurantCard, RestaurantsCarousel
+│   │       │   └── restaurantPage/# CartSidebar, CategoryNav, RestaurantHeader
+│   │       └── pages/             # HomePage, LoginPage, RegisterPage,
+│   │                              # RestaurantPage, AddRestaurantPage, OrdersPage
 │   ├── server/                    # C++17 Recommendation Engine (TCP Server)
 │   │   ├── include/               # Header files
 │   │   ├── App.cpp
@@ -276,12 +304,18 @@ Byte-Me/
 ---
 ## Building & Running
  
-All three components are containerized and managed via Docker Compose.
+All four components are containerized and managed via Docker Compose.
  
-**Start the servers:**
+**Start the backend servers:**
 ```bash
 docker-compose up -d --build cpp-server web-server
 ```
+
+**Start the React frontend:**
+```bash
+docker-compose up -d --build frontend
+```
+> The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
  
 **Start the Python CLI client:**
 ```bash

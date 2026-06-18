@@ -5,6 +5,12 @@ const getAllOrders = (req, res) => {
     res.json(ordersModel.getAllOrders());
 }
 
+// Returns only the orders belonging to the authenticated user
+const getMyOrders = (req, res) => {
+    const all = ordersModel.getAllOrders();
+    res.json(all.filter(o => o.customerId === req.userId));
+};
+
 //Returns a single order by ID. Returns 404 if not found.
 const getOrderById = (req, res) => {
     const orderId = req.params.id;
@@ -65,6 +71,7 @@ const deleteOrder = (req,res) => {
 
 module.exports = {
     getAllOrders,
+    getMyOrders,
     getOrderById,
     createOrder,
     updateOrder,

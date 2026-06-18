@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import RestaurantPage from './pages/RestaurantPage';
 import AddRestaurantPage from './pages/AddRestaurantPage';
+import OrdersPage from './pages/OrdersPage';
 import ProductModal from './components/product/ProductModal';
 
 export default function AppRouter({ token, user, isOwner, signOut }) {
@@ -31,11 +32,12 @@ export default function AppRouter({ token, user, isOwner, signOut }) {
           <Route path="/restaurants/new" element={<AddRestaurantPage token={token} user={user} isOwner={isOwner} />} />
 
           {/* Dynamic route for individual restaurant pages */}
-          <Route path="/restaurants/:restaurantId" element={<RestaurantPage />}>
+          <Route path="/restaurants/:restaurantId" element={<RestaurantPage token={token} />}>
             {/* Child route for the product modal — matches /restaurants/:id/products/:productId */}
             <Route path="products/:productId" element={<ProductModal />} />
           </Route>
 
+          <Route path="/orders" element={<OrdersPage token={token} />} />
           <Route path="/" element={<HomePage user={user} />} />
         </Routes>
       </main>
