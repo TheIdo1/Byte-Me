@@ -63,3 +63,9 @@
   color: var(--primary);
   border-bottom: 2px solid var(--primary);
 }
+
+.admin-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
