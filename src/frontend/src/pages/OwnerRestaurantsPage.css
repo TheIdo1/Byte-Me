@@ -63,3 +63,43 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--shadow-color-hover);
 }
+
+.owner-restaurant-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover; /* Keeps aspect ratio without stretching */
+  border-radius: 8px;
+  margin-right: 16px;
+  flex-shrink: 0; /* Prevents the image from being squished */
+  background-color: #f0f0f0; /* Placeholder color while loading */
+}
+
+.owner-restaurant-info {
+  flex: 1; /* Takes up the remaining space */
+  overflow: hidden;
+}
+
+.owner-restaurant-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  color: var(--text-main, #202125);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds '...' if the name is too long */
+}
+
+.owner-restaurant-info p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted, #7a7d82);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.owner-restaurant-action {
+  font-size: 20px;
+  color: var(--text-muted, #7a7d82);
+  margin-left: 16px;
+  font-weight: bold;
+}
