@@ -320,6 +320,8 @@ docker compose up --force-recreate
 > You can create more complex restaurants (including products and extras to them) in the restaurant mannagment page.
 > The restaurant's sub-category 'extras' is hidden sub-category that it's item won't show on the restaurant's page.
 
+> Credential for the user that created all restaurants are ido:idoido
+
 
 
 > The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
