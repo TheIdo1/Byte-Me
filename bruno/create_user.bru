@@ -28,3 +28,10 @@ body:json {
     "isRestaurantOwner": true
   }
 }
+
+script:post-response {
+  const responseData = res.getBody();
+  if (responseData && responseData.id) {
+    bru.setVar("myUserId", responseData.id);
+  }
+}
