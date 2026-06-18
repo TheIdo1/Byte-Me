@@ -20,14 +20,14 @@
 
 .form-group label {
   font-weight: 600;
-  color: #202125;
+  color: var(--text-main);
   font-size: 14px;
 }
 
 .form-group input,
 .form-group textarea {
   padding: 10px 14px;
-  border: 1px solid #eaeaec;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s;
@@ -37,11 +37,11 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #009de0;
+  border-color: var(--primary);
 }
 
 .submit-btn {
-  background-color: #009de0;
+  background-color: var(--primary);
   color: white;
   padding: 12px 24px;
   border: none;
@@ -55,30 +55,11 @@
 }
 
 .submit-btn:hover {
-  background-color: #0089c4;
-}
-
-/* Danger Zone Styles */
-.danger-zone {
-  margin-top: 40px;
-  padding-top: 24px;
-  border-top: 2px dashed #ffcccc;
-}
-
-.danger-zone h3 {
-  color: #d32f2f;
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-
-.danger-zone p {
-  color: #7a7d82;
-  font-size: 14px;
-  margin-bottom: 16px;
+  background-color: var(--primary-hover);
 }
 
 .delete-btn {
-  background-color: #d32f2f;
+  background-color: var(--danger);
   color: white;
   padding: 10px 20px;
   border: none;
@@ -92,15 +73,14 @@
   background-color: #b71c1c;
 }
 
-
 .error-message {
-  background-color: #ffebee;
-  color: #c62828;
+  background-color: var(--danger-light);
+  color: var(--danger);
   padding: 12px 16px;
   border-radius: 8px;
   margin-bottom: 20px;
   font-weight: 500;
-  border: 1px solid #ffcdd2;
+  border: 1px solid var(--danger-border);
 }
 
 .image-preview-container {
@@ -109,52 +89,9 @@
   overflow: hidden;
   width: 150px;
   height: 100px;
-  background-color: #f0f0f0;
+  background-color: var(--input-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #ccc;
-}
-
-.image-preview-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.image-preview-error {
-  font-size: 12px;
-  color: #7a7d82;
-  text-align: center;
-  padding: 8px;
-}
-
-/* Safe Delete Input Styles */
-.safe-delete-group {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.safe-delete-group label {
-  font-size: 14px;
-  color: #202125;
-}
-
-.safe-delete-group input {
-  padding: 10px 14px;
-  border: 1px solid #ffcccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.safe-delete-group input:focus {
-  outline: none;
-  border-color: #d32f2f;
-}
-
-.delete-btn:disabled {
-  background-color: #ffcdd2;
-  cursor: not-allowed;
+  border: 1px dashed var(--border-color);
 }

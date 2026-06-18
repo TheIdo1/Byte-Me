@@ -1,17 +1,17 @@
 /* src/frontend/src/components/admin/ProductForm.css */
 
 .product-form-container {
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   padding: 24px;
   border-radius: 12px;
-  border: 1px solid #eaeaec;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .product-form-container h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  color: #202125;
+  color: var(--text-main);
   font-size: 20px;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .save-product-btn {
-  background-color: #009de0;
+  background-color: var(--primary);
   color: white;
   padding: 10px 24px;
   border: none;
@@ -39,19 +39,13 @@
 }
 
 .save-product-btn:hover:not(:disabled) {
-  background-color: #0089c4;
-}
-
-.save-product-btn:disabled {
-  background-color: #99d8f3;
-  cursor: not-allowed;
+  background-color: var(--primary-hover);
 }
 
 .cancel-btn {
-  background-color: #f0f0f0;
-  color: #202125;
+  background-color: transparent;
   padding: 10px 24px;
-  border: none;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
@@ -59,26 +53,26 @@
 }
 
 .cancel-btn:hover {
-  background-color: #e4e4e4;
+  background-color: var(--input-bg);
 }
 
 .form-group select {
     padding: 10px 14px;
-    border: 1px solid #eaeaec;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
     width: 100%;
-    background-color: white;
+    background-color: var(--bg-card);
 }
 
 .form-error-message {
-  background-color: #ffebee;
-  color: #d32f2f;
+  background-color: var(--danger-light);
+  color: var(--danger);
   padding: 12px 16px;
   border-radius: 8px;
   margin-bottom: 16px;
   font-weight: 500;
-  border: 1px solid #ffcdd2;
+  border: 1px solid var(--danger-border);
 }
 
 .checkbox-group {
@@ -102,10 +96,10 @@
 .extras-list-container {
   max-height: 150px;
   overflow-y: auto;
-  border: 1px solid #eaeaec;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 12px;
-  background-color: #fafafa;
+  background-color: var(--input-bg);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -129,12 +123,12 @@
   font-weight: 500;
   cursor: pointer;
   font-size: 14px;
-  color: #202125;
+  color: var(--text-main);
 }
 
 .no-extras-msg {
   margin: 0;
-  color: #7a7d82;
+  color: var(--text-muted);
   font-size: 14px;
   text-align: center;
   padding: 10px 0;

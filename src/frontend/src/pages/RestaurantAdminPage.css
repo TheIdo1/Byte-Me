@@ -2,7 +2,7 @@
 
 .admin-page-container {
   min-height: 100vh;
-  background-color: #f8f8f8;
+  background-color: var(--bg-page);
   padding: 40px 24px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -18,14 +18,14 @@
 .admin-header h1 {
   font-size: 28px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   margin: 0;
 }
 
 .back-btn {
   background: none;
   border: none;
-  color: #7a7d82;
+  color: var(--text-muted);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -36,7 +36,7 @@
 }
 
 .back-btn:hover {
-  color: #202125;
+  color: var(--text-main);
 }
 
 .admin-tabs {
@@ -44,7 +44,7 @@
   margin: 0 auto;
   display: flex;
   gap: 16px;
-  border-bottom: 2px solid #eaeaec;
+  border-bottom: 2px solid var(--border-color);
   margin-bottom: 32px;
 }
 
@@ -54,46 +54,12 @@
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
-  color: #7a7d82;
+  color: var(--text-muted);
   cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px; /* Pull it down to overlap the container border */
-  transition: all 0.2s;
-}
-
-.admin-tab:hover {
-  color: #202125;
+  transition: color 0.2s;
 }
 
 .admin-tab.active {
-  color: #009de0;
-  border-bottom-color: #009de0;
-}
-
-.admin-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-}
-
-.placeholder-content {
-  text-align: center;
-  padding: 60px 20px;
-  color: #7a7d82;
-}
-
-.placeholder-content h3 {
-  color: #202125;
-  margin-bottom: 12px;
-}
-
-.admin-loading {
-  text-align: center;
-  padding: 80px;
-  color: #7a7d82;
-  font-size: 18px;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
 }

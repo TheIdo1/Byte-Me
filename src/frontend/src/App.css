@@ -6,8 +6,8 @@
   align-items: center;
   height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #7a7d82;
-  background-color: #f8f8f8;
+  color: var(--text-muted);
+  background-color: var(--bg-page);
 }
 
 .app-initializing-container h3 {
