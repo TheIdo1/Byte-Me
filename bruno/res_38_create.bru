@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 38 (Local Cafe Spot 3)
+  type: http
+  seq: 248
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Cafe Spot 3",
+    "description": "Best Cafe in Haifa",
+    "category": "Cafe",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-5932264",
+    "email": "contact38@localcafespot3.co.il",
+    "subcategories": ["Cafe", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 18,
+      "floor": 0,
+      "lat": 32.826195779278684,
+      "long": 34.98762921156616
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

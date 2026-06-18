@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 61 (Urban Seafood Diner 5)
+  type: http
+  seq: 340
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Seafood Diner 5",
+    "description": "Best Seafood in Tiberias",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-1909344",
+    "email": "contact61@urbanseafooddiner5.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 32,
+      "floor": 0,
+      "lat": 32.81572873509385,
+      "long": 35.497734415757144
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

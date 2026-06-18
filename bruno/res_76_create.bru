@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 76 (The Desserts Taste 6)
+  type: http
+  seq: 400
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Desserts Taste 6",
+    "description": "Best Desserts in Beer Sheva",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-9981985",
+    "email": "contact76@thedessertstaste6.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 70,
+      "floor": 0,
+      "lat": 31.243436120592264,
+      "long": 34.766736106427146
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 45 (Rustic Kosher Express 3)
+  type: http
+  seq: 276
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Kosher Express 3",
+    "description": "Best Kosher in Tel Aviv",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-9661797",
+    "email": "contact45@rustickosherexpress3.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 19,
+      "floor": 0,
+      "lat": 32.040473297700466,
+      "long": 34.73737432884752
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

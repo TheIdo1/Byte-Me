@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 64 (The Fine Dining Diner 1)
+  type: http
+  seq: 352
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Fine Dining Diner 1",
+    "description": "Best Fine Dining in Jerusalem",
+    "category": "Fine Dining",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6176157",
+    "email": "contact64@thefinediningdiner1.co.il",
+    "subcategories": ["Fine Dining", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 59,
+      "floor": 0,
+      "lat": 31.773776788310098,
+      "long": 35.19148911728414
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

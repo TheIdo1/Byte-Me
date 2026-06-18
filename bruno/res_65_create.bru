@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 65 (Happy Fine Dining Grill 2)
+  type: http
+  seq: 356
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Fine Dining Grill 2",
+    "description": "Best Fine Dining in Haifa",
+    "category": "Fine Dining",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-8697277",
+    "email": "contact65@happyfinedininggrill2.co.il",
+    "subcategories": ["Fine Dining", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 29,
+      "floor": 0,
+      "lat": 32.76062579542932,
+      "long": 35.03909538211001
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

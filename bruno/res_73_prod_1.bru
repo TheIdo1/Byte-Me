@@ -1,0 +1,27 @@
+meta {
+  name: Create Prod 1 for Res 73
+  type: http
+  seq: 389
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/{{resId}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Product 1 - Desserts Style",
+    "description": "Delicious Desserts dish",
+    "category": "Desserts",
+    "price": 26.00,
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80",
+    "extras": [],
+    "isExtra": false
+  }
+}

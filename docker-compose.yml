@@ -52,3 +52,11 @@ services:
     depends_on:
       - cpp-server
       - web-server
+
+  seeder:
+      image: node:20-alpine
+      command: sh -c "echo 'Waiting 10s for web-server to boot...' && sleep 10 && echo 'Installing Bruno CLI...' && npm install -g @usebruno/cli && echo 'Running API Seeder (Populating Restaurants)...' && cd /app/bruno && bru run && echo 'Finished Seeding."
+      volumes:
+        - ./bruno:/app/bruno
+      depends_on:
+        - web-server

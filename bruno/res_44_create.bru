@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 44 (Spicy Kosher Express 2)
+  type: http
+  seq: 272
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Kosher Express 2",
+    "description": "Best Kosher in Rishon LeZion",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-1273674",
+    "email": "contact44@spicykosherexpress2.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 31,
+      "floor": 0,
+      "lat": 32.01308684913562,
+      "long": 34.757916363928786
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

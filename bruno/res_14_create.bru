@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 14 (Prime Italian Crave 7)
+  type: http
+  seq: 152
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Prime Italian Crave 7",
+    "description": "Best Italian in Netanya",
+    "category": "Italian",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6874400",
+    "email": "contact14@primeitaliancrave7.co.il",
+    "subcategories": ["Italian", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 49,
+      "floor": 0,
+      "lat": 32.319225698083045,
+      "long": 34.89225386623187
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

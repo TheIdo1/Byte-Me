@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 35 (Spicy Mediterranean House 7)
+  type: http
+  seq: 236
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Mediterranean House 7",
+    "description": "Best Mediterranean in Rishon LeZion",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-7595839",
+    "email": "contact35@spicymediterraneanhouse7.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 63,
+      "floor": 0,
+      "lat": 31.981611439998872,
+      "long": 34.83779919447263
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}
