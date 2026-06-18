@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 69 (Urban Fine Dining Taste 6)
+  type: http
+  seq: 372
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Fine Dining Taste 6",
+    "description": "Best Fine Dining in Ashdod",
+    "category": "Fine Dining",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-5549559",
+    "email": "contact69@urbanfinediningtaste6.co.il",
+    "subcategories": ["Fine Dining", "Drinks", "Specials"],
+    "address": {
+      "city": "Ashdod",
+      "street": "Menachem Begin",
+      "houseNum": 38,
+      "floor": 0,
+      "lat": 31.777982424485355,
+      "long": 34.64252950626592
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

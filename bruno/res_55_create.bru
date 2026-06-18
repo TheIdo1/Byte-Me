@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 55 (Crispy Mexican Bite 6)
+  type: http
+  seq: 316
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Mexican Bite 6",
+    "description": "Best Mexican in Jerusalem",
+    "category": "Mexican",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6127203",
+    "email": "contact55@crispymexicanbite6.co.il",
+    "subcategories": ["Mexican", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 83,
+      "floor": 0,
+      "lat": 31.77021364509849,
+      "long": 35.18849286993395
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

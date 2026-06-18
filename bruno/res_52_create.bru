@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 52 (Crispy Mexican Eats 3)
+  type: http
+  seq: 304
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Mexican Eats 3",
+    "description": "Best Mexican in Tiberias",
+    "category": "Mexican",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-8273659",
+    "email": "contact52@crispymexicaneats3.co.il",
+    "subcategories": ["Mexican", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 82,
+      "floor": 0,
+      "lat": 32.82925562973525,
+      "long": 35.57866602421665
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

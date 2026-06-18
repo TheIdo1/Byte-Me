@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 67 (Local Fine Dining Express 4)
+  type: http
+  seq: 364
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Local Fine Dining Express 4",
+    "description": "Best Fine Dining in Beer Sheva",
+    "category": "Fine Dining",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-3175934",
+    "email": "contact67@localfinediningexpress4.co.il",
+    "subcategories": ["Fine Dining", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 64,
+      "floor": 0,
+      "lat": 31.29495133686647,
+      "long": 34.793377579508345
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

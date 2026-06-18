@@ -5,6 +5,7 @@ import { getAllRestaurants } from '../api/restaurantsApi';
 import RestaurantsCarousel from '../components/restaurant/RestaurantsCarousel';
 import ProductsCarousel from '../components/product/ProductsCarousel';
 import EmptyState from '../components/EmptyState';
+import CategoryBar from '../components/CategoryBar';
 import './HomePage.css';
 
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -19,7 +20,30 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function toCardProps(r) {
+function toCardProps(r, userLat, userLon) {
+  // Calculate distance
+  const dist = haversineDistance(userLat, userLon, r.address?.lat, r.address?.long);
+
+  let deliveryTime;
+  let deliveryFee;
+
+  if (dist === Infinity || dist > 25) {
+    // if distance is long or unknown show default state
+    deliveryTime = '45-60 min';
+    deliveryFee = 25;
+  } else {
+    // dynamic calculation
+    const minTime = Math.max(20, Math.round(15 + (dist * 4)));
+    const maxTime = minTime + 10;
+    deliveryTime = `${minTime}-${maxTime} min`;
+    const baseFee = 10;
+    const distanceFee = Math.round(dist * 2);
+    deliveryFee = baseFee + distanceFee;
+
+  }
+
+
+
   return {
     id: r.id,
     name: r.name,
@@ -28,8 +52,8 @@ function toCardProps(r) {
     isSponsored: r.isSponsored,
     promotion: r.promotionalMessage,
     tags: r.subcategories?.length ? r.subcategories : [r.category].filter(Boolean),
-    deliveryTime: null,
-    deliveryFee: 0,
+    deliveryTime: deliveryTime,
+    deliveryFee: deliveryFee,
   };
 }
 
@@ -46,7 +70,7 @@ export default function HomePage({ user }) {
   useEffect(() => {
     getAllRestaurants()
       .then(setRestaurants)
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -66,8 +90,9 @@ export default function HomePage({ user }) {
       .finally(() => setSearchLoading(false));
   }, [q]);
 
-  const userLat = user?.address?.lat;
-  const userLon = user?.address?.long;
+  // Fallback to 507 Building if user address is missing 32.071297203893124, 34.84464972069747
+  const userLat = user?.address?.lat ?? 32.071297203893124;
+  const userLon = user?.address?.long ?? 34.84464972069747;
 
   const sortedRestaurants = useMemo(() => {
     return [...restaurants].sort((a, b) => {
@@ -107,7 +132,7 @@ export default function HomePage({ user }) {
               <RestaurantsCarousel
                 title="Restaurants"
                 subtitle={`${searchResults.restaurants.length} found`}
-                restaurants={searchResults.restaurants.map(toCardProps)}
+                restaurants={searchResults.restaurants.map(r => toCardProps(r, userLat, userLon))}
               />
             ) : (
               <EmptyState icon="🏠" title="No restaurants matched" subtitle="We couldn't find a restaurant for this search." />
@@ -129,11 +154,12 @@ export default function HomePage({ user }) {
 
   return (
     <div className="page">
+      <CategoryBar />
       {sponsoredRestaurants.length > 0 && (
         <RestaurantsCarousel
           title="Sponsored"
           subtitle="Top picks for you"
-          restaurants={sponsoredRestaurants.map(toCardProps)}
+          restaurants={sponsoredRestaurants.map(r => toCardProps(r, userLat, userLon))}
         />
       )}
       {categories.map(category => (
@@ -142,7 +168,7 @@ export default function HomePage({ user }) {
           title={category}
           restaurants={sortedRestaurants
             .filter(r => r.category === category)
-            .map(toCardProps)}
+            .map(r => toCardProps(r, userLat, userLon))}
         />
       ))}
       {restaurants.length === 0 && (

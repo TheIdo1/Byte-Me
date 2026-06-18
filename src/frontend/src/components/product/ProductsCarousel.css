@@ -23,14 +23,14 @@
 .products-carousel-container .carousel-title {
   font-size: 24px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   margin: 0;
   letter-spacing: -0.5px;
 }
 
 .products-carousel-container .carousel-subtitle {
   font-size: 15px;
-  color: #7b7d85;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
@@ -43,7 +43,7 @@
 
 .products-carousel-container .see-all-btn {
   background-color: transparent;
-  color: #007a99;
+  color: var(--icon-color);
   border: none;
   padding: 8px 0;
   font-weight: 600;
@@ -64,8 +64,8 @@
 }
 
 .products-carousel-container .icon-btn {
-  background-color: #e1f4fc;
-  color: #007a99;
+  background-color: var(--icon-bg);
+  color: var(--icon-color);
   border: none;
   width: 40px;
   height: 40px;
@@ -78,7 +78,7 @@
 }
 
 .products-carousel-container .icon-btn:hover {
-  background-color: #d0effb;
+  background-color: var(--icon-bg);
 }
 
 .products-carousel-container .icon-btn:active {

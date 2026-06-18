@@ -4,13 +4,13 @@
   align-items: center;
   justify-content: center;
   padding: 32px 16px;
-  background: #b3d9f5;
+  background: var(--primary-light);
 }
 
 .add-restaurant-card {
-  background: #ffffff;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 157, 224, 0.12);
+  box-shadow: 0 8px 32px var(--shadow-color-hover);
   padding: 40px 48px;
   width: 100%;
   max-width: 560px;
@@ -23,20 +23,20 @@
 .add-restaurant-card h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
 .add-restaurant-card .subtitle {
   font-size: 0.9rem;
-  color: #72727a;
+  color: var(--text-muted);
   margin-bottom: 32px;
 }
 
 .add-restaurant-error {
-  background: #fff5f5;
-  border: 1px solid #fed7d7;
-  color: #c53030;
+  background: var(--danger-light);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 0.875rem;
@@ -48,7 +48,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #009de0;
+  color: var(--primary);
   margin-bottom: 12px;
   margin-top: 24px;
 }
@@ -79,19 +79,19 @@
 .field label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #202125;
+  color: var(--text-main);
 }
 
 .field input,
 .field select,
 .field textarea {
   padding: 10px 14px;
-  border: 1.5px solid #cce9f7;
+  border: 1.5px solid var(--border-accent);
   border-radius: 8px;
   font-size: 0.9rem;
   font-family: inherit;
-  color: #202125;
-  background: #f0f9ff;
+  color: var(--text-main);
+  background: var(--input-bg-light);
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   outline: none;
 }
@@ -102,45 +102,45 @@
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: #a8d4ed;
+  color: var(--primary-light);
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  border-color: #009de0;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(0, 157, 224, 0.15);
+  border-color: var(--primary);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px var(--shadow-color-hover);
 }
 
 .field input.input-error,
 .field select.input-error,
 .field textarea.input-error {
-  border-color: #e53e3e;
-  background: #fff5f5;
+  border-color: var(--danger);
+  background: var(--danger-light);
 }
 
 .field input.input-error:focus,
 .field select.input-error:focus,
 .field textarea.input-error:focus {
-  border-color: #e53e3e;
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--shadow-color-hover);
 }
 
 .field-error {
   font-size: 0.75rem;
-  color: #e53e3e;
+  color: var(--danger);
   margin-top: 2px;
 }
 
 .required {
-  color: #009de0;
+  color: var(--primary);
   margin-left: 2px;
 }
 
 .divider {
   height: 1px;
-  background: #e0f2fb;
+  background: var(--primary-light);
   margin: 24px 0 20px;
 }
 
@@ -148,8 +148,8 @@
   width: 100%;
   padding: 12px;
   margin-top: 28px;
-  background: #009de0;
-  color: #ffffff;
+  background: var(--primary);
+  color: var(--bg-card);
   font-size: 0.95rem;
   font-weight: 600;
   border: none;
@@ -159,7 +159,7 @@
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #0089c4;
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -188,7 +188,7 @@
 }
 
 .guard-secondary-link {
-  color: #009de0;
+  color: var(--primary);
   font-weight: 600;
   font-size: 0.85rem;
   text-decoration: none;
@@ -207,10 +207,10 @@
 .image-mode-btn {
   flex: 1;
   padding: 8px 10px;
-  border: 1.5px solid #cce9f7;
+  border: 1.5px solid var(--border-accent);
   border-radius: 8px;
-  background: #f0f9ff;
-  color: #72727a;
+  background: var(--input-bg-light);
+  color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -218,9 +218,9 @@
 }
 
 .image-mode-btn--active {
-  background: #009de0;
-  border-color: #009de0;
-  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--bg-card);
 }
 
 .image-preview {
@@ -229,5 +229,5 @@
   max-height: 180px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1.5px solid #cce9f7;
+  border: 1.5px solid var(--border-accent);
 }

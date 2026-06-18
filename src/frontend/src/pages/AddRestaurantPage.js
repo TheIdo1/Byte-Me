@@ -16,6 +16,7 @@ const INITIAL_FORM = {
   phone: '',
   email: '',
   image: '',
+  rating: '',
   promotionalMessage: '',
   address: { city: '', street: '', houseNum: '', floor: '', lat: '', long: '' },
 };
@@ -30,73 +31,45 @@ const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
 // An empty object means the form is valid and ready to submit.
 function validate(form) {
   const errs = {};
-  if (!form.name.trim())                    errs.name     = 'Restaurant name is required.';
-  if (!form.category)                       errs.category = 'Category is required.';
-  if (!form.phone.trim())                   errs.phone    = 'Phone number is required.';
-  else if (!PHONE_RE.test(form.phone.trim())) errs.phone  = 'Enter a valid phone number.';
-  if (!form.email.trim())                   errs.email    = 'Email is required.';
-  else if (!EMAIL_RE.test(form.email))      errs.email    = 'Enter a valid email address.';
-  if (!form.image.trim())                   errs.image    = 'A restaurant image is required.';
+  if (!form.name.trim()) errs.name = 'Restaurant name is required.';
+  if (!form.category) errs.category = 'Category is required.';
+  if (!form.phone.trim()) errs.phone = 'Phone number is required.';
+  else if (!PHONE_RE.test(form.phone.trim())) errs.phone = 'Enter a valid phone number.';
+  if (!form.email.trim()) errs.email = 'Email is required.';
+  else if (!EMAIL_RE.test(form.email)) errs.email = 'Enter a valid email address.';
+  if (!form.image.trim()) errs.image = 'A restaurant image is required.';
 
-  if (!form.address.city.trim())            errs.city     = 'City is required.';
-  if (!form.address.street.trim())          errs.street   = 'Street is required.';
+  if (!form.address.city.trim()) errs.city = 'City is required.';
+  if (!form.address.street.trim()) errs.street = 'Street is required.';
 
   const houseNum = parseInt(form.address.houseNum, 10);
-  if (form.address.houseNum === '')         errs.houseNum = 'House number is required.';
+  if (form.address.houseNum === '') errs.houseNum = 'House number is required.';
   else if (isNaN(houseNum) || houseNum < 1) errs.houseNum = 'Must be a positive number.';
 
   const floor = parseInt(form.address.floor, 10);
-  if (form.address.floor === '')            errs.floor    = 'Floor is required.';
-  else if (isNaN(floor) || floor < 0)       errs.floor    = 'Must be 0 or higher.';
+  if (form.address.floor === '') errs.floor = 'Floor is required.';
+  else if (isNaN(floor) || floor < 0) errs.floor = 'Must be 0 or higher.';
 
-  if (form.address.lat === '')              errs.lat  = 'Latitude is required.';
-  else { const v = parseFloat(form.address.lat);  if (isNaN(v) || v < -90  || v > 90)  errs.lat  = 'Must be between -90 and 90.'; }
-  if (form.address.long === '')             errs.long = 'Longitude is required.';
+  if (form.address.lat === '') errs.lat = 'Latitude is required.';
+  else { const v = parseFloat(form.address.lat); if (isNaN(v) || v < -90 || v > 90) errs.lat = 'Must be between -90 and 90.'; }
+  if (form.address.long === '') errs.long = 'Longitude is required.';
   else { const v = parseFloat(form.address.long); if (isNaN(v) || v < -180 || v > 180) errs.long = 'Must be between -180 and 180.'; }
+
+  const rating = parseFloat(form.rating);
+  if (form.rating === '') errs.rating = 'Rating is required.';
+  else if (isNaN(rating) || rating < 1 || rating > 10) errs.rating = 'Must be between 1 and 10.';
 
   return errs;
 }
 
 export default function AddRestaurantPage({ token, user, isOwner }) {
-  const [form, setForm]       = useState(INITIAL_FORM);
-  const [errors, setErrors]   = useState({});
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
-  // Whether the image field is filled via a pasted URL or an uploaded file.
-  const [imageMode, setImageMode] = useState('url');
   const navigate = useNavigate();
 
-  // Switching modes clears whatever was in the image field so a leftover
-  // data URL or pasted link from the other mode can't be submitted by mistake.
-  function handleImageModeChange(mode) {
-    setImageMode(mode);
-    setForm((prev) => ({ ...prev, image: '' }));
-  }
-
-  // Reads the chosen file into a base64 data URL — there's no upload
-  // endpoint on the server, so the image is stored as a data URL string
-  // exactly like a pasted image link would be.
-  function handleImageFile(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.size > MAX_IMAGE_BYTES) {
-      setErrors((prev) => ({ ...prev, image: 'Image must be smaller than 3MB.' }));
-      setTouched((prev) => ({ ...prev, image: true }));
-      e.target.value = '';
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const newForm = { ...form, image: reader.result };
-      setForm(newForm);
-      setTouched((prev) => ({ ...prev, image: true }));
-      setErrors(validate(newForm));
-    };
-    reader.readAsDataURL(file);
-  }
 
   // Updates form state on every keystroke. Re-validates only fields the user
   // has already visited so errors don't flash on untouched inputs.
@@ -141,6 +114,7 @@ export default function AddRestaurantPage({ token, user, isOwner }) {
         email: form.email.trim(),
         image: form.image.trim(),
         promotionalMessage: form.promotionalMessage.trim(),
+        rating: parseFloat(parseFloat(form.rating).toFixed(1)),
         authorizedUsers: [user.id],
         address: {
           city: form.address.city.trim(),
@@ -168,7 +142,7 @@ export default function AddRestaurantPage({ token, user, isOwner }) {
       ? form.address[name]
       : form[name],
     onChange: handleChange,
-    onBlur:   handleBlur,
+    onBlur: handleBlur,
     className: touched[name] && errors[name] ? 'input-error' : '',
   });
 
@@ -241,42 +215,28 @@ export default function AddRestaurantPage({ token, user, isOwner }) {
             </div>
 
             <div className="field">
-              <label>Restaurant image <span className="required">*</span></label>
-              <div className="image-mode-toggle">
-                <button
-                  type="button"
-                  className={`image-mode-btn ${imageMode === 'url' ? 'image-mode-btn--active' : ''}`}
-                  onClick={() => handleImageModeChange('url')}
-                >
-                  Use a URL
-                </button>
-                <button
-                  type="button"
-                  className={`image-mode-btn ${imageMode === 'upload' ? 'image-mode-btn--active' : ''}`}
-                  onClick={() => handleImageModeChange('upload')}
-                >
-                  Upload a photo
-                </button>
-              </div>
-
-              {imageMode === 'url' ? (
-                <input type="text" {...f('image')} placeholder="https://example.com/photo.jpg" />
-              ) : (
-                <input
-                  type="file"
-                  accept="image/*"
-                  className={touched.image && errors.image ? 'input-error' : ''}
-                  onChange={handleImageFile}
-                  onBlur={handleBlur}
-                  name="image"
-                />
-              )}
+              <label>Restaurant image URL <span className="required">*</span></label>
+              <input type="text" {...f('image')} placeholder="https://example.com/photo.jpg" />
 
               {form.image && (
                 <img src={form.image} alt="Restaurant preview" className="image-preview" />
               )}
               {touched.image && errors.image && <span className="field-error">{errors.image}</span>}
             </div>
+
+            <div className="field">
+              <label>Rating (1-10) <span className="required">*</span></label>
+              <input
+                type="number"
+                {...f('rating')}
+                placeholder="8.5"
+                min="1"
+                max="10"
+                step="0.1"
+              />
+              {touched.rating && errors.rating && <span className="field-error">{errors.rating}</span>}
+            </div>
+
           </div>
 
           <div className="divider" />

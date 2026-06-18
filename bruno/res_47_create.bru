@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 47 (Crispy Kosher Kitchen 5)
+  type: http
+  seq: 284
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Kosher Kitchen 5",
+    "description": "Best Kosher in Haifa",
+    "category": "Kosher",
+    "image": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-7477666",
+    "email": "contact47@crispykosherkitchen5.co.il",
+    "subcategories": ["Kosher", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 54,
+      "floor": 0,
+      "lat": 32.76762141078262,
+      "long": 35.03731084448173
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

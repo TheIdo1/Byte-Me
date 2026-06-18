@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 63 (Spicy Seafood Kitchen 7)
+  type: http
+  seq: 348
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Seafood Kitchen 7",
+    "description": "Best Seafood in Tel Aviv",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-4844646",
+    "email": "contact63@spicyseafoodkitchen7.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 41,
+      "floor": 0,
+      "lat": 32.063396640036096,
+      "long": 34.79078480090249
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

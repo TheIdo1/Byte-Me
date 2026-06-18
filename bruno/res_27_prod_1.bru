@@ -1,0 +1,27 @@
+meta {
+  name: Create Prod 1 for Res 27
+  type: http
+  seq: 205
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/{{resId}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Product 1 - Burgers Style",
+    "description": "Delicious Burgers dish",
+    "category": "Burgers",
+    "price": 35.00,
+    "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=400&q=80",
+    "extras": [],
+    "isExtra": false
+  }
+}

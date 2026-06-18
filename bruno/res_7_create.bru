@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 7 (Secret Israeli Hub 7)
+  type: http
+  seq: 124
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Secret Israeli Hub 7",
+    "description": "Best Israeli in Tiberias",
+    "category": "Israeli",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-2283864",
+    "email": "contact7@secretisraelihub7.co.il",
+    "subcategories": ["Israeli", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 60,
+      "floor": 0,
+      "lat": 32.83616095733217,
+      "long": 35.4937615136906
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

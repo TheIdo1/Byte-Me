@@ -17,12 +17,12 @@
 .empty-state-title {
   font-size: 18px;
   font-weight: 600;
-  color: #202125;
+  color: var(--text-main);
   margin: 0 0 4px 0;
 }
 
 .empty-state-subtitle {
   font-size: 15px;
-  color: #7b7d85;
+  color: var(--text-muted);
   margin: 0;
 }

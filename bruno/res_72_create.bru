@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 72 (Secret Desserts Eats 2)
+  type: http
+  seq: 384
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Secret Desserts Eats 2",
+    "description": "Best Desserts in Tel Aviv",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6259855",
+    "email": "contact72@secretdessertseats2.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 14,
+      "floor": 0,
+      "lat": 32.08888404484435,
+      "long": 34.795514965108595
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

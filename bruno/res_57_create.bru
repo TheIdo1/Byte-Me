@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 57 (Happy Seafood Eats 1)
+  type: http
+  seq: 324
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Happy Seafood Eats 1",
+    "description": "Best Seafood in Eilat",
+    "category": "Seafood",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-3017585",
+    "email": "contact57@happyseafoodeats1.co.il",
+    "subcategories": ["Seafood", "Drinks", "Specials"],
+    "address": {
+      "city": "Eilat",
+      "street": "HaTmarim",
+      "houseNum": 21,
+      "floor": 0,
+      "lat": 29.581078832924014,
+      "long": 34.93646382013779
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

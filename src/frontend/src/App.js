@@ -22,6 +22,26 @@ export default function App() {
   const [user, setUser]     = useState(null);
   const [isOwner, setIsOwner] = useState(false);
 
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('darkMode');
+    return savedTheme === 'true'; // localStorage saves as strings
+  });
+
+  // Add or remove the 'dark-mode' class on the body tag whenever state changes
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+    // Save preference to local storage
+    localStorage.setItem('darkMode', isDarkMode);
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
   // Intercept localStorage.setItem so LoginPage (which writes the token directly to
   // localStorage) automatically triggers a state update here without needing to be
   // modified. The original function is restored when App unmounts.
@@ -70,6 +90,20 @@ export default function App() {
     setToken(null);
   }
 
+  // Session Initialization Guard 
+  // If a token exists but the profile is still being fetched from the server,
+  // we block navigation and show a clean layout using an early return statement.
+  const isAuthenticating = token && !user;
+
+  if (isAuthenticating) {
+    return (
+      <div className="app-initializing-container">
+        <h3>Initializing session...</h3>
+      </div>
+    );
+  }
+
+  // Once completely loaded (or if no token exists), we safely proceed to the main return
   return (
     <BrowserRouter>
       <AppRouter
@@ -77,6 +111,8 @@ export default function App() {
         user={user}
         isOwner={isOwner}
         signOut={signOut}
+        toggleTheme={toggleTheme}
+        isDarkMode={isDarkMode}
       />
     </BrowserRouter>
   );

@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 66 (Crispy Fine Dining Grill 3)
+  type: http
+  seq: 360
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Fine Dining Grill 3",
+    "description": "Best Fine Dining in Eilat",
+    "category": "Fine Dining",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-3993330",
+    "email": "contact66@crispyfinedininggrill3.co.il",
+    "subcategories": ["Fine Dining", "Drinks", "Specials"],
+    "address": {
+      "city": "Eilat",
+      "street": "HaTmarim",
+      "houseNum": 80,
+      "floor": 0,
+      "lat": 29.532309979977136,
+      "long": 34.920950601428764
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

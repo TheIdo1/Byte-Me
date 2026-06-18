@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 6 (Secret Israeli Taste 6)
+  type: http
+  seq: 120
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Secret Israeli Taste 6",
+    "description": "Best Israeli in Ashdod",
+    "category": "Israeli",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-8894204",
+    "email": "contact6@secretisraelitaste6.co.il",
+    "subcategories": ["Israeli", "Drinks", "Specials"],
+    "address": {
+      "city": "Ashdod",
+      "street": "Menachem Begin",
+      "houseNum": 84,
+      "floor": 0,
+      "lat": 31.80672846551211,
+      "long": 34.606121097949895
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

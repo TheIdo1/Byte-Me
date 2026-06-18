@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 27 (Rustic Burgers Diner 6)
+  type: http
+  seq: 204
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Burgers Diner 6",
+    "description": "Best Burgers in Tel Aviv",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-3908323",
+    "email": "contact27@rusticburgersdiner6.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Tel Aviv",
+      "street": "Rothschild Blvd",
+      "houseNum": 60,
+      "floor": 0,
+      "lat": 32.09244784154714,
+      "long": 34.75721376438676
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

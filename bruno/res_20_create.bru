@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 20 (Spicy Asian Diner 6)
+  type: http
+  seq: 176
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Spicy Asian Diner 6",
+    "description": "Best Asian in Haifa",
+    "category": "Asian",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-4695028",
+    "email": "contact20@spicyasiandiner6.co.il",
+    "subcategories": ["Asian", "Drinks", "Specials"],
+    "address": {
+      "city": "Haifa",
+      "street": "Ben Gurion",
+      "houseNum": 91,
+      "floor": 0,
+      "lat": 32.75610299924852,
+      "long": 35.02759964401782
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

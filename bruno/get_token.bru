@@ -1,0 +1,23 @@
+meta {
+  name: get token
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://web-server:8081/api/tokens/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "ido",
+    "password": "idoido"
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("myToken", responseData.token);
+}

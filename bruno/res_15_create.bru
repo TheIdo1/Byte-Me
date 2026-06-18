@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 15 (The Asian Eats 1)
+  type: http
+  seq: 156
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "The Asian Eats 1",
+    "description": "Best Asian in Ashdod",
+    "category": "Asian",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6483726",
+    "email": "contact15@theasianeats1.co.il",
+    "subcategories": ["Asian", "Drinks", "Specials"],
+    "address": {
+      "city": "Ashdod",
+      "street": "Menachem Begin",
+      "houseNum": 55,
+      "floor": 0,
+      "lat": 31.841923620101657,
+      "long": 34.653471211278955
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

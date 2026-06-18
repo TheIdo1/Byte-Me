@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 53 (Crispy Mexican Express 4)
+  type: http
+  seq: 308
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Crispy Mexican Express 4",
+    "description": "Best Mexican in Rishon LeZion",
+    "category": "Mexican",
+    "image": "https://images.unsplash.com/photo-1525640788966-69bdb028aa73?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-1758588",
+    "email": "contact53@crispymexicanexpress4.co.il",
+    "subcategories": ["Mexican", "Drinks", "Specials"],
+    "address": {
+      "city": "Rishon LeZion",
+      "street": "Herzl",
+      "houseNum": 41,
+      "floor": 0,
+      "lat": 31.98472321733167,
+      "long": 34.76672049337644
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

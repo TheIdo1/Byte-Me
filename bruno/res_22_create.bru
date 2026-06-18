@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 22 (Urban Burgers Grill 1)
+  type: http
+  seq: 184
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Burgers Grill 1",
+    "description": "Best Burgers in Beer Sheva",
+    "category": "Burgers",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6411399",
+    "email": "contact22@urbanburgersgrill1.co.il",
+    "subcategories": ["Burgers", "Drinks", "Specials"],
+    "address": {
+      "city": "Beer Sheva",
+      "street": "Rager Blvd",
+      "houseNum": 62,
+      "floor": 0,
+      "lat": 31.23369970074295,
+      "long": 34.75857753164037
+    },
+    "products": [],
+    "rating": 3,
+    "isSponsored": true
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

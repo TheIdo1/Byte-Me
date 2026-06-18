@@ -1,0 +1,30 @@
+meta {
+  name: Create user
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://web-server:8081/api/users/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "ido",
+    "password": "idoido",
+    "firstName": "Ido",
+    "lastName": "itzhak",
+    "email": "idoitzhak01@gmail.com",
+    "address": {
+      "city": "Givat Shmuel",
+      "street": "Zabi",
+      "houseNum": 514,
+      "floor": 1,
+      "lat": 40.10586474,
+      "long": 42.1787654
+    },
+    "isRestaurantOwner": true
+  }
+}

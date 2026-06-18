@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 77 (Urban Desserts Spot 7)
+  type: http
+  seq: 404
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Desserts Spot 7",
+    "description": "Best Desserts in Netanya",
+    "category": "Desserts",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-6600220",
+    "email": "contact77@urbandessertsspot7.co.il",
+    "subcategories": ["Desserts", "Drinks", "Specials"],
+    "address": {
+      "city": "Netanya",
+      "street": "Herzl",
+      "houseNum": 64,
+      "floor": 0,
+      "lat": 32.32011070577564,
+      "long": 34.87823626843285
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

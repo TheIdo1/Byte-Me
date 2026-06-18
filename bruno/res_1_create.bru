@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 1 (Rustic Israeli Crave 1)
+  type: http
+  seq: 100
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Rustic Israeli Crave 1",
+    "description": "Best Israeli in Jerusalem",
+    "category": "Israeli",
+    "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-4334261",
+    "email": "contact1@rusticisraelicrave1.co.il",
+    "subcategories": ["Israeli", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 38,
+      "floor": 0,
+      "lat": 31.74614182272878,
+      "long": 35.214686932458356
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

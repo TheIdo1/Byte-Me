@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 34 (Urban Mediterranean Express 6)
+  type: http
+  seq: 232
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Mediterranean Express 6",
+    "description": "Best Mediterranean in Tiberias",
+    "category": "Mediterranean",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-1344155",
+    "email": "contact34@urbanmediterraneanexpress6.co.il",
+    "subcategories": ["Mediterranean", "Drinks", "Specials"],
+    "address": {
+      "city": "Tiberias",
+      "street": "HaGalil",
+      "houseNum": 25,
+      "floor": 0,
+      "lat": 32.811905058922584,
+      "long": 35.57728489129678
+    },
+    "products": [],
+    "rating": 5,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}

@@ -1,0 +1,44 @@
+meta {
+  name: Create Res 37 (Urban Cafe Eats 2)
+  type: http
+  seq: 244
+}
+
+post {
+  url: http://web-server:8081/api/restaurants/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{myToken}}
+}
+
+body:json {
+  {
+    "name": "Urban Cafe Eats 2",
+    "description": "Best Cafe in Jerusalem",
+    "category": "Cafe",
+    "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80",
+    "authorizedUsers": ["user99"],
+    "phone": "03-2060856",
+    "email": "contact37@urbancafeeats2.co.il",
+    "subcategories": ["Cafe", "Drinks", "Specials"],
+    "address": {
+      "city": "Jerusalem",
+      "street": "Jaffa Road",
+      "houseNum": 84,
+      "floor": 0,
+      "lat": 31.755065777351604,
+      "long": 35.22485440461109
+    },
+    "products": [],
+    "rating": 4,
+    "isSponsored": false
+  }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  bru.setVar("resId", responseData.id);
+}
