@@ -306,11 +306,16 @@ Byte-Me/
  
 All four components are containerized and managed via Docker Compose.
  
-**Start the backend servers:**
+**Build Docker:**
 ```bash
-docker-compose up 
+docker compuse build --no-cache
 ```
-> This will also populate the app with restaurants through http calls using bruno
+
+**Start all app:**
+```bash
+docker compose up --force-recreate
+```
+> This will also populate the app with restaurants through http calls using bruno, this action can take a minute.
 
 > The frontend is served on **http://localhost:3000** and proxies API calls to the web server automatically.
 
