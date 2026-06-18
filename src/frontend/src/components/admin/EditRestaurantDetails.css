@@ -58,6 +58,65 @@
   background-color: var(--primary-hover);
 }
 
+/* --- Danger Zone & Safe Delete Styles (Dark/Light Mode Compatible) --- */
+
+.danger-zone {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 2px dashed var(--danger-border);
+}
+
+.danger-zone h3 {
+  color: var(--danger);
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.danger-zone p {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.safe-delete-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.safe-delete-group label {
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.safe-delete-group input {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 300px;
+  transition: border-color 0.2s;
+  background-color: var(--input-bg);
+  color: var(--text-main);
+}
+
+.safe-delete-group input:focus {
+  outline: none;
+  border-color: var(--danger);
+}
+
+
+.delete-btn:disabled {
+  background-color: var(--input-bg);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  border: 1px solid var(--border-color);
+}
+
+.delete-btn:disabled:hover {
+  background-color: var(--input-bg);
+}
+
 .delete-btn {
   background-color: var(--danger);
   color: white;
