@@ -16,6 +16,7 @@ const INITIAL_FORM = {
   phone: '',
   email: '',
   image: '',
+  rating: '',
   promotionalMessage: '',
   address: { city: '', street: '', houseNum: '', floor: '', lat: '', long: '' },
 };
@@ -53,6 +54,10 @@ function validate(form) {
   else { const v = parseFloat(form.address.lat); if (isNaN(v) || v < -90 || v > 90) errs.lat = 'Must be between -90 and 90.'; }
   if (form.address.long === '') errs.long = 'Longitude is required.';
   else { const v = parseFloat(form.address.long); if (isNaN(v) || v < -180 || v > 180) errs.long = 'Must be between -180 and 180.'; }
+
+  const rating = parseFloat(form.rating);
+  if (form.rating === '') errs.rating = 'Rating is required.';
+  else if (isNaN(rating) || rating < 1 || rating > 10) errs.rating = 'Must be between 1 and 10.';
 
   return errs;
 }
@@ -109,6 +114,7 @@ export default function AddRestaurantPage({ token, user, isOwner }) {
         email: form.email.trim(),
         image: form.image.trim(),
         promotionalMessage: form.promotionalMessage.trim(),
+        rating: parseFloat(parseFloat(form.rating).toFixed(1)),
         authorizedUsers: [user.id],
         address: {
           city: form.address.city.trim(),
@@ -217,6 +223,20 @@ export default function AddRestaurantPage({ token, user, isOwner }) {
               )}
               {touched.image && errors.image && <span className="field-error">{errors.image}</span>}
             </div>
+
+            <div className="field">
+              <label>Rating (1-10) <span className="required">*</span></label>
+              <input
+                type="number"
+                {...f('rating')}
+                placeholder="8.5"
+                min="1"
+                max="10"
+                step="0.1"
+              />
+              {touched.rating && errors.rating && <span className="field-error">{errors.rating}</span>}
+            </div>
+
           </div>
 
           <div className="divider" />
