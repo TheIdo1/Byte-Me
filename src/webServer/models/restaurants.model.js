@@ -1,137 +1,109 @@
-// models/restaurants.js
-// currently manages the in-memory storage for restaurants and provides functions to interact with the data.
+// src/webServer/models/restaurants.model.js
+const Restaurant = require('./restaurants.schema');
 
-const { v4: uuidv4 } = require('uuid');
-
-// In-memory array to store all restaurants. Resets when the server restarts.
-const restaurants = [];
-
-
-// Retrieves all restaurants from the memory.
-const getAllRestaurants = () => {
-    return restaurants;
+// Retrieves all restaurants from the database.
+const getAllRestaurants = async () => {
+    return await Restaurant.find();
 };
 
 /*
-Retrieves a specific restaurant by its ID.
-id - The ID of the restaurant to find.
-The restaurant object if found, otherwise undefined.
+ Retrieves a specific restaurant by its MongoDB ObjectId.
+ Returns the restaurant document, or null if not found.
 */
-const getRestaurantById = (id) => {
-    return restaurants.find(restaurant => restaurant.id === id);
+const getRestaurantById = async (id) => {
+    try {
+        return await Restaurant.findById(id);
+    } catch (error) {
+        return null;
+    }
 };
 
 /*
-Creates a new restaurnt, constructs the required JSON structure, and saves it to memory
-restaurantData - The data for the new restaurant (name, category, authorized users[ids], phone, email, address{}, products[ids])
-return the newly created restaurant
+ Creates a new restaurant in the database.
+ Returns the newly created restaurant.
 */
-const createRestaurant = (restaurantData) => {
-
-    // Constructing the restaurant object exactly as agreed upon
-    const newRestaurant = {
-        id: uuidv4(),
-        name: restaurantData.name || '',
+const createRestaurant = async (restaurantData) => {
+    const newRestaurant = new Restaurant({
+        name: restaurantData.name,
         description: restaurantData.description || '',
-        category: restaurantData.category || '',
+        category: restaurantData.category,
         authorizedUsers: restaurantData.authorizedUsers || [],
-        phone: restaurantData.phone || '',
-        email: restaurantData.email || '',
+        phone: restaurantData.phone,
+        email: restaurantData.email,
         image: restaurantData.image || '',
         subcategories: restaurantData.subcategories || [],
-        address: {
-            city: restaurantData.address.city || '',
-            street: restaurantData.address.street || '',
-            houseNum: restaurantData.address.houseNum || 0,
-            floor: restaurantData.address.floor || 0,
-            lat: restaurantData.address.lat || 32.071169922988354,
-            long: restaurantData.address.long || 34.84453170435457
-        },
-        products: restaurantData.products || [], // this field is optional, initiate to empty list if undefined.
+        address: restaurantData.address,
+        products: restaurantData.products || [],
         rating: restaurantData.rating || 1,
         isSponsored: restaurantData.isSponsored ?? false,
-        promotionalMessage : restaurantData.promotionalMessage || "Try Us"
-    };
+        promotionalMessage: restaurantData.promotionalMessage || 'Try Us'
+    });
 
-    // Save to in-memory array
-    restaurants.push(newRestaurant);
-    
+    await newRestaurant.save();
     return newRestaurant;
 };
 
-
-// Updates an existing restaurant by its ID.
-// id - The ID of the restaurant to update.
-// updateData - The new data to apply to the restaurant.
-// returns The updated restaurant object, or null if the restaurant was not found.
-const updateRestaurant = (id, updateData) => {
-    const restaurantIndex = restaurants.findIndex(restaurant => restaurant.id === id);
-    
-    if (restaurantIndex === -1) {
-        return null; // restaurant not found
+/*
+ Updates an existing restaurant by its MongoDB ObjectId.
+ Returns the updated restaurant, or null if not found.
+*/
+const updateRestaurant = async (id, updateData) => {
+    try {
+        return await Restaurant.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+        return null;
     }
-
-    // Merges existing restaurant properties with incoming updates
-    // any overlapping fields are overwritten by the new values.
-    restaurants[restaurantIndex] = { ...restaurants[restaurantIndex], ...updateData };
-    
-    return restaurants[restaurantIndex];
 };
 
 /*
-Deletes an restaurant from memory by its ID.
-id - The ID of the restaurant to delete.
-returns True if the restaurant was successfully deleted, false if not found.
+ Deletes a restaurant by its MongoDB ObjectId.
+ Returns true if deleted, false if not found.
 */
-const deleteRestaurant = (id) => {
-    const restaurantIndex = restaurants.findIndex(restaurant => restaurant.id === id);
-    
-    if (restaurantIndex === -1) {
+const deleteRestaurant = async (id) => {
+    try {
+        const result = await Restaurant.findByIdAndDelete(id);
+        return result !== null;
+    } catch (error) {
         return false;
     }
-
-    // Remove 1 element at the found index
-    restaurants.splice(restaurantIndex, 1);
-    return true;
 };
 
-/*
-Adds a product ID to a restaurant's products array.
-restaurantId - The ID of the restaurant.
-productId - The ID of the newly created product.
-returns True if successful, false if the restaurant was not found.
-*/
-const addProductToRestaurant = (restaurantId, productId) => {
-    const restaurant = getRestaurantById(restaurantId);
-    
-    if (!restaurant) {
+// Appends a product ID string to the restaurant's products array.
+const addProductToRestaurant = async (restaurantId, productId) => {
+    try {
+        const result = await Restaurant.findByIdAndUpdate(
+            restaurantId,
+            { $push: { products: productId } }
+        );
+        return result !== null;
+    } catch (error) {
         return false;
     }
-
-    // Push the new product ID into the array
-    restaurant.products.push(productId);
-    return true;
 };
 
-/*
-Removes a product ID from a restaurant's products array.
-restaurantId - The ID of the restaurant.
-productId - The ID of the product to remove.
-returns True if successful, false if the restaurant was not found.
-*/
-const removeProductFromRestaurant = (restaurantId, productId) => {
-    const restaurant = getRestaurantById(restaurantId);
-    
-    if (!restaurant) {
+// Removes a product ID string from the restaurant's products array.
+const removeProductFromRestaurant = async (restaurantId, productId) => {
+    try {
+        const result = await Restaurant.findByIdAndUpdate(
+            restaurantId,
+            { $pull: { products: productId } }
+        );
+        return result !== null;
+    } catch (error) {
         return false;
     }
-
-    // Filter out the deleted product ID, keeping everything else
-    restaurant.products = restaurant.products.filter(id => id !== productId);
-    return true;
 };
 
-// Export the functions so the Controller can use them
+// Searches restaurants by name or description using a case-insensitive regex.
+const searchRestaurants = async (query) => {
+    // Escape special regex characters to prevent injection
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escaped, 'i');
+    return await Restaurant.find({
+        $or: [{ name: regex }, { description: regex }]
+    });
+};
+
 module.exports = {
     getAllRestaurants,
     getRestaurantById,
@@ -139,5 +111,6 @@ module.exports = {
     updateRestaurant,
     deleteRestaurant,
     addProductToRestaurant,
-    removeProductFromRestaurant
+    removeProductFromRestaurant,
+    searchRestaurants
 };

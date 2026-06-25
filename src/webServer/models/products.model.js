@@ -1,109 +1,110 @@
-// models/products.js
-// currently manages the in-memory storage for products and provides functions to interact with the data.
+// src/webServer/models/products.model.js
+const Product = require('./products.schema');
+const Counter = require('./counter.schema');
 
-const { v4: uuidv4 } = require('uuid');
-
-// In-memory array to store all products. Resets when the server restarts.
-const products = [];
-let nextCppId = 1;
-
-
-// Retrieves all products from the memory.
-const getAllProducts = () => {
-    return products;
+// Retrieves all products from the database.
+const getAllProducts = async () => {
+    return await Product.find();
 };
 
-// Retirive all products from spesific restaurant
-const getAllRestaurantProducts = (id) => {
-    return products.filter(p => p.restaurantId === id)
+// Retrieves all products belonging to a specific restaurant.
+const getAllRestaurantProducts = async (restaurantId) => {
+    return await Product.find({ restaurantId });
 };
 
 /*
-Retrieves a specific product by its ID.
-id - The ID of the product to find.
-The product object if found, otherwise undefined.
+ Retrieves a specific product by its MongoDB ObjectId.
+ Returns the product document, or null if not found.
 */
-const getProductById = (id) => {
-    return products.find(product => product.id === id);
+const getProductById = async (id) => {
+    try {
+        return await Product.findById(id);
+    } catch (error) {
+        return null;
+    }
 };
 
 /*
-Creates a new restaurnt, constructs the required JSON structure, and saves it to memory
-productData - The data for the new product (name, category, authorized users[ids], phone, email, address{}, products[ids])
-return the newly created product
+ Creates a new product in the database.
+ Generates an auto-incrementing cppId using the Counter collection.
+ Returns the newly created product.
 */
-const createProduct = (productData) => {
+const createProduct = async (productData) => {
+    const counter = await Counter.findByIdAndUpdate(
+        'product_cpp_id',
+        { $inc: { seq: 1 } },
+        { returnDocument: 'after', upsert: true }
+    );
 
-    // Constructing the product object exactly as agreed upon
-    const newProduct = {
-        id: uuidv4(),
-        cppId: nextCppId++,
-        restaurantId: productData.restaurantId || '',
-        name: productData.name || '',
+    const newProduct = new Product({
+        cppId: counter.seq,
+        restaurantId: productData.restaurantId,
+        name: productData.name,
         description: productData.description || '',
-        category: productData.category || '',
+        category: productData.category,
         price: productData.price || 0,
         image: productData.image || '',
-        extras: productData.extras || [], // this field is optional, initiate to empty list if undefined.
+        extras: productData.extras || [],
         isExtra: productData.isExtra || false,
         isPopular: productData.isPopular || false
-    };
+    });
 
-    // Save to in-memory array
-    products.push(newProduct);
-    
+    await newProduct.save();
     return newProduct;
 };
 
-
-// Updates an existing product by its ID.
-// id - The ID of the product to update.
-// updateData - The new data to apply to the product.
-// returns The updated product object, or null if the product was not found.
-const updateProduct = (id, updateData) => {
-    const productIndex = products.findIndex(product => product.id === id);
-    
-    if (productIndex === -1) {
-        return null; // product not found
+/*
+ Updates an existing product by its MongoDB ObjectId.
+ Returns the updated product, or null if not found.
+*/
+const updateProduct = async (id, updateData) => {
+    try {
+        return await Product.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+        return null;
     }
-
-    // Merges existing product properties with incoming updates
-    // any overlapping fields are overwritten by the new values.
-    products[productIndex] = { ...products[productIndex], ...updateData };
-    
-    return products[productIndex];
 };
 
 /*
-Deletes an product from memory by its ID.
-id - The ID of the product to delete.
-returns True if the product was successfully deleted, false if not found.
+ Deletes a product by its MongoDB ObjectId.
+ Returns true if deleted, false if not found.
 */
-const deleteProduct = (id) => {
-    const productIndex = products.findIndex(product => product.id === id);
-    
-    if (productIndex === -1) {
+const deleteProduct = async (id) => {
+    try {
+        const result = await Product.findByIdAndDelete(id);
+        return result !== null;
+    } catch (error) {
         return false;
     }
-
-    // Remove 1 element at the found index
-    products.splice(productIndex, 1);
-    return true;
 };
 
-// Returns the C++ integer ID for a given Node UUID, or null if not found.
-const getProductCppId = (nodeId) => {
-    const product = products.find(p => p.id === nodeId);
-    return product ? product.cppId : null;
+// Returns the C++ integer ID for a given MongoDB ObjectId, or null if not found.
+const getProductCppId = async (nodeId) => {
+    try {
+        const product = await Product.findById(nodeId).select('cppId');
+        return product ? product.cppId : null;
+    } catch (error) {
+        return null;
+    }
 };
 
-// Export the functions so the Controller can use them
+// Searches products by name or description using a case-insensitive regex.
+const searchProducts = async (query) => {
+    // Escape special regex characters to prevent injection
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escaped, 'i');
+    return await Product.find({
+        $or: [{ name: regex }, { description: regex }]
+    });
+};
+
 module.exports = {
     getAllProducts,
+    getAllRestaurantProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
     getProductCppId,
-    getAllRestaurantProducts
+    searchProducts
 };
