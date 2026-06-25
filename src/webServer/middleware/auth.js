@@ -1,4 +1,3 @@
-const usersModel = require('../models/users.model');
 const jwt = require('jsonwebtoken'); // Import the JWT library
 
 
