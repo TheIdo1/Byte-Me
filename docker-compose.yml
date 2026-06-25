@@ -32,6 +32,7 @@ services:
       - CPP_SERVER_PORT=8080
       - PORT=8081
       - JWT_SECRET="d5ff86ee9cc528e3f72f50fb8746ba729d0ce4055249472657776a9e9c976de8"
+      - MONGO_URI=mongodb://mongodb:27017/byte_me
     depends_on:
       - cpp-server # Ensures C++ boots up before Node.js
       - mongodb
