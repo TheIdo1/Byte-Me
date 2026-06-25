@@ -1,6 +1,6 @@
 // src/webServer/services/users.service.js
-const User = require('../models/User.schema');
-const Counter = require('../models/Counter.schema');
+const User = require('../models/users.schema');
+const Counter = require('../models/counter.schema');
 
 /*Helper function to safely strip the password from the user object 
 before returning it to the controller.
