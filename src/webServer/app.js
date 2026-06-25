@@ -5,9 +5,13 @@ require('dotenv').config({ path: './config/.env' });
 
 const express = require('express');
 const app = express();
+const connectDB = require('./config/db');
 
 // Define the port (defaults to 3000 if not set in the environment variables)
 const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB database
+connectDB();
 
 // Global Middlewares
 // this middleware parses incoming requests with JSON payloads.
