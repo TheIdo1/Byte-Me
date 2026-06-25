@@ -11,6 +11,15 @@ services:
     #   - ./data:/usr/src/app/data
     restart: unless-stopped
 
+  mongodb:
+    image: mongo:latest
+    container_name: byte_me_mongo
+    ports:
+      - "27017:27017" # Maps the default Mongo port to your host machine
+    volumes:
+      - mongo_data:/data/db # Maps the volume to Mongo's default data path
+    restart: unless-stopped
+    
   web-server:
     build:
       context: ./src/webServer # Builds using the Node Dockerfile we will create
@@ -25,6 +34,7 @@ services:
       - JWT_SECRET="d5ff86ee9cc528e3f72f50fb8746ba729d0ce4055249472657776a9e9c976de8"
     depends_on:
       - cpp-server # Ensures C++ boots up before Node.js
+      - mongodb
     restart: unless-stopped
 
   frontend:
@@ -60,3 +70,10 @@ services:
         - ./bruno:/app/bruno
       depends_on:
         - web-server
+
+
+
+# 3. Declare the named volume at the very bottom of the file
+volumes:
+  mongo_data:
+    # This ensures persistent storage so data isn't lost when containers stop
