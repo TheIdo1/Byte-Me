@@ -1,6 +1,6 @@
 const productsModel = require('../models/products.model');
 const restaurantsModel = require('../models/restaurants.model');
-const usersModel = require('../models/users.model');
+const usersService = require('../services/users.service');
 const { sendCommandToCpp } = require('../services/cppSocketService');
 
 //Returns all products
@@ -19,7 +19,7 @@ const getAllRestaurantProducts = (req, res) => {
 }
 
 //Returns a single product by ID. Returns 404 if not found.
-const getProductById = (req, res) => {
+const getProductById = async (req, res) => {
     const productId = req.params.pId;
     const product = productsModel.getProductById(productId);
     if (!product) {
@@ -29,8 +29,14 @@ const getProductById = (req, res) => {
 
     // C++ connection: notify recommendation engine that user viewed this product
     if (req.userId) {
-        const userCppId = usersModel.getUserCppId(req.userId);
+        const userCppId = await usersService.getUserCppId(req.userId);
+
+        // The user may have been deleted after the token was created.
+        if (userCppId === null) {
+            return;
+        }
         const productCppId = product.cppId;
+
         sendCommandToCpp(`POST ${userCppId} ${productCppId}`)
             .then(response => {
                 if (!String(response).startsWith('2')) {
@@ -125,7 +131,7 @@ const deleteProduct = async (req, res) => {
     restaurantsModel.removeProductFromRestaurant(product.restaurantId, productId);
 
     const productCppId = product.cppId;
-    const allUserCppIds = usersModel.getAllUserCppIds();
+    const allUserCppIds = await usersService.getAllUserCppIds();
     Promise.allSettled(
         allUserCppIds.map(userCppId =>
             sendCommandToCpp(`DELETE ${userCppId} ${productCppId}`)

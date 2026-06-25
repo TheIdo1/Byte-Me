@@ -52,7 +52,7 @@ const createUser = async (userData) => {
     const counter = await Counter.findByIdAndUpdate(
         'user_cpp_id',           // The unique name of our sequence
         { $inc: { seq: 1 } },    // Increment the sequence by 1
-        { new: true, upsert: true } // Return the updated doc, create it if it doesn't exist
+        { returnDocument: 'after', upsert: true } // Return the updated doc, create it if it doesn't exist
     );
 
     // Create the new user with the generated cppId
