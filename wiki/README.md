@@ -1,6 +1,6 @@
 # Byte-Me
 
-![byte me wide picture](resources/byteme_wide_picture.png)
+![byte me wide picture](/resources/byteme_wide_picture.png)
 
 ***Scroll down for initializng instructions***
 
@@ -240,7 +240,7 @@ PATCH,arguments: [userId] [productId1] [productId2] ...
 POST,arguments: [userId] [productId1] [productId2] ...
 help
 ```
-![run example](resources/run_example.png)
+![run example](/resources/run_example.png)
 
 ## How the recommendation works
 
@@ -341,27 +341,27 @@ docker-compose down
 docker-compose down -v
 ```
  
-![byte me logo](resources/byteme_logo.png)
+![byte me logo](/resources/byteme_logo.png)
 
 
 *Running Example*
-![build](resources/running_example/build.jpg)
-![finished_build](resources/running_example/finished_build.jpg)
-![run](resources/running_example/run.jpg)
-![run_seeder](resources/running_example/run_seeder.jpg)
+![build](/resources/running_example/build.jpg)
+![finished_build](/resources/running_example/finished_build.jpg)
+![run](/resources/running_example/run.jpg)
+![run_seeder](/resources/running_example/run_seeder.jpg)
 **react ui**
-![homepage](resources/running_example/homepage.jpg)
-![restaurant_page](resources/running_example/restaurant_page.jpg)
-![product_page](resources/running_example/product_page.jpg)
-![orders_page](resources/running_example/orders_page.jpg)
-![manage_restaurants](resources/running_example/manage_restaurants.jpg)
-![manage_restaurant1](resources/running_example/manage_restaurant_1.jpg)
-![manage_restaurant2](resources/running_example/manage_restaurant_2.jpg)
+![homepage](/resources/running_example/homepage.jpg)
+![restaurant_page](/resources/running_example/restaurant_page.jpg)
+![product_page](/resources/running_example/product_page.jpg)
+![orders_page](/resources/running_example/orders_page.jpg)
+![manage_restaurants](/resources/running_example/manage_restaurants.jpg)
+![manage_restaurant1](/resources/running_example/manage_restaurant_1.jpg)
+![manage_restaurant2](/resources/running_example/manage_restaurant_2.jpg)
 
 **react native ui**
-![native_1](resources/running_example/native_1.jpg)
-![native_2](resources/running_example/native_2.jpg)
-![native_3](resources/running_example/native_3.jpg)
+![native_1](/resources/running_example/native_1.jpg)
+![native_2](/resources/running_example/native_2.jpg)
+![native_3](/resources/running_example/native_3.jpg)
 
 **shutdown app**
-![shutdown](resources/running_example/shutdown.jpg)
+![shutdown](/resources/running_example/shutdown.jpg)
