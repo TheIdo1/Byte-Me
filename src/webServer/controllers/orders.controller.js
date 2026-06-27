@@ -1,73 +1,109 @@
-const ordersModel = require('../models/orders.model');
+// src/webServer/controllers/orders.controller.js
+const ordersService = require('../services/orders.service');
 
-//Returns all orders
-const getAllOrders = (req, res) => {
-    res.json(ordersModel.getAllOrders());
-}
-
-// Returns only the orders belonging to the authenticated user
-const getMyOrders = (req, res) => {
-    const all = ordersModel.getAllOrders();
-    res.json(all.filter(o => o.customerId === req.userId));
+// Returns all orders
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await ordersService.getAllOrders();
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error('Failed to get all orders:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
 
-//Returns a single order by ID. Returns 404 if not found.
-const getOrderById = (req, res) => {
-    const orderId = req.params.id;
-    const order = ordersModel.getOrderById(orderId);
-    if (!order) {
-        return res.status(404).json({ error: 'Order not found' })
+// Returns only the orders belonging to the authenticated user
+const getMyOrders = async (req, res) => {
+    try {
+        // Fetch all orders and filter them
+        // Note: For better performance in production, a dedicated query in the service 
+        // like Order.find({ customerId: req.userId }) would be preferred.
+        const all = await ordersService.getAllOrders();
+        res.json(all.filter(o => o.customerId === req.userId));
+    } catch (error) {
+        console.error('Failed to get user orders:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-    res.status(200).json(order)
-}
+};
 
-const createOrder = (req, res) => {
-    //The middleware 'validateCreateOrder' guarantees that 
-    // restaurantId and orderedItems exist and are valid
-    const { restaurantId, orderedItems } = req.body;
+// Returns a single order by ID. Returns 404 if not found.
+const getOrderById = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const order = await ordersService.getOrderById(orderId);
+        
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        res.status(200).json(order);
+    } catch (error) {
+        console.error('Failed to get order by ID:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
-    // SECURITY: The customerId is derived from the JWT payload via the 'requireAuth' middleware
-    // We ignore any attempt by the client to specify a customerId in the body
-    const customerId = req.userId;
+const createOrder = async (req, res) => {
+    try {
+        // The middleware 'validateCreateOrder' guarantees that 
+        // restaurantId and orderedItems exist and are valid
+        const { restaurantId, orderedItems } = req.body;
 
-    // Build the clean data object to pass to the model.
-    // The model will add the UUID and current date on its side.
-    const cleanOrderData = { customerId, restaurantId, orderedItems };
+        // SECURITY: The customerId is derived from the JWT payload via the 'requireAuth' middleware
+        // We ignore any attempt by the client to specify a customerId in the body
+        const customerId = req.userId;
 
-    const newOrder = ordersModel.createOrder(cleanOrderData);
-    res.status(201).location(`/api/orders/${newOrder.id}`).json(newOrder);
+        // Build the clean data object to pass to the service.
+        const cleanOrderData = { customerId, restaurantId, orderedItems };
+
+        const newOrder = await ordersService.createOrder(cleanOrderData);
+        res.status(201).location(`/api/orders/${newOrder.id}`).json(newOrder);
+    } catch (error) {
+        console.error('Failed to create order:', error);
+        res.status(500).json({ error: 'Failed to create order' });
+    }
 };
 
 /*
-Updates an existing order.
-Assumes that the validation middleware has already sanitized req.body,
-ensuring it only contains allowed fields with proper data types.
+ Updates an existing order.
+ Assumes that the validation middleware has already sanitized req.body,
+ ensuring it only contains allowed fields with proper data types.
 */
-const updateOrder = (req, res) => {
-    const orderId = req.params.id;
-    
-    // Extract the sanitized updates from the request body
-    const updates = req.body;
+const updateOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        
+        // Extract the sanitized updates from the request body
+        const updates = req.body;
 
-    const updatedOrder = ordersModel.updateOrder(orderId, updates);
+        const updatedOrder = await ordersService.updateOrder(orderId, updates);
 
-    // if the model returns null, it means no order was found with this UUID
-    if (!updatedOrder) {
-        return res.status(404).json({ error: 'Order not found' });
+        // if the service returns null, it means no order was found with this ID
+        if (!updatedOrder) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        console.error('Failed to update order:', error);
+        res.status(500).json({ error: 'Failed to update order' });
     }
-
-    res.status(204).send();
 };
 
-//Deletes an order by ID, Returns 404 if not found
-const deleteOrder = (req,res) => {
-    const orderId = req.params.id;
-    const isDeleted = ordersModel.deleteOrder(orderId);
-    if (!isDeleted) {
-        return res.status(404).json({ error: 'Order not found' })
+// Deletes an order by ID, Returns 404 if not found
+const deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const isDeleted = await ordersService.deleteOrder(orderId);
+        
+        if (!isDeleted) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        res.status(204).send();
+    } catch (error) {
+        console.error('Failed to delete order:', error);
+        res.status(500).json({ error: 'Failed to delete order' });
     }
-    res.status(204).send()
-}
+};
 
 module.exports = {
     getAllOrders,
