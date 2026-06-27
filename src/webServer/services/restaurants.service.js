@@ -1,26 +1,32 @@
-// src/webServer/models/restaurants.model.js
-const Restaurant = require('./restaurants.schema');
+// src/webServer/services/restaurants.service.js
+const Restaurant = require('../models/restaurants.schema');
 
-// Retrieves all restaurants from the database.
+/*
+ Retrieves all restaurants from the database.
+ returns {Array} All restaurant documents.
+*/
 const getAllRestaurants = async () => {
     return await Restaurant.find();
 };
 
 /*
- Retrieves a specific restaurant by its MongoDB ObjectId.
- Returns the restaurant document, or null if not found.
+ Retrieves a single restaurant by its MongoDB ObjectId.
+ {string} id - The restaurant's ObjectId as a string.
+ returns {Object|null} The restaurant document, or null if not found / invalid id.
 */
 const getRestaurantById = async (id) => {
     try {
         return await Restaurant.findById(id);
     } catch (error) {
+        // If the ID is not a valid ObjectId format, Mongoose throws a CastError
         return null;
     }
 };
 
 /*
- Creates a new restaurant in the database.
- Returns the newly created restaurant.
+ Creates a new restaurant and saves it to the database.
+ restaurantData - The validated restaurant fields from the controller.
+ returns {Object} The newly created restaurant document.
 */
 const createRestaurant = async (restaurantData) => {
     const newRestaurant = new Restaurant({
@@ -38,14 +44,15 @@ const createRestaurant = async (restaurantData) => {
         isSponsored: restaurantData.isSponsored ?? false,
         promotionalMessage: restaurantData.promotionalMessage || 'Try Us'
     });
-
     await newRestaurant.save();
     return newRestaurant;
 };
 
 /*
- Updates an existing restaurant by its MongoDB ObjectId.
- Returns the updated restaurant, or null if not found.
+ Partially updates a restaurant by its MongoDB ObjectId.
+ {string} id - The restaurant's ObjectId.
+ {Object} updateData - Fields to update (already sanitized by the validator middleware).
+ returns {Object|null} The updated restaurant document, or null if not found.
 */
 const updateRestaurant = async (id, updateData) => {
     try {
@@ -57,7 +64,8 @@ const updateRestaurant = async (id, updateData) => {
 
 /*
  Deletes a restaurant by its MongoDB ObjectId.
- Returns true if deleted, false if not found.
+ {string} id - The restaurant's ObjectId.
+ returns {boolean} True if deleted, false if not found.
 */
 const deleteRestaurant = async (id) => {
     try {
@@ -68,12 +76,15 @@ const deleteRestaurant = async (id) => {
     }
 };
 
-// Appends a product ID string to the restaurant's products array.
+/*
+ Appends a product ObjectId to the restaurant's products array.
+ Uses $push to keep the operation atomic.
+ returns {boolean} True if the restaurant was found and updated.
+*/
 const addProductToRestaurant = async (restaurantId, productId) => {
     try {
         const result = await Restaurant.findByIdAndUpdate(
-            restaurantId,
-            { $push: { products: productId } }
+            restaurantId, { $push: { products: productId } }
         );
         return result !== null;
     } catch (error) {
@@ -81,12 +92,15 @@ const addProductToRestaurant = async (restaurantId, productId) => {
     }
 };
 
-// Removes a product ID string from the restaurant's products array.
+/*
+ Removes a product ObjectId from the restaurant's products array.
+ Uses $pull to remove by value without needing the index.
+ returns {boolean} True if the restaurant was found and updated.
+*/
 const removeProductFromRestaurant = async (restaurantId, productId) => {
     try {
         const result = await Restaurant.findByIdAndUpdate(
-            restaurantId,
-            { $pull: { products: productId } }
+            restaurantId, { $pull: { products: productId } }
         );
         return result !== null;
     } catch (error) {
@@ -94,9 +108,13 @@ const removeProductFromRestaurant = async (restaurantId, productId) => {
     }
 };
 
-// Searches restaurants by name or description using a case-insensitive regex.
+/*
+ Case-insensitive search across restaurant name and description.
+ Special regex characters in the query are escaped to prevent injection.
+ {string} query - The search term from the sanitized request.
+ returns {Array} Matching restaurant documents.
+*/
 const searchRestaurants = async (query) => {
-    // Escape special regex characters to prevent injection
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(escaped, 'i');
     return await Restaurant.find({

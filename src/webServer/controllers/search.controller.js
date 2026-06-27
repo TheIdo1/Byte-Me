@@ -1,5 +1,5 @@
-const restaurantsModel = require('../models/restaurants.model');
-const productsModel = require('../models/products.model');
+const restaurantsService = require('../services/restaurants.service');
+const productsService = require('../services/products.service');
 
 // Handles the search request.
 // Retrieves the sanitized query from the request object and searches both restaurants and products
@@ -9,8 +9,8 @@ const search = async (req, res) => {
         const query = req.cleanQuery;
 
         const [matchedRestaurants, matchedProducts] = await Promise.all([
-            restaurantsModel.searchRestaurants(query),
-            productsModel.searchProducts(query)
+            restaurantsService.searchRestaurants(query),
+            productsService.searchProducts(query)
         ]);
 
         res.status(200).json({
