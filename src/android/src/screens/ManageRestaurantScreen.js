@@ -41,6 +41,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
   const [editLoading, setEditLoading]   = useState(false);
   const [editError, setEditError]       = useState('');
   const [editSuccess, setEditSuccess]   = useState(false);
+  const [showCatPicker, setShowCatPicker] = useState(false);
 
   // Product form state
   const [productModal, setProductModal] = useState(false);
@@ -61,6 +62,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
         name: rest.name,
         description: rest.description ?? '',
         category: rest.category ?? '',
+        subcategories: (rest.subcategories ?? []).join(', '),
         phone: rest.phone ?? '',
         email: rest.email ?? '',
         image: rest.image ?? '',
@@ -84,6 +86,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
     try {
       const updated = await updateRestaurant(restaurantId, {
         ...editForm,
+        subcategories: editForm.subcategories.split(',').map((s) => s.trim()).filter(Boolean),
         rating: parseFloat(editForm.rating) || restaurant.rating,
       });
       setRestaurant(updated);
@@ -154,6 +157,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
         description: productForm.description.trim(),
         image: productForm.image.trim(),
         category: productForm.isExtra ? 'extras' : productForm.category,
+        isExtra: productForm.isExtra,
         isPopular: productForm.isPopular,
         extras: productForm.isExtra ? [] : productForm.extras,
       };
@@ -216,6 +220,37 @@ export default function ManageRestaurantScreen({ route, navigation }) {
 
           <EField label="Name"                value={editForm.name}                onChangeText={(v) => setEditForm({ ...editForm, name: v })} />
           <EField label="Description"         value={editForm.description}         onChangeText={(v) => setEditForm({ ...editForm, description: v })} multiline />
+
+          {/* Category picker */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Category</Text>
+            <TouchableOpacity
+              style={[styles.input, styles.pickerBtn]}
+              onPress={() => setShowCatPicker(!showCatPicker)}
+            >
+              <Text style={{ color: editForm.category ? '#202125' : '#b0b4ba', fontSize: 15 }}>
+                {editForm.category || 'Select category'}
+              </Text>
+            </TouchableOpacity>
+            {showCatPicker && (
+              <View style={styles.catList}>
+                {CATEGORIES_DATA.map((c) => (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[styles.catOption, editForm.category === c.name && styles.catOptionSelected]}
+                    onPress={() => { setEditForm({ ...editForm, category: c.name }); setShowCatPicker(false); }}
+                  >
+                    <Text style={{ fontSize: 14, color: editForm.category === c.name ? '#009de0' : '#202125' }}>
+                      {c.emoji} {c.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <EField label="Subcategories (comma-separated)" value={editForm.subcategories} onChangeText={(v) => setEditForm({ ...editForm, subcategories: v })} />
+
           <EField label="Phone"               value={editForm.phone}               onChangeText={(v) => setEditForm({ ...editForm, phone: v })} keyboardType="phone-pad" />
           <EField label="Email"               value={editForm.email}               onChangeText={(v) => setEditForm({ ...editForm, email: v })} keyboardType="email-address" />
           <ImagePickerField
@@ -431,6 +466,10 @@ const styles = StyleSheet.create({
   extraItemPrice: { fontSize: 13, color: '#009de0', fontWeight: '600' },
   btn: { backgroundColor: '#009de0', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginTop: 8 },
   btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  pickerBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
+  catList: { borderWidth: 1, borderColor: '#e9ecef', borderRadius: 10, marginTop: 4, overflow: 'hidden' },
+  catOption: { paddingHorizontal: 14, paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: '#f0f4f8' },
+  catOptionSelected: { backgroundColor: '#e6f5fc' },
   deleteBtn: { marginTop: 12, paddingVertical: 14, alignItems: 'center', borderRadius: 10, borderWidth: 1.5, borderColor: '#c43228' },
   deleteBtnText: { color: '#c43228', fontSize: 15, fontWeight: '600' },
   addProductBtn: { borderWidth: 1.5, borderColor: '#009de0', borderStyle: 'dashed', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
