@@ -26,6 +26,11 @@ export default function MyRestaurantsScreen({ navigation }) {
 
   useEffect(() => { load(); }, [load]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', load);
+    return unsubscribe;
+  }, [navigation, load]);
+
   if (loading) {
     return <View style={styles.center}><ActivityIndicator size="large" color="#009de0" /></View>;
   }
