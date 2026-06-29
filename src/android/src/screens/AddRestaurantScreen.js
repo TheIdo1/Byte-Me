@@ -17,7 +17,6 @@ const INITIAL = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s\-]{7,15}$/;
-const ADDR_FIELDS = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'];
 
 function validate(form) {
   const e = {};
@@ -39,7 +38,32 @@ function validate(form) {
   const rating = parseFloat(form.rating);
   if (!form.rating) e.rating = 'Required';
   else if (isNaN(rating) || rating < 1 || rating > 10) e.rating = '1–10';
+  if (!form.address.lat.trim()) e.lat = 'Required';
+  else if (isNaN(parseFloat(form.address.lat))) e.lat = 'Invalid';
+  if (!form.address.long.trim()) e.long = 'Required';
+  else if (isNaN(parseFloat(form.address.long))) e.long = 'Invalid';
   return e;
+}
+
+// Defined outside to prevent remount on every render (fixes keyboard dismissal)
+function Field({ label, value, onChangeText, onBlur, placeholder, keyboardType, required, error, touched }) {
+  return (
+    <View style={styles.field}>
+      <Text style={styles.label}>{label}{required ? <Text style={styles.req}> *</Text> : null}</Text>
+      <TextInput
+        style={[styles.input, touched && error && styles.inputError]}
+        value={value}
+        onChangeText={onChangeText}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        placeholderTextColor="#b0b4ba"
+        keyboardType={keyboardType ?? 'default'}
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      {touched && error && <Text style={styles.fieldError}>{error}</Text>}
+    </View>
+  );
 }
 
 export default function AddRestaurantScreen({ navigation }) {
@@ -50,6 +74,8 @@ export default function AddRestaurantScreen({ navigation }) {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showCatPicker, setShowCatPicker] = useState(false);
+
+  const ADDR_FIELDS = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'];
 
   function setField(name, value) {
     const isAddr = ADDR_FIELDS.includes(name);
@@ -65,12 +91,8 @@ export default function AddRestaurantScreen({ navigation }) {
     setErrors(validate(form));
   }
 
-  function fieldValue(name) {
-    return ADDR_FIELDS.includes(name) ? form.address[name] : form[name];
-  }
-
   async function handleSubmit() {
-    const allFields = ['name','category','phone','email','image','rating','city','street','houseNum','floor'];
+    const allFields = ['name','category','phone','email','image','rating','city','street','houseNum','floor','lat','long'];
     setTouched(Object.fromEntries(allFields.map((k) => [k, true])));
     const errs = validate(form);
     setErrors(errs);
@@ -96,8 +118,8 @@ export default function AddRestaurantScreen({ navigation }) {
           street: form.address.street.trim(),
           houseNum: parseInt(form.address.houseNum, 10),
           floor: parseInt(form.address.floor, 10),
-          lat: form.address.lat ? parseFloat(form.address.lat) : undefined,
-          long: form.address.long ? parseFloat(form.address.long) : undefined,
+          lat: parseFloat(form.address.lat),
+          long: parseFloat(form.address.long),
         },
       });
       navigation.navigate('ManageRestaurant', { restaurantId: created.id });
@@ -108,25 +130,7 @@ export default function AddRestaurantScreen({ navigation }) {
     }
   }
 
-  function Field({ name, label, placeholder, keyboardType, required }) {
-    return (
-      <View style={styles.field}>
-        <Text style={styles.label}>{label}{required ? <Text style={styles.req}> *</Text> : null}</Text>
-        <TextInput
-          style={[styles.input, touched[name] && errors[name] && styles.inputError]}
-          value={fieldValue(name)}
-          onChangeText={(v) => setField(name, v)}
-          onBlur={() => markTouched(name)}
-          placeholder={placeholder}
-          placeholderTextColor="#b0b4ba"
-          keyboardType={keyboardType ?? 'default'}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        {touched[name] && errors[name] && <Text style={styles.fieldError}>{errors[name]}</Text>}
-      </View>
-    );
-  }
+  function f(name) { return ADDR_FIELDS.includes(name) ? form.address[name] : form[name]; }
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -134,8 +138,12 @@ export default function AddRestaurantScreen({ navigation }) {
         {!!serverError && <View style={styles.errorBox}><Text style={styles.errorText}>{serverError}</Text></View>}
 
         <Text style={styles.section}>Basic Info</Text>
-        <Field name="name" label="Restaurant name" placeholder="Byte Burgers" required />
-        <Field name="description" label="Description" placeholder="Short tagline" />
+        <Field label="Restaurant name" placeholder="Byte Burgers" required
+          value={f('name')} onChangeText={(v) => setField('name', v)} onBlur={() => markTouched('name')}
+          error={errors.name} touched={touched.name} />
+        <Field label="Description" placeholder="Short tagline"
+          value={f('description')} onChangeText={(v) => setField('description', v)} onBlur={() => markTouched('description')}
+          error={errors.description} touched={touched.description} />
 
         {/* Category picker */}
         <View style={styles.field}>
@@ -166,7 +174,10 @@ export default function AddRestaurantScreen({ navigation }) {
           )}
         </View>
 
-        <Field name="subcategories" label="Subcategories (comma-separated)" placeholder="Pizza, Pasta, Salads" />
+        <Field label="Subcategories (comma-separated)" placeholder="Pizza, Pasta, Salads"
+          value={f('subcategories')} onChangeText={(v) => setField('subcategories', v)} onBlur={() => markTouched('subcategories')}
+          error={errors.subcategories} touched={touched.subcategories} />
+
         <ImagePickerField
           label="Restaurant Image"
           value={form.image}
@@ -175,8 +186,13 @@ export default function AddRestaurantScreen({ navigation }) {
           error={errors.image}
           touched={touched.image}
         />
-        <Field name="rating" label="Rating (1–10)" placeholder="8.5" keyboardType="decimal-pad" required />
-        <Field name="promotionalMessage" label="Promotional message" placeholder="Free delivery today!" />
+
+        <Field label="Rating (1–10)" placeholder="8.5" keyboardType="decimal-pad" required
+          value={f('rating')} onChangeText={(v) => setField('rating', v)} onBlur={() => markTouched('rating')}
+          error={errors.rating} touched={touched.rating} />
+        <Field label="Promotional message" placeholder="Free delivery today!"
+          value={f('promotionalMessage')} onChangeText={(v) => setField('promotionalMessage', v)} onBlur={() => markTouched('promotionalMessage')}
+          error={errors.promotionalMessage} touched={touched.promotionalMessage} />
 
         <View style={styles.toggleRow}>
           <Text style={styles.toggleLabel}>Sponsored</Text>
@@ -185,22 +201,50 @@ export default function AddRestaurantScreen({ navigation }) {
 
         <View style={styles.divider} />
         <Text style={styles.section}>Contact</Text>
-        <Field name="phone" label="Phone" placeholder="+972 50 000 0000" keyboardType="phone-pad" required />
-        <Field name="email" label="Email" placeholder="restaurant@example.com" keyboardType="email-address" required />
+        <Field label="Phone" placeholder="+972 50 000 0000" keyboardType="phone-pad" required
+          value={f('phone')} onChangeText={(v) => setField('phone', v)} onBlur={() => markTouched('phone')}
+          error={errors.phone} touched={touched.phone} />
+        <Field label="Email" placeholder="restaurant@example.com" keyboardType="email-address" required
+          value={f('email')} onChangeText={(v) => setField('email', v)} onBlur={() => markTouched('email')}
+          error={errors.email} touched={touched.email} />
 
         <View style={styles.divider} />
         <Text style={styles.section}>Address</Text>
         <View style={styles.row}>
-          <View style={styles.half}><Field name="city"    label="City"    placeholder="Tel Aviv"    required /></View>
-          <View style={styles.half}><Field name="street"  label="Street"  placeholder="Dizengoff"   required /></View>
+          <View style={styles.half}>
+            <Field label="City" placeholder="Tel Aviv" required
+              value={f('city')} onChangeText={(v) => setField('city', v)} onBlur={() => markTouched('city')}
+              error={errors.city} touched={touched.city} />
+          </View>
+          <View style={styles.half}>
+            <Field label="Street" placeholder="Dizengoff" required
+              value={f('street')} onChangeText={(v) => setField('street', v)} onBlur={() => markTouched('street')}
+              error={errors.street} touched={touched.street} />
+          </View>
         </View>
         <View style={styles.row}>
-          <View style={styles.half}><Field name="houseNum" label="House #" placeholder="12" keyboardType="numeric" required /></View>
-          <View style={styles.half}><Field name="floor"    label="Floor"   placeholder="0"  keyboardType="numeric" required /></View>
+          <View style={styles.half}>
+            <Field label="House #" placeholder="12" keyboardType="numeric" required
+              value={f('houseNum')} onChangeText={(v) => setField('houseNum', v)} onBlur={() => markTouched('houseNum')}
+              error={errors.houseNum} touched={touched.houseNum} />
+          </View>
+          <View style={styles.half}>
+            <Field label="Floor" placeholder="0" keyboardType="numeric" required
+              value={f('floor')} onChangeText={(v) => setField('floor', v)} onBlur={() => markTouched('floor')}
+              error={errors.floor} touched={touched.floor} />
+          </View>
         </View>
         <View style={styles.row}>
-          <View style={styles.half}><Field name="lat"  label="Latitude"  placeholder="31.7683" keyboardType="decimal-pad" /></View>
-          <View style={styles.half}><Field name="long" label="Longitude" placeholder="35.2137" keyboardType="decimal-pad" /></View>
+          <View style={styles.half}>
+            <Field label="Latitude" placeholder="31.7683" keyboardType="decimal-pad" required
+              value={f('lat')} onChangeText={(v) => setField('lat', v)} onBlur={() => markTouched('lat')}
+              error={errors.lat} touched={touched.lat} />
+          </View>
+          <View style={styles.half}>
+            <Field label="Longitude" placeholder="35.2137" keyboardType="decimal-pad" required
+              value={f('long')} onChangeText={(v) => setField('long', v)} onBlur={() => markTouched('long')}
+              error={errors.long} touched={touched.long} />
+          </View>
         </View>
 
         <TouchableOpacity

@@ -23,8 +23,11 @@ function validate(form) {
   if (!form.phone.trim())                     e.phone     = 'Required';
   else if (!PHONE_RE.test(form.phone.trim())) e.phone     = 'Invalid phone';
   if (!form.username.trim())                  e.username  = 'Required';
-  if (!form.password)                         e.password  = 'Required';
-  else if (form.password.length < 6)          e.password  = 'Min 6 characters';
+  if (!form.password)                              e.password = 'Required';
+  else if (form.password.length < 8)              e.password = 'Min 8 characters';
+  else if (!/[a-zA-Z]/.test(form.password))       e.password = 'Must contain a letter';
+  else if (!/[0-9]/.test(form.password))          e.password = 'Must contain a number';
+  else if (!/[^a-zA-Z0-9]/.test(form.password))  e.password = 'Must contain a special character';
   if (!form.address.city.trim())              e.city      = 'Required';
   if (!form.address.street.trim())            e.street    = 'Required';
   const hn = parseInt(form.address.houseNum, 10);
@@ -135,7 +138,7 @@ export default function RegisterScreen({ navigation }) {
         <View style={styles.divider} />
         <Section title="Account" />
         <Field name="username" label="Username" placeholder="johndoe" value={form.username} error={errors.username} touched={touched.username} onChangeText={(v) => setField('username', v)} onBlur={() => markTouched('username')} />
-        <Field name="password" label="Password" placeholder="••••••••" secureTextEntry value={form.password} error={errors.password} touched={touched.password} onChangeText={(v) => setField('password', v)} onBlur={() => markTouched('password')} />
+        <Field name="password" label="Password" placeholder="Min 8 chars, letter, number, symbol" secureTextEntry value={form.password} error={errors.password} touched={touched.password} onChangeText={(v) => setField('password', v)} onBlur={() => markTouched('password')} />
 
         <View style={styles.divider} />
         <Section title="Delivery Address" />

@@ -9,6 +9,24 @@ import { useAuth } from '../context/AuthContext';
 import { CATEGORIES_DATA } from '../components/CategoryBar';
 import ImagePickerField from '../components/ImagePickerField';
 
+// Defined outside to prevent remount on every render (fixes keyboard dismissal)
+function EField({ label, value, onChangeText, keyboardType, multiline }) {
+  return (
+    <View style={styles.field}>
+      <Text style={styles.label}>{label}</Text>
+      <TextInput
+        style={[styles.input, multiline && { height: 80, textAlignVertical: 'top', paddingTop: 10 }]}
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType ?? 'default'}
+        autoCapitalize="none"
+        autoCorrect={false}
+        multiline={multiline}
+      />
+    </View>
+  );
+}
+
 export default function ManageRestaurantScreen({ route, navigation }) {
   const { restaurantId } = route.params;
   const { user } = useAuth();
@@ -172,23 +190,6 @@ export default function ManageRestaurantScreen({ route, navigation }) {
 
   if (loading) {
     return <View style={styles.center}><ActivityIndicator size="large" color="#009de0" /></View>;
-  }
-
-  function EField({ label, value, onChangeText, keyboardType, multiline }) {
-    return (
-      <View style={styles.field}>
-        <Text style={styles.label}>{label}</Text>
-        <TextInput
-          style={[styles.input, multiline && { height: 80, textAlignVertical: 'top', paddingTop: 10 }]}
-          value={value}
-          onChangeText={onChangeText}
-          keyboardType={keyboardType ?? 'default'}
-          autoCapitalize="none"
-          autoCorrect={false}
-          multiline={multiline}
-        />
-      </View>
-    );
   }
 
   return (
