@@ -42,6 +42,31 @@ function validate(form) {
 
 const ADDRESS_FIELDS = ['city', 'street', 'houseNum', 'floor', 'lat', 'long'];
 
+function Field({ name, label, placeholder, keyboardType, secureTextEntry, value, error, touched, onChangeText, onBlur }) {
+  return (
+    <View style={styles.field}>
+      <Text style={styles.label}>{label} <Text style={styles.req}>*</Text></Text>
+      <TextInput
+        style={[styles.input, touched && error && styles.inputError]}
+        value={value}
+        onChangeText={onChangeText}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        placeholderTextColor="#b0b4ba"
+        keyboardType={keyboardType ?? 'default'}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      {touched && error && <Text style={styles.fieldError}>{error}</Text>}
+    </View>
+  );
+}
+
+function Section({ title }) {
+  return <Text style={styles.sectionTitle}>{title}</Text>;
+}
+
 export default function RegisterScreen({ navigation }) {
   const [form, setForm]       = useState(INITIAL_FORM);
   const [errors, setErrors]   = useState({});
@@ -61,10 +86,6 @@ export default function RegisterScreen({ navigation }) {
   function markTouched(name) {
     setTouched((p) => ({ ...p, [name]: true }));
     setErrors(validate(form));
-  }
-
-  function fieldValue(name) {
-    return ADDRESS_FIELDS.includes(name) ? form.address[name] : form[name];
   }
 
   async function handleSubmit() {
@@ -95,31 +116,6 @@ export default function RegisterScreen({ navigation }) {
     }
   }
 
-  function Field({ name, label, placeholder, keyboardType, secureTextEntry }) {
-    return (
-      <View style={styles.field}>
-        <Text style={styles.label}>{label} <Text style={styles.req}>*</Text></Text>
-        <TextInput
-          style={[styles.input, touched[name] && errors[name] && styles.inputError]}
-          value={fieldValue(name)}
-          onChangeText={(v) => setField(name, v)}
-          onBlur={() => markTouched(name)}
-          placeholder={placeholder}
-          placeholderTextColor="#b0b4ba"
-          keyboardType={keyboardType ?? 'default'}
-          secureTextEntry={secureTextEntry}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        {touched[name] && errors[name] && <Text style={styles.fieldError}>{errors[name]}</Text>}
-      </View>
-    );
-  }
-
-  function Section({ title }) {
-    return <Text style={styles.sectionTitle}>{title}</Text>;
-  }
-
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
@@ -130,30 +126,30 @@ export default function RegisterScreen({ navigation }) {
 
         <Section title="Personal Info" />
         <View style={styles.row}>
-          <View style={styles.half}><Field name="firstName" label="First name" placeholder="John" /></View>
-          <View style={styles.half}><Field name="lastName"  label="Last name"  placeholder="Doe"  /></View>
+          <View style={styles.half}><Field name="firstName" label="First name" placeholder="John" value={form.firstName} error={errors.firstName} touched={touched.firstName} onChangeText={(v) => setField('firstName', v)} onBlur={() => markTouched('firstName')} /></View>
+          <View style={styles.half}><Field name="lastName"  label="Last name"  placeholder="Doe"  value={form.lastName}  error={errors.lastName}  touched={touched.lastName}  onChangeText={(v) => setField('lastName', v)}  onBlur={() => markTouched('lastName')}  /></View>
         </View>
-        <Field name="email" label="Email" placeholder="john@example.com" keyboardType="email-address" />
-        <Field name="phone" label="Phone" placeholder="+972 50 000 0000" keyboardType="phone-pad" />
+        <Field name="email" label="Email" placeholder="john@example.com" keyboardType="email-address" value={form.email} error={errors.email} touched={touched.email} onChangeText={(v) => setField('email', v)} onBlur={() => markTouched('email')} />
+        <Field name="phone" label="Phone" placeholder="+972 50 000 0000" keyboardType="phone-pad" value={form.phone} error={errors.phone} touched={touched.phone} onChangeText={(v) => setField('phone', v)} onBlur={() => markTouched('phone')} />
 
         <View style={styles.divider} />
         <Section title="Account" />
-        <Field name="username" label="Username" placeholder="johndoe" />
-        <Field name="password" label="Password" placeholder="••••••••" secureTextEntry />
+        <Field name="username" label="Username" placeholder="johndoe" value={form.username} error={errors.username} touched={touched.username} onChangeText={(v) => setField('username', v)} onBlur={() => markTouched('username')} />
+        <Field name="password" label="Password" placeholder="••••••••" secureTextEntry value={form.password} error={errors.password} touched={touched.password} onChangeText={(v) => setField('password', v)} onBlur={() => markTouched('password')} />
 
         <View style={styles.divider} />
         <Section title="Delivery Address" />
         <View style={styles.row}>
-          <View style={styles.half}><Field name="city"   label="City"   placeholder="Tel Aviv"    /></View>
-          <View style={styles.half}><Field name="street" label="Street" placeholder="Dizengoff St" /></View>
+          <View style={styles.half}><Field name="city"   label="City"   placeholder="Tel Aviv"     value={form.address.city}   error={errors.city}   touched={touched.city}   onChangeText={(v) => setField('city', v)}   onBlur={() => markTouched('city')}   /></View>
+          <View style={styles.half}><Field name="street" label="Street" placeholder="Dizengoff St" value={form.address.street} error={errors.street} touched={touched.street} onChangeText={(v) => setField('street', v)} onBlur={() => markTouched('street')} /></View>
         </View>
         <View style={styles.row}>
-          <View style={styles.half}><Field name="houseNum" label="House #" placeholder="12"  keyboardType="numeric" /></View>
-          <View style={styles.half}><Field name="floor"    label="Floor"   placeholder="0"   keyboardType="numeric" /></View>
+          <View style={styles.half}><Field name="houseNum" label="House #" placeholder="12" keyboardType="numeric" value={form.address.houseNum} error={errors.houseNum} touched={touched.houseNum} onChangeText={(v) => setField('houseNum', v)} onBlur={() => markTouched('houseNum')} /></View>
+          <View style={styles.half}><Field name="floor"    label="Floor"   placeholder="0"  keyboardType="numeric" value={form.address.floor}    error={errors.floor}    touched={touched.floor}    onChangeText={(v) => setField('floor', v)}    onBlur={() => markTouched('floor')}    /></View>
         </View>
         <View style={styles.row}>
-          <View style={styles.half}><Field name="lat"  label="Latitude"  placeholder="31.7683" keyboardType="decimal-pad" /></View>
-          <View style={styles.half}><Field name="long" label="Longitude" placeholder="35.2137" keyboardType="decimal-pad" /></View>
+          <View style={styles.half}><Field name="lat"  label="Latitude"  placeholder="31.7683" keyboardType="decimal-pad" value={form.address.lat}  error={errors.lat}  touched={touched.lat}  onChangeText={(v) => setField('lat', v)}  onBlur={() => markTouched('lat')}  /></View>
+          <View style={styles.half}><Field name="long" label="Longitude" placeholder="35.2137" keyboardType="decimal-pad" value={form.address.long} error={errors.long} touched={touched.long} onChangeText={(v) => setField('long', v)} onBlur={() => markTouched('long')} /></View>
         </View>
 
         <View style={styles.divider} />

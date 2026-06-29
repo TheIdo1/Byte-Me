@@ -3,12 +3,14 @@ import {
   View, Text, Image, ScrollView, TouchableOpacity,
   StyleSheet, ActivityIndicator,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getRestaurantProducts } from '../api/productsApi';
 import { useCart } from '../context/CartContext';
 
 export default function ProductDetailScreen({ route, navigation }) {
   const { productId, restaurantId } = route.params;
   const { addToCart } = useCart();
+  const insets = useSafeAreaInsets();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -95,7 +97,7 @@ export default function ProductDetailScreen({ route, navigation }) {
       </ScrollView>
 
       {/* Footer */}
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
         <View style={styles.qtyRow}>
           <TouchableOpacity style={styles.qtyBtn} onPress={() => setQuantity((q) => Math.max(1, q - 1))}>
             <Text style={styles.qtyBtnText}>−</Text>
@@ -157,7 +159,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    paddingTop: 16,
+    paddingHorizontal: 16,
     borderTopWidth: 1,
     borderTopColor: '#e9ecef',
     backgroundColor: '#fff',

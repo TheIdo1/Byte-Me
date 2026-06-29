@@ -21,32 +21,33 @@ export const CATEGORIES_DATA = [
 
 export default function CategoryBar({ onSelectCategory, selectedCategory }) {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.scroll}
-      style={styles.bar}
-    >
-      {CATEGORIES_DATA.map((cat) => {
-        const active = selectedCategory === cat.name;
-        return (
-          <TouchableOpacity
-            key={cat.id}
-            style={[styles.chip, active && styles.chipActive]}
-            onPress={() => onSelectCategory?.(active ? null : cat.name)}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.emoji}>{cat.emoji}</Text>
-            <Text style={[styles.label, active && styles.labelActive]}>{cat.name}</Text>
-          </TouchableOpacity>
-        );
-      })}
-    </ScrollView>
+    <View style={styles.bar}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}
+      >
+        {CATEGORIES_DATA.map((cat) => {
+          const active = selectedCategory === cat.name;
+          return (
+            <TouchableOpacity
+              key={cat.id}
+              style={[styles.chip, active && styles.chipActive]}
+              onPress={() => onSelectCategory?.(active ? null : cat.name)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.emoji}>{cat.emoji}</Text>
+              <Text style={[styles.label, active && styles.labelActive]}>{cat.name}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  bar: { backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e9ecef' },
+  bar: { backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e9ecef', height: 60 },
   scroll: { paddingHorizontal: 12, paddingVertical: 10, gap: 8, flexDirection: 'row' },
   chip: {
     flexDirection: 'row',
@@ -56,8 +57,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#f0f4f8',
     gap: 6,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
   },
-  chipActive: { backgroundColor: '#e6f5fc', borderWidth: 1.5, borderColor: '#009de0' },
+  chipActive: { backgroundColor: '#e6f5fc', borderColor: '#009de0' },
   emoji: { fontSize: 16 },
   label: { fontSize: 13, fontWeight: '500', color: '#202125' },
   labelActive: { color: '#009de0', fontWeight: '700' },

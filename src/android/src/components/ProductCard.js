@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function ProductCard({ product, onPress }) {
+export default function ProductCard({ product, onPress, onAddToCart }) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
       <View style={styles.info}>
@@ -15,9 +15,11 @@ export default function ProductCard({ product, onPress }) {
           style={styles.image}
           resizeMode="cover"
         />
-        <View style={styles.addBtn}>
-          <Text style={styles.addBtnText}>+</Text>
-        </View>
+        {onAddToCart && (
+          <TouchableOpacity style={styles.addBtn} onPress={onAddToCart} activeOpacity={0.8}>
+            <Text style={styles.addBtnText}>+</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );

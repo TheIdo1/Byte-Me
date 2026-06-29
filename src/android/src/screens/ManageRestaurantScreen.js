@@ -7,6 +7,7 @@ import { getRestaurantById, updateRestaurant, deleteRestaurant } from '../api/re
 import { getRestaurantProducts, createProduct, updateProduct, deleteProduct } from '../api/productsApi';
 import { useAuth } from '../context/AuthContext';
 import { CATEGORIES_DATA } from '../components/CategoryBar';
+import ImagePickerField from '../components/ImagePickerField';
 
 export default function ManageRestaurantScreen({ route, navigation }) {
   const { restaurantId } = route.params;
@@ -211,7 +212,11 @@ export default function ManageRestaurantScreen({ route, navigation }) {
           <EField label="Description"         value={editForm.description}         onChangeText={(v) => setEditForm({ ...editForm, description: v })} multiline />
           <EField label="Phone"               value={editForm.phone}               onChangeText={(v) => setEditForm({ ...editForm, phone: v })} keyboardType="phone-pad" />
           <EField label="Email"               value={editForm.email}               onChangeText={(v) => setEditForm({ ...editForm, email: v })} keyboardType="email-address" />
-          <EField label="Image URL"           value={editForm.image}               onChangeText={(v) => setEditForm({ ...editForm, image: v })} />
+          <ImagePickerField
+            label="Restaurant Image"
+            value={editForm.image}
+            onChange={(v) => setEditForm({ ...editForm, image: v })}
+          />
           <EField label="Rating (1–10)"       value={editForm.rating}              onChangeText={(v) => setEditForm({ ...editForm, rating: v })} keyboardType="decimal-pad" />
           <EField label="Promotional message" value={editForm.promotionalMessage}  onChangeText={(v) => setEditForm({ ...editForm, promotionalMessage: v })} />
 
@@ -273,7 +278,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
           </View>
           <ScrollView contentContainerStyle={{ padding: 20 }} keyboardShouldPersistTaps="handled">
             {!!productError && <View style={styles.errBox}><Text style={styles.errText}>{productError}</Text></View>}
-            {['name','price','description','image','category'].map((field) => (
+            {['name','price','description','category'].map((field) => (
               <View key={field} style={styles.field}>
                 <Text style={styles.label}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
                 <TextInput
@@ -287,6 +292,11 @@ export default function ManageRestaurantScreen({ route, navigation }) {
                 />
               </View>
             ))}
+            <ImagePickerField
+              label="Product Image"
+              value={productForm.image}
+              onChange={(v) => setProductForm({ ...productForm, image: v })}
+            />
             <View style={styles.toggleRow}>
               <Text style={styles.toggleLabel}>Popular item</Text>
               <Switch value={productForm.isPopular} onValueChange={(v) => setProductForm({ ...productForm, isPopular: v })} trackColor={{ true: '#009de0' }} />

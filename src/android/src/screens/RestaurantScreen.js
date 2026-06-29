@@ -145,7 +145,7 @@ export default function RestaurantScreen({ route, navigation }) {
             <View style={styles.menuSection}>
               <Text style={styles.menuSectionTitle}>Most ordered</Text>
               {popular.map((p) => (
-                <ProductCard key={p.id || p._id} product={p} onPress={() => openProduct(p)} />
+                <ProductCard key={p.id || p._id} product={p} onPress={() => openProduct(p)} onAddToCart={() => p.extras?.length > 0 ? openProduct(p) : addToCart(p, 1, [])} />
               ))}
             </View>
           )}
@@ -159,7 +159,7 @@ export default function RestaurantScreen({ route, navigation }) {
                 <View key={cat} style={styles.menuSection}>
                   <Text style={styles.menuSectionTitle}>{cat}</Text>
                   {catProducts.map((p) => (
-                    <ProductCard key={p.id || p._id} product={p} onPress={() => openProduct(p)} />
+                    <ProductCard key={p.id || p._id} product={p} onPress={() => openProduct(p)} onAddToCart={() => p.extras?.length > 0 ? openProduct(p) : addToCart(p, 1, [])} />
                   ))}
                 </View>
               );

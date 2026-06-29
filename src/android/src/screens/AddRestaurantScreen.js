@@ -6,6 +6,7 @@ import {
 import { createRestaurant } from '../api/restaurantsApi';
 import { useAuth } from '../context/AuthContext';
 import { CATEGORIES_DATA } from '../components/CategoryBar';
+import ImagePickerField from '../components/ImagePickerField';
 
 const INITIAL = {
   name: '', description: '', category: '', subcategories: '',
@@ -166,7 +167,14 @@ export default function AddRestaurantScreen({ navigation }) {
         </View>
 
         <Field name="subcategories" label="Subcategories (comma-separated)" placeholder="Pizza, Pasta, Salads" />
-        <Field name="image" label="Image URL" placeholder="https://..." required />
+        <ImagePickerField
+          label="Restaurant Image"
+          value={form.image}
+          onChange={(v) => setField('image', v)}
+          required
+          error={errors.image}
+          touched={touched.image}
+        />
         <Field name="rating" label="Rating (1–10)" placeholder="8.5" keyboardType="decimal-pad" required />
         <Field name="promotionalMessage" label="Promotional message" placeholder="Free delivery today!" />
 
