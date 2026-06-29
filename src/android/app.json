@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Byte Me",
+    "slug": "byte-me",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#009de0"
+      }
+    }
+  }
+}

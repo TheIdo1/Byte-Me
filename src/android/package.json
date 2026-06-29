@@ -1,0 +1,27 @@
+{
+  "name": "byte-me-android",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "start": "expo start --port 8082 --host lan",
+    "android": "expo start --android --port 8082 --host lan",
+    "ios": "expo start --ios --port 8082 --host lan"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-navigation/bottom-tabs": "^7.18.3",
+    "@react-navigation/native": "7.3.4",
+    "@react-navigation/native-stack": "7.17.6",
+    "expo": "~53.0.0",
+    "expo-constants": "~17.1.8",
+    "expo-status-bar": "~2.2.0",
+    "react": "18.3.1",
+    "react-native": "0.76.9",
+    "react-native-gesture-handler": "~2.20.0",
+    "react-native-safe-area-context": "4.14.0",
+    "react-native-screens": "4.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0"
+  }
+}
