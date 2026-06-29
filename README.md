@@ -333,6 +333,20 @@ docker-compose down
 ```
  
 > To persist data between restarts, see the commented `volumes` section in `docker-compose.yml`.
+
+**Run the React Native (Android) app:**
+
+The mobile app is run separately outside of Docker.
+
+```bash
+cd src/android
+npm install
+npm start
+```
+
+Scan the QR code with the **Expo Go** app on your phone. Make sure your phone and computer are on the same Wi-Fi network.
+
+> The mobile app auto-detects the API host from Expo's `hostUri`, so no manual IP configuration is needed.
  
 ---
 
