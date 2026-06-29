@@ -359,9 +359,20 @@ docker-compose down -v
 ![manage_restaurant2](/resources/running_example/manage_restaurant_2.jpg)
 
 **react native ui**
-![native_1](/resources/running_example/native_1.jpg)
-![native_2](/resources/running_example/native_2.jpg)
-![native_3](/resources/running_example/native_3.jpg)
+![native_1](/resources/running_example/expo_%20(1).jpg)
+![native_2](/resources/running_example/expo_%20(2).jpg)
+![native_3](/resources/running_example/expo_%20(3).jpg)
+![native_4](/resources/running_example/expo_%20(4).jpg)
+![native_5](/resources/running_example/expo_%20(5).jpg)
+![native_6](/resources/running_example/expo_%20(6).jpg)
+![native_7](/resources/running_example/expo_%20(7).jpg)
+![native_8](/resources/running_example/expo_%20(8).jpg)
+![native_9](/resources/running_example/expo_%20(9).jpg)
+![native_10](/resources/running_example/expo_%20(10).jpg)
+![native_11](/resources/running_example/expo_%20(11).jpg)
+![native_12](/resources/running_example/expo_%20(12).jpg)
+![native_13](/resources/running_example/expo_%20(13).jpg)
+![native_14](/resources/running_example/expo_%20(14).jpg)
 
 **shutdown app**
 ![shutdown](/resources/running_example/shutdown.jpg)
