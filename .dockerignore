@@ -1,7 +1,11 @@
 # Ignore Node.js dependencies
 node_modules
 src/webServer/node_modules
+src/android/node_modules
 npm-debug.log
+
+# Ignore React Native / Expo app (not part of C++ build)
+src/android/
 
 # Ignore local build directories to ensure a clean container build
 build/
