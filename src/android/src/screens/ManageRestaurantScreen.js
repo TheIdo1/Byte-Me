@@ -386,7 +386,8 @@ export default function ManageRestaurantScreen({ route, navigation }) {
 
             {/* Extras multi-select (only for non-extras) */}
             {!productForm.isExtra && (() => {
-              const extraProducts = products.filter((p) => p.category === 'extras');
+              const editingId = editingProduct?.id || editingProduct?._id;
+              const extraProducts = products.filter((p) => p.category === 'extras' && (p.id || p._id) !== editingId);
               return (
                 <View style={styles.field}>
                   <Text style={styles.label}>Available add-ons</Text>
