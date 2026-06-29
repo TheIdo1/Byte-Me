@@ -45,7 +45,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
   // Product form state
   const [productModal, setProductModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [productForm, setProductForm]   = useState({ name: '', price: '', description: '', image: '', category: '', isPopular: false });
+  const [productForm, setProductForm]   = useState({ name: '', price: '', description: '', image: '', category: '', isPopular: false, isExtra: false, extras: [] });
   const [productError, setProductError] = useState('');
   const [productLoading, setProductLoading] = useState(false);
 
@@ -120,17 +120,20 @@ export default function ManageRestaurantScreen({ route, navigation }) {
   function openProductForm(product) {
     if (product) {
       setEditingProduct(product);
+      const isExtra = product.category === 'extras';
       setProductForm({
         name: product.name,
         price: String(product.price),
         description: product.description ?? '',
         image: product.image ?? '',
-        category: product.category ?? '',
+        category: isExtra ? '' : (product.category ?? ''),
         isPopular: product.isPopular ?? false,
+        isExtra,
+        extras: product.extras ?? [],
       });
     } else {
       setEditingProduct(null);
-      setProductForm({ name: '', price: '', description: '', image: '', category: '', isPopular: false });
+      setProductForm({ name: '', price: '', description: '', image: '', category: '', isPopular: false, isExtra: false, extras: [] });
     }
     setProductError('');
     setProductModal(true);
@@ -140,6 +143,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
     if (!productForm.name.trim()) { setProductError('Name is required.'); return; }
     const price = parseFloat(productForm.price);
     if (isNaN(price) || price < 0) { setProductError('Valid price required.'); return; }
+    if (!productForm.isExtra && !productForm.category) { setProductError('Category is required.'); return; }
 
     setProductLoading(true);
     setProductError('');
@@ -149,8 +153,9 @@ export default function ManageRestaurantScreen({ route, navigation }) {
         price,
         description: productForm.description.trim(),
         image: productForm.image.trim(),
-        category: productForm.category.trim(),
+        category: productForm.isExtra ? 'extras' : productForm.category,
         isPopular: productForm.isPopular,
+        extras: productForm.isExtra ? [] : productForm.extras,
       };
       if (editingProduct) {
         await updateProduct(restaurantId, editingProduct.id || editingProduct._id, data);
@@ -253,8 +258,11 @@ export default function ManageRestaurantScreen({ route, navigation }) {
               {!!p.image && <Image source={{ uri: p.image }} style={styles.productThumb} resizeMode="cover" />}
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>{p.name}</Text>
-                <Text style={styles.productMeta}>₪{p.price?.toFixed(2)} · {p.category}</Text>
-                {p.isPopular && <Text style={styles.popularTag}>Popular</Text>}
+                <Text style={styles.productMeta}>₪{p.price?.toFixed(2)}{p.category && p.category !== 'extras' ? ` · ${p.category}` : ''}</Text>
+                <View style={{ flexDirection: 'row', gap: 4, marginTop: 3 }}>
+                  {p.isPopular && <Text style={styles.popularTag}>Popular</Text>}
+                  {p.category === 'extras' && <Text style={styles.extraTag}>Add-on</Text>}
+                </View>
               </View>
               <TouchableOpacity style={styles.editIcon} onPress={() => openProductForm(p)}>
                 <Text style={{ fontSize: 16 }}>✏️</Text>
@@ -279,20 +287,96 @@ export default function ManageRestaurantScreen({ route, navigation }) {
           </View>
           <ScrollView contentContainerStyle={{ padding: 20 }} keyboardShouldPersistTaps="handled">
             {!!productError && <View style={styles.errBox}><Text style={styles.errText}>{productError}</Text></View>}
-            {['name','price','description','category'].map((field) => (
-              <View key={field} style={styles.field}>
-                <Text style={styles.label}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
-                <TextInput
-                  style={styles.input}
-                  value={productForm[field]}
-                  onChangeText={(v) => setProductForm({ ...productForm, [field]: v })}
-                  keyboardType={field === 'price' ? 'decimal-pad' : 'default'}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  multiline={field === 'description'}
-                />
+
+            {/* Name */}
+            <View style={styles.field}>
+              <Text style={styles.label}>Name</Text>
+              <TextInput style={styles.input} value={productForm.name} onChangeText={(v) => setProductForm({ ...productForm, name: v })} autoCapitalize="none" autoCorrect={false} />
+            </View>
+
+            {/* Price */}
+            <View style={styles.field}>
+              <Text style={styles.label}>Price</Text>
+              <TextInput style={styles.input} value={productForm.price} onChangeText={(v) => setProductForm({ ...productForm, price: v })} keyboardType="decimal-pad" autoCapitalize="none" autoCorrect={false} />
+            </View>
+
+            {/* Description */}
+            <View style={styles.field}>
+              <Text style={styles.label}>Description</Text>
+              <TextInput style={[styles.input, { height: 80, textAlignVertical: 'top', paddingTop: 10 }]} value={productForm.description} onChangeText={(v) => setProductForm({ ...productForm, description: v })} autoCapitalize="none" autoCorrect={false} multiline />
+            </View>
+
+            {/* Is Extra toggle */}
+            <View style={styles.toggleRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.toggleLabel}>This is an extra / add-on</Text>
+                <Text style={styles.toggleSub}>e.g. toppings, sauces, sides</Text>
               </View>
-            ))}
+              <Switch
+                value={productForm.isExtra}
+                onValueChange={(v) => setProductForm({ ...productForm, isExtra: v, category: '', extras: [] })}
+                trackColor={{ true: '#009de0' }}
+              />
+            </View>
+
+            {/* Category — subcategory chips (only for non-extras) */}
+            {!productForm.isExtra && (
+              <View style={styles.field}>
+                <Text style={styles.label}>Category</Text>
+                <View style={styles.chipGroup}>
+                  {(restaurant?.subcategories ?? []).filter((s) => s !== 'extras').map((sub) => {
+                    const active = productForm.category === sub;
+                    return (
+                      <TouchableOpacity
+                        key={sub}
+                        style={[styles.subChip, active && styles.subChipActive]}
+                        onPress={() => setProductForm({ ...productForm, category: sub })}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={[styles.subChipText, active && styles.subChipTextActive]}>{sub}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+
+            {/* Extras multi-select (only for non-extras) */}
+            {!productForm.isExtra && (() => {
+              const extraProducts = products.filter((p) => p.category === 'extras');
+              return (
+                <View style={styles.field}>
+                  <Text style={styles.label}>Available add-ons</Text>
+                  {extraProducts.length === 0
+                    ? <Text style={styles.noExtrasHint}>No add-on products yet. Add extras first.</Text>
+                    : extraProducts.map((ep) => {
+                        const eid = ep.id || ep._id;
+                        const selected = productForm.extras.includes(eid);
+                        return (
+                          <TouchableOpacity
+                            key={eid}
+                            style={[styles.extraRow, selected && styles.extraRowSelected]}
+                            onPress={() => setProductForm({
+                              ...productForm,
+                              extras: selected
+                                ? productForm.extras.filter((x) => x !== eid)
+                                : [...productForm.extras, eid],
+                            })}
+                            activeOpacity={0.7}
+                          >
+                            <View style={[styles.checkbox, selected && styles.checkboxChecked]}>
+                              {selected && <Text style={styles.checkmark}>✓</Text>}
+                            </View>
+                            <Text style={styles.extraItemName}>{ep.name}</Text>
+                            <Text style={styles.extraItemPrice}>+₪{ep.price?.toFixed(2)}</Text>
+                          </TouchableOpacity>
+                        );
+                      })
+                  }
+                </View>
+              );
+            })()}
+
             <ImagePickerField
               label="Product Image"
               value={productForm.image}
@@ -331,6 +415,20 @@ const styles = StyleSheet.create({
   input: { height: 46, borderWidth: 1.5, borderColor: '#e9ecef', borderRadius: 10, paddingHorizontal: 12, fontSize: 15, color: '#202125', backgroundColor: '#fafbfc' },
   toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 6, marginBottom: 14 },
   toggleLabel: { fontSize: 15, color: '#202125', fontWeight: '500' },
+  toggleSub: { fontSize: 12, color: '#7a7d82', marginTop: 2 },
+  chipGroup: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
+  subChip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20, backgroundColor: '#f0f4f8', borderWidth: 1.5, borderColor: 'transparent' },
+  subChipActive: { backgroundColor: '#e6f5fc', borderColor: '#009de0' },
+  subChipText: { fontSize: 13, fontWeight: '500', color: '#202125' },
+  subChipTextActive: { color: '#009de0', fontWeight: '700' },
+  noExtrasHint: { fontSize: 13, color: '#7a7d82', fontStyle: 'italic', marginTop: 4 },
+  extraRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: 12, borderRadius: 10, borderWidth: 1.5, borderColor: '#e9ecef', marginBottom: 8, backgroundColor: '#fafbfc', gap: 10 },
+  extraRowSelected: { borderColor: '#009de0', backgroundColor: '#e6f5fc' },
+  checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: '#c8ccd0', alignItems: 'center', justifyContent: 'center' },
+  checkboxChecked: { backgroundColor: '#009de0', borderColor: '#009de0' },
+  checkmark: { color: '#fff', fontSize: 12, fontWeight: '800' },
+  extraItemName: { flex: 1, fontSize: 14, color: '#202125', fontWeight: '500' },
+  extraItemPrice: { fontSize: 13, color: '#009de0', fontWeight: '600' },
   btn: { backgroundColor: '#009de0', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginTop: 8 },
   btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
   deleteBtn: { marginTop: 12, paddingVertical: 14, alignItems: 'center', borderRadius: 10, borderWidth: 1.5, borderColor: '#c43228' },
@@ -343,7 +441,8 @@ const styles = StyleSheet.create({
   productInfo: { flex: 1 },
   productName: { fontSize: 14, fontWeight: '700', color: '#202125', marginBottom: 3 },
   productMeta: { fontSize: 12, color: '#7a7d82' },
-  popularTag: { fontSize: 11, color: '#854d0e', backgroundColor: '#fef9c3', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1, alignSelf: 'flex-start', marginTop: 3 },
+  popularTag: { fontSize: 11, color: '#854d0e', backgroundColor: '#fef9c3', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1, alignSelf: 'flex-start' },
+  extraTag: { fontSize: 11, color: '#0e6494', backgroundColor: '#e6f5fc', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1, alignSelf: 'flex-start' },
   editIcon: { padding: 6 },
   deleteIcon: { padding: 6 },
   modalContainer: { flex: 1, backgroundColor: '#fff' },
