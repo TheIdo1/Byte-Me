@@ -42,6 +42,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
   const [editError, setEditError]       = useState('');
   const [editSuccess, setEditSuccess]   = useState(false);
   const [showCatPicker, setShowCatPicker] = useState(false);
+  const [showProductCatPicker, setShowProductCatPicker] = useState(false);
 
   // Product form state
   const [productModal, setProductModal] = useState(false);
@@ -139,6 +140,7 @@ export default function ManageRestaurantScreen({ route, navigation }) {
       setProductForm({ name: '', price: '', description: '', image: '', category: '', isPopular: false, isExtra: false, extras: [] });
     }
     setProductError('');
+    setShowProductCatPicker(false);
     setProductModal(true);
   }
 
@@ -354,25 +356,31 @@ export default function ManageRestaurantScreen({ route, navigation }) {
               />
             </View>
 
-            {/* Category — subcategory chips (only for non-extras) */}
+            {/* Category dropdown (only for non-extras) */}
             {!productForm.isExtra && (
               <View style={styles.field}>
                 <Text style={styles.label}>Category</Text>
-                <View style={styles.chipGroup}>
-                  {(restaurant?.subcategories ?? []).filter((s) => s !== 'extras').map((sub) => {
-                    const active = productForm.category === sub;
-                    return (
+                <TouchableOpacity
+                  style={[styles.input, styles.pickerBtn]}
+                  onPress={() => setShowProductCatPicker(!showProductCatPicker)}
+                >
+                  <Text style={{ color: productForm.category ? '#202125' : '#b0b4ba', fontSize: 15 }}>
+                    {productForm.category || 'Select category'}
+                  </Text>
+                </TouchableOpacity>
+                {showProductCatPicker && (
+                  <View style={styles.catList}>
+                    {(restaurant?.subcategories ?? []).filter((s) => s !== 'extras').map((sub) => (
                       <TouchableOpacity
                         key={sub}
-                        style={[styles.subChip, active && styles.subChipActive]}
-                        onPress={() => setProductForm({ ...productForm, category: sub })}
-                        activeOpacity={0.7}
+                        style={[styles.catOption, productForm.category === sub && styles.catOptionSelected]}
+                        onPress={() => { setProductForm({ ...productForm, category: sub }); setShowProductCatPicker(false); }}
                       >
-                        <Text style={[styles.subChipText, active && styles.subChipTextActive]}>{sub}</Text>
+                        <Text style={{ fontSize: 14, color: productForm.category === sub ? '#009de0' : '#202125' }}>{sub}</Text>
                       </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                    ))}
+                  </View>
+                )}
               </View>
             )}
 
