@@ -1,6 +1,6 @@
 # Byte-Me
 
-![byte me wide picture](resources/byteme_wide_picture.png)
+![byte me wide picture](/resources/byteme_wide_picture.png)
 
 ***Scroll down for initializng instructions***
 
@@ -240,7 +240,7 @@ PATCH,arguments: [userId] [productId1] [productId2] ...
 POST,arguments: [userId] [productId1] [productId2] ...
 help
 ```
-![run example](resources/run_example.png)
+![run example](/resources/run_example.png)
 
 ## How the recommendation works
 
@@ -330,51 +330,49 @@ docker compose up --force-recreate
 docker compose up --scale seeder=0
 ```
 
+ 
 **Shut everything down:**
 ```bash
 docker-compose down
 ```
-
-**Run the React Native (Android) app:**
-
-The mobile app is run separately outside of Docker. preferably on other shell.
-
-```bash
-cd src/android
-npm install
-npm start
-```
-
-Scan the QR code with the **Expo Go** app on your phone. Make sure your phone and computer are on the same Wi-Fi network.
-
-> The mobile app auto-detects the API host from Expo's `hostUri`, so no manual IP configuration is needed.
  
 **Shut everything down & remove data:**
 ```bash
 docker-compose down -v
 ```
  
-![byte me logo](resources/byteme_logo.png)
+![byte me logo](/resources/byteme_logo.png)
 
 
 *Running Example*
-![build](resources/running_example/build.jpg)
-![finished_build](resources/running_example/finished_build.jpg)
-![run](resources/running_example/run.jpg)
-![run_seeder](resources/running_example/run_seeder.jpg)
+![build](/resources/running_example/build.jpg)
+![finished_build](/resources/running_example/finished_build.jpg)
+![run](/resources/running_example/run.jpg)
+![run_seeder](/resources/running_example/run_seeder.jpg)
 **react ui**
-![homepage](resources/running_example/homepage.jpg)
-![restaurant_page](resources/running_example/restaurant_page.jpg)
-![product_page](resources/running_example/product_page.jpg)
-![orders_page](resources/running_example/orders_page.jpg)
-![manage_restaurants](resources/running_example/manage_restaurants.jpg)
-![manage_restaurant1](resources/running_example/manage_restaurant_1.jpg)
-![manage_restaurant2](resources/running_example/manage_restaurant_2.jpg)
+![homepage](/resources/running_example/homepage.jpg)
+![restaurant_page](/resources/running_example/restaurant_page.jpg)
+![product_page](/resources/running_example/product_page.jpg)
+![orders_page](/resources/running_example/orders_page.jpg)
+![manage_restaurants](/resources/running_example/manage_restaurants.jpg)
+![manage_restaurant1](/resources/running_example/manage_restaurant_1.jpg)
+![manage_restaurant2](/resources/running_example/manage_restaurant_2.jpg)
 
 **react native ui**
-![native_1](resources/running_example/native_1.jpg)
-![native_2](resources/running_example/native_2.jpg)
-![native_3](resources/running_example/native_3.jpg)
+![native_1](/resources/running_example/expo_%20(1).jpg)
+![native_2](/resources/running_example/expo_%20(2).jpg)
+![native_3](/resources/running_example/expo_%20(3).jpg)
+![native_4](/resources/running_example/expo_%20(4).jpg)
+![native_5](/resources/running_example/expo_%20(5).jpg)
+![native_6](/resources/running_example/expo_%20(6).jpg)
+![native_7](/resources/running_example/expo_%20(7).jpg)
+![native_8](/resources/running_example/expo_%20(8).jpg)
+![native_9](/resources/running_example/expo_%20(9).jpg)
+![native_10](/resources/running_example/expo_%20(10).jpg)
+![native_11](/resources/running_example/expo_%20(11).jpg)
+![native_12](/resources/running_example/expo_%20(12).jpg)
+![native_13](/resources/running_example/expo_%20(13).jpg)
+![native_14](/resources/running_example/expo_%20(14).jpg)
 
 **shutdown app**
-![shutdown](resources/running_example/shutdown.jpg)
+![shutdown](/resources/running_example/shutdown.jpg)
